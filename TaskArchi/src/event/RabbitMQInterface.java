@@ -15,18 +15,34 @@
  * attempts to register that entity with the event manager
  * **************************************************************************************
  */
-package taskarchi.event;
+package event;
 
-import java.rmi.*;
+//import java.rmi.*;
 import java.net.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import java.io.IOException;
 
 public class RabbitMQInterface {
 
     private long participantId = -1;			// This processes ID
-    private RMIEventManagerInterface rmiEvtMgrI = null;	// Event manager interface object
-    private String defaultPort = "1099";		// Default event manager port
+     
+    private static final String EXCHANGE_NAME = "logs";
+    
+    public RabbitMQInterface() throws Exception{
+        
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        Connection connection = factory.newConnection();
+        
+}
+
+
+    //private RMIEventManagerInterface rmiEvtMgrI = null;	// Event manager interface object
+    //private String defaultPort = "1099";		// Default event manager port
 
     /**
      * *************************************************************************
@@ -122,11 +138,11 @@ public class RabbitMQInterface {
      * This instantiation should be used when the event manager is on the local 
      * machine, using the default port.
      * 
-     * @throws event.EventManagerInterface.LocatingEventManagerException
-     * @throws event.EventManagerInterface.RegistrationException
-     * @throws event.EventManagerInterface.ParticipantAlreadyRegisteredException 
+     * @throws event.RabbitMQInterface.LocatingEventManagerException
+     * @throws event.RabbitMQInterface.RegistrationException
+     * @throws event.RabbitMQInterface.ParticipantAlreadyRegisteredException 
      */
-    public RabbitMQInterface() throws LocatingEventManagerException, RegistrationException, ParticipantAlreadyRegisteredException {
+  /*  public RabbitMQInterface() throws LocatingEventManagerException, RegistrationException, ParticipantAlreadyRegisteredException {
 	// First we check to see if the participant is already registered. If not
         // we go on with the registration. If the are, we throw an exception.
         if (participantId == -1) {
@@ -158,7 +174,7 @@ public class RabbitMQInterface {
      * @throws event.EventManagerInterface.RegistrationException
      * @throws event.EventManagerInterface.ParticipantAlreadyRegisteredException 
      */
-    public RabbitMQInterface(String serverIpAddress) throws LocatingEventManagerException,
+  /*  public RabbitMQInterface(String serverIpAddress) throws LocatingEventManagerException,
             RegistrationException, ParticipantAlreadyRegisteredException {
 	// Assumes that the event manager is on another machine. The user must provide the IP
         // address of the event manager and the port number
@@ -186,7 +202,7 @@ public class RabbitMQInterface {
      * This method allows participants to get their participant Id.
      * 
      * @return The ID
-     * @throws event.EventManagerInterface.ParticipantNotRegisteredException 
+     * @throws event.RabbitMQInterface.ParticipantNotRegisteredException 
      */
     public long getMyId() throws ParticipantNotRegisteredException {
         if (participantId != -1) {
@@ -227,11 +243,36 @@ public class RabbitMQInterface {
      * @throws event.EventManagerInterface.ParticipantNotRegisteredException
      * @throws event.EventManagerInterface.SendEventException 
      */
-    public void sendEvent(Event evt) throws ParticipantNotRegisteredException, SendEventException {
+            public void sendmesage(Event evt) throws Exception, SendEventException, ParticipantNotRegisteredException {
+	   
+            Channel channel = connection.createChannel();
+            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+            
+             if (participantId != -1) {
+                try {
+                evt.setSenderId(participantId);
+                String message = evt.getMessage();
+                 channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+
+                channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
+                System.out.println(" [x] Sent '" + message + "'");
+                  } // try
+                catch (Exception e) {
+                    throw new SendEventException("Error sending event" + e);
+                  } // catch
+            } else {
+                throw new ParticipantNotRegisteredException("Participant not registered");
+            } // if
+            channel.close();
+            connection.close();
+        }
+  	   
+	  
+  /*  public void sendEvent(Event evt) throws ParticipantNotRegisteredException, SendEventException {
         if (participantId != -1) {
             try {
                 evt.setSenderId(participantId);
-                rmiEvtMgrI.SendEvent(evt);
+       	      rmiEvtMgrI.SendEvent(evt);
             } // try
             catch (Exception e) {
                 throw new SendEventException("Error sending event" + e);
@@ -248,7 +289,7 @@ public class RabbitMQInterface {
      * @return Event object.
      * @throws event.EventManagerInterface.ParticipantNotRegisteredException
      * @throws event.EventManagerInterface.GetEventException 
-     */
+     
     public EventQueue getEventQueue() throws ParticipantNotRegisteredException, GetEventException {
         EventQueue eq = null;
         if (participantId != -1) {
@@ -262,7 +303,7 @@ public class RabbitMQInterface {
             throw new ParticipantNotRegisteredException("Participant not registered");
         } // if
         return eq;
-    } // getEventQueue
+    } // getEventQueue*/
 
     /**
      * This method is called when the object is no longer used. 
