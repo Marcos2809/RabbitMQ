@@ -15,7 +15,8 @@
 package common;
 
 import event.Event;
-import event.EventManagerInterface;
+import event.RabbitMQInterface;
+//import event.EventManagerInterface;
 import event.EventQueue;
 
 public class Component {
@@ -41,53 +42,19 @@ public class Component {
     public final static String DEHUMIDIFIER_ON = "D1";
     public final static String DEHUMIDIFIER_OFF = "D0";
 
-    protected Event evt = null;				// Event object
-    protected EventQueue queue = null;			// Message Queue
-    protected int evtId = 0;			        // User specified event ID
-    protected EventManagerInterface evtMgrI = null;     // Interface object to the event manager
+    protected RabbitMQInterface evtMgrI = null;         // Interface object to the RabbitMQ Interface
 
     protected Component() {
-        /////////////////////////////////////////////////////////////////////////////////
-        // Get the IP address of the event manager
-        /////////////////////////////////////////////////////////////////////////////////
-        String[] args = new String[]{};
-        if (args.length == 0) {
-            // event manager is on the local system
-
             System.out.println("\n\nAttempting to register on the local machine...");
-
             try {
                 // Here we create an event manager interface object. This assumes
                 // that the event manager is on the local machine
-
-                evtMgrI = new EventManagerInterface();
+                evtMgrI = new RabbitMQInterface();
             }
             catch (Exception e) {
                 System.out.println("Error instantiating event manager interface: " + e);
-
             } // catch
-
-        }
-        else {
-
-            // event manager is not on the local system
-            //evtMgrIP = args[0];
-            System.out.println("\n\nAttempting to register on the machine:: " + SERVER_IP);
-
-            try {
-                // Here we create an event manager interface object. This assumes
-                // that the event manager is NOT on the local machine
-
-                evtMgrI = new EventManagerInterface(SERVER_IP);
-            }
-            catch (Exception e) {
-                System.out.println("Error instantiating event manager interface: " + e);
-
-            } // catch
-
-        } // if
     }
-
     // This is to accomplish with singleton pattern
     @Override
     public Object clone() throws CloneNotSupportedException {

@@ -78,7 +78,7 @@ public class HumiditySensor extends Sensor implements Runnable {
                 messageWin.writeMessage("Current Relative Humidity:: " + relativeHumidity + "%");
                 // Get the message queue
                 try {
-                    queue = evtMgrI.getEventQueue();
+                      evtMgrI.returnMessage();
                 } 
                 catch (Exception e) {
                     messageWin.writeMessage("Error getting event queue::" + e);
@@ -91,27 +91,24 @@ public class HumiditySensor extends Sensor implements Runnable {
                 // so the assumption is that there should only be a message at most.
                 // If there are more, it is the last message that will effect the
                 // output of the humidity as it would in reality.
-                int qlen = queue.getSize();
-
-                for (int i = 0; i < qlen; i++) {
-                    evt = queue.getEvent();
-                    if (evt.getEventId() == HUMIDITY_SENSOR) {
-                        if (evt.getMessage().equalsIgnoreCase(HUMIDIFIER_ON)) // humidifier on
+      
+                    if (evtMgrI.returnid() == HUMIDITY_SENSOR) {
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_ON)) // humidifier on
                         {
                             humidifierState = true;
                         } 
 
-                        if (evt.getMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) // humidifier off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) // humidifier off
                         {
                             humidifierState = false;
                         } 
 
-                        if (evt.getMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) // dehumidifier on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) // dehumidifier on
                         {
                             dehumidifierState = true;
                         }
 
-                        if (evt.getMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) // dehumidifier off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) // dehumidifier off
                         {
                             dehumidifierState = false;
                         } 
@@ -120,19 +117,10 @@ public class HumiditySensor extends Sensor implements Runnable {
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
-                    if (evt.getEventId() == END) {
+                    if (evtMgrI.returnid() == END) {
                         isDone = true;
-
-                        try {
-                            evtMgrI.unRegister();
-                        }
-                        catch (Exception e) {
-                            messageWin.writeMessage("Error unregistering: " + e);
-                        } 
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");
-                    } 
-                } 
-
+                    }
                 // Now we trend the relative humidity according to the status of the
                 // humidifier/dehumidifier controller.
                 if (humidifierState) {

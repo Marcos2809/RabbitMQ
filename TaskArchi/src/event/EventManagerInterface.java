@@ -232,7 +232,7 @@ public class EventManagerInterface {
             try {
                 evt.setSenderId(participantId);
                 rmiEvtMgrI.SendEvent(evt);
-            } // try
+             } // try
             catch (Exception e) {
                 throw new SendEventException("Error sending event" + e);
             } // catch
@@ -242,7 +242,7 @@ public class EventManagerInterface {
     } // sendEvent
 
     /**
-     * This method sends an event to the
+     * This method get an event to the
      * event manager.
      * 
      * @return Event object.

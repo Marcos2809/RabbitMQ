@@ -24,8 +24,8 @@ public interface RMIEventManagerInterface extends Remote {
      * participant registration service on the EventManager
      * 
      * @return long integer registration number
-     * @throws java.rmi.RemoteException 
-     */
+     * @throws java.rmi.RemoteException */
+     
     public long Register() throws java.rmi.RemoteException;
 
     /**
@@ -33,16 +33,16 @@ public interface RMIEventManagerInterface extends Remote {
      * participant un-registration service on the EventManager
      * 
      * @param SenderID long integer registration number
-     * @throws java.rmi.RemoteException 
-     */
+     * @throws java.rmi.RemoteException */
+     
     public void UnRegister(long SenderID) throws java.rmi.RemoteException;
 
     /**
      * This interface is used by participant to
      * access the event sending service on the EventManager
      * @param m Event object (see the class: Event.java)
-     * @throws java.rmi.RemoteException 
-     */
+     * @throws java.rmi.RemoteException */
+     
     public void SendEvent(Event m) throws java.rmi.RemoteException;
 
     /**
@@ -51,8 +51,8 @@ public interface RMIEventManagerInterface extends Remote {
      * 
      * @param SenderID long integer registration number
      * @return EventQueue object (see the class: EventQueue.java)
-     * @throws java.rmi.RemoteException 
-     */
+     * @throws java.rmi.RemoteException */
+     
     public EventQueue GetEventQueue(long SenderID) throws java.rmi.RemoteException;
 
 } // class

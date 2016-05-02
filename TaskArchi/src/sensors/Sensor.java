@@ -16,7 +16,7 @@ package sensors;
 
 import common.Component;
 import event.Event;
-import event.EventManagerInterface;
+import event.RabbitMQInterface;
 import java.util.Random;
 
 public class Sensor extends Component {
@@ -65,12 +65,14 @@ public class Sensor extends Component {
      * @param eventId This is the ID to identify the type of event
      * @param value Is the value to publish in the event queue
      */
-    protected void postEvent(EventManagerInterface ei, int eventId, float value) {
+    protected void postEvent(RabbitMQInterface ei, int eventId, float value) {
         // Create the event.
         Event evt = new Event(eventId, String.valueOf(value));
+        String event_id =""+eventId;
+        String mensaje = String.valueOf(value) +"&"+event_id;
         // Send the event to the event manager.
         try {
-            ei.sendEvent(evt);
+            ei.sendEvent(mensaje, "");
         }
         catch (Exception e) {
             System.out.println("Error Posting Temperature:: " + e);
