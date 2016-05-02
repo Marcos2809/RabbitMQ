@@ -18,6 +18,7 @@ package sensors;
 
 import common.Component;
 import instrumentation.MessageWindow;
+import java.util.Locale;
 
 public class TemperatureSensor extends Sensor implements Runnable {
 
@@ -34,7 +35,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
     public void run() {
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
-        if (evtMgrI != null) {
+     //   if (evtMgrI != null) {
 
             // We create a message window. Note that we place this panel about 1/2 across 
             // and 1/3 down the screen			
@@ -93,8 +94,11 @@ public class TemperatureSensor extends Sensor implements Runnable {
                 // the assumption is that there should only be a message at most.
                 // If there are more, it is the last message that will effect the
                 // output of the temperature as it would in reality.
+                System.out.println(evtMgrI.returnid()+"Valor del ID" );
+                System.out.println(TEMPERATURE_SENSOR+"Valor del Sensor" );
 
                     if (evtMgrI.returnid() == TEMPERATURE_SENSOR) {
+                        System.out.println("Probando Sensor: "+evtMgrI.returnid());
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_ON)) // heater on
                         {
                             heaterState = true;
@@ -144,10 +148,10 @@ public class TemperatureSensor extends Sensor implements Runnable {
                     messageWin.writeMessage("Sleep error:: " + e);
                 } // catch
             } // while
-        }
-        else {
-            System.out.println("Unable to register with the event manager.\n\n");
-        } // if
+       // }
+     //   else {
+         //   System.out.println("Unable to register with the event manager.\n\n");
+     //   } // if
     }
 
     private static void createInstance() {
@@ -180,6 +184,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
+        Component.SERVER_IP = "127.0.0.1";
         TemperatureSensor sensor = TemperatureSensor.getInstance();
         sensor.run();
     }

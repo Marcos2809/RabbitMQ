@@ -70,9 +70,11 @@ public class Sensor extends Component {
         Event evt = new Event(eventId, String.valueOf(value));
         String event_id =""+eventId;
         String mensaje = String.valueOf(value) +"&"+event_id;
+        System.out.println("sensorid: " + event_id);
         // Send the event to the event manager.
         try {
-            ei.sendEvent(mensaje, "");
+          
+            ei.sendEvent(mensaje, "logs");
         }
         catch (Exception e) {
             System.out.println("Error Posting Temperature:: " + e);

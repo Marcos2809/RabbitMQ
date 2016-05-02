@@ -34,7 +34,9 @@ public class RabbitMQInterface {
     private long participantId = -1;			// This processes ID
     private static final String EXCHANGE_NAME = "logs";
     private static String message = "";
-    private static int eventId;
+    private static int event_id;
+    Channel channel;
+    Connection connection;
 
       
     /**
@@ -138,8 +140,11 @@ public class RabbitMQInterface {
     public RabbitMQInterface () throws Exception{
         ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
+            try{
+                connection = factory.newConnection();
+                }catch(Exception e){
+                        e.printStackTrace();
+            }
 
     }
     /**
@@ -149,11 +154,11 @@ public class RabbitMQInterface {
      * @throws event.RabbitMQInterface.ParticipantNotRegisteredException 
      */
     public long getMyId() throws ParticipantNotRegisteredException {
-        if (participantId != -1) {
+       // if (participantId != -1) {
             return participantId;
-        } else {
-            throw new ParticipantNotRegisteredException("Participant not registered");
-        } // if
+     //   } else {
+      //      throw new ParticipantNotRegisteredException("Participant not registered");
+      //  } // if
     } // getMyId
 
     /**
@@ -180,17 +185,12 @@ public class RabbitMQInterface {
 
     } // getRegistrationTime
 
-      public void sendEvent(String ideven, String messages) throws Exception {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-        String message = messages;
-        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
-        System.out.println(" [x] Sent '" + message + "'");
-        channel.close();
-        connection.close();
+      public void sendEvent(String message, String ideven) throws Exception {
+            channel = connection.createChannel();
+            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+            channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
+            System.out.println(" [x] Sent '" + message + "'");
+            
       }
 //   
     /**
@@ -201,12 +201,8 @@ public class RabbitMQInterface {
      * @throws event.RabbitMQInterface.ParticipantNotRegisteredException
      * @throws event.RabbitMQInterface.GetEventException 
      */
-    public void getEvent (int eventId) throws Exception {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        Connection connection = factory.newConnection();
+    public void getEvent (String eventId) throws Exception {
         Channel channel = connection.createChannel();
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
         String queueName = channel.queueDeclare().getQueue();
         channel.queueBind(queueName, EXCHANGE_NAME, eventId+"");
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
@@ -226,7 +222,8 @@ public class RabbitMQInterface {
         return message;
     } 
     public int returnid(){
-        return eventId;
+        event_id=-5;
+        return event_id;
     }
     
 } // EventManagerInterface

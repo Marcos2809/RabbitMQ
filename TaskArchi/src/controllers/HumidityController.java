@@ -64,12 +64,12 @@ public class HumidityController extends Controller implements Runnable {
                 messageWin.writeMessage("   Registration Time: " + evtMgrI.getRegistrationTime());
             }
             catch (Exception e) {
-                System.out.println("Error:: " + e);
+                System.out.println("Error:: " + e);               
             }
 
             /**
              * ******************************************************************
-             ** Here we start the main simulation loop
+             ** Here we start the main simulation loop gls
              * *******************************************************************
              */
             while (!isDone) {
@@ -195,7 +195,8 @@ public class HumidityController extends Controller implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        if(args[0] != null) Component.SERVER_IP = args[0];
+       // if(args[0] != null) Component.SERVER_IP = args[0];
+        Component.SERVER_IP = "127.0.0.1";
         HumidityController sensor = HumidityController.getInstance();
         sensor.run();
     }

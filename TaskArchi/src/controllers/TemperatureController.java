@@ -40,7 +40,7 @@ public class TemperatureController extends Controller implements Runnable {
 
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
-        if (evtMgrI != null) {
+      //  if (evtMgrI != null) {
             System.out.println("Registered with the event manager.");
 
             /* Now we create the temperature control status and message panel
@@ -132,7 +132,7 @@ public class TemperatureController extends Controller implements Runnable {
                         heatIndicator.dispose();
                         chillIndicator.dispose();
                     }
-//Mod                }
+
 
                 // Update the lamp status
                 if (heaterState) {
@@ -158,10 +158,10 @@ public class TemperatureController extends Controller implements Runnable {
                     System.out.println("Sleep error:: " + e);
                 }
             }
-        }
-        else {
-            System.out.println("Unable to register with the event manager.\n\n");
-        }
+        //}
+//        else {
+       //     System.out.println("Unable to register with the event manager.\n\n");
+     //   }
     }
 
     private static void createInstance() {
@@ -194,7 +194,8 @@ public class TemperatureController extends Controller implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        if(args[0] != null) Component.SERVER_IP = args[0];
+      //  if(args[0] != null) Component.SERVER_IP = args[0];
+        Component.SERVER_IP = "127.0.0.1";
         TemperatureController sensor = TemperatureController.getInstance();
         sensor.run();
     }

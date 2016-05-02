@@ -37,6 +37,7 @@ public class ECSMonitor extends Thread {
         try {
             // Here we create an event manager interface object. This assumes
             // that the event manager is on the local machine
+            //em = new EventManagerInterface();
             em = new EventManagerInterface();
         }
         catch (Exception e) {
@@ -51,7 +52,8 @@ public class ECSMonitor extends Thread {
         try {
             // Here we create an event manager interface object. This assumes
             // that the event manager is NOT on the local machine
-            em = new EventManagerInterface(evtMgrIP);
+            //em = new EventManagerInterface(evtMgrIP);
+            em = new EventManagerInterface();
             Component.SERVER_IP = evtMgrIP;
         }
         catch (Exception e) {
