@@ -74,7 +74,7 @@ public class HumidityController extends Controller implements Runnable {
              */
             while (!isDone) {
                 try {
-                    queue = evtMgrI.getEventQueue();
+                    evtMgrI.returnMessage();
                 }
                 catch (Exception e) {
                     messageWin.writeMessage("Error getting event queue::" + e);
@@ -87,27 +87,23 @@ public class HumidityController extends Controller implements Runnable {
                 // the assumption is that there should only be a message at most.
                 // If there are more, it is the last message that will effect the
                 // output of the humidity as it would in reality.
-                int qlen = queue.getSize();
-
-                for (int i = 0; i < qlen; i++) {
-                    evt = queue.getEvent();
-
-                    if (evt.getEventId() == HUMIDITY_CONTROLLER) {
-                        if (evt.getMessage().equalsIgnoreCase(HUMIDIFIER_ON)) { // humidifier on
+               
+                    if (evtMgrI.returnid()  == HUMIDITY_CONTROLLER) {
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_ON)) { // humidifier on
                             humidifierState = true;
                             messageWin.writeMessage("Received humidifier on event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_SENSOR, HUMIDIFIER_ON);
                         }
-                        if (evt.getMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) { // humidifier off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) { // humidifier off
                             humidifierState = false;
                             messageWin.writeMessage("Received humidifier off event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_SENSOR, HUMIDIFIER_OFF);
                         }
-                        if (evt.getMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) { // dehumidifier on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) { // dehumidifier on
                             dehumidifierState = true;
                             messageWin.writeMessage("Received dehumidifier on event");
 
@@ -115,26 +111,20 @@ public class HumidityController extends Controller implements Runnable {
                             confirmMessage(evtMgrI, HUMIDITY_SENSOR, DEHUMIDIFIER_ON);
                         }
 
-                        if (evt.getMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) { // dehumidifier off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) { // dehumidifier off
                             dehumidifierState = false;
                             messageWin.writeMessage("Received dehumidifier off event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_SENSOR, DEHUMIDIFIER_OFF);
-                        }
+                       
                     }
 
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
-                    if (evt.getEventId() == END) {
+                    if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        try {
-                            evtMgrI.unRegister();
-                        }
-                        catch (Exception e) {
-                            messageWin.writeMessage("Error unregistering: " + e);
-                        }
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");
 
                         // Get rid of the indicators. The message panel is left for the

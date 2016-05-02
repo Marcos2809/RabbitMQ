@@ -16,7 +16,7 @@ package controllers;
 
 import common.Component;
 import event.Event;
-import event.EventManagerInterface;
+import event.RabbitMQInterface;
 
 public class Controller extends Component {
     protected int delay = 2500;				// The loop delay (2.5 seconds)
@@ -33,12 +33,12 @@ public class Controller extends Component {
      * @param evtId This is the ID to identify the type of event
      * @param m This is the received command.
      */
-    protected void confirmMessage(EventManagerInterface ei, int evtId, String m) {
+    protected void confirmMessage(RabbitMQInterface ei, int evtId, String m) {
         // Here we create the event.
         Event evt = new Event(evtId, m);
-	// Here we send the event to the event manager.
+        // Here we send the event to the event manager.
         try {
-            ei.sendEvent(evt);
+             ei.sendEvent(m, "");
         } // try
         catch (Exception e) {
             System.out.println("Error Confirming Message:: " + e);

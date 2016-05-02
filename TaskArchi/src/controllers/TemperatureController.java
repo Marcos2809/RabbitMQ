@@ -74,12 +74,12 @@ public class TemperatureController extends Controller implements Runnable {
              * *******************************************************************
              */
             while (!isDone) {
-                try {
-                    queue = evtMgrI.getEventQueue();
-                }
-                catch (Exception e) {
-                    messageWin.writeMessage("Error getting event queue::" + e);
-                }
+              try {
+                  evtMgrI.returnMessage();
+              }
+              catch (Exception e){
+                  
+              }
 
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = 5, this is a request to turn the
@@ -88,33 +88,33 @@ public class TemperatureController extends Controller implements Runnable {
                 // the assumption is that there should only be a message at most.
                 // If there are more, it is the last message that will effect the
                 // output of the temperature as it would in reality.
-                int qlen = queue.getSize();
+//mod                int qlen = queue.getSize();
 
-                for (int i = 0; i < qlen; i++) {
-                    evt = queue.getEvent();
-                    if (evt.getEventId() == TEMPERATURE_CONTROLLER) {
-                        if (evt.getMessage().equalsIgnoreCase(HEATER_ON)) { // heater on
+ //mod               for (int i = 0; i < qlen; i++) {
+//mod                    evt = queue.getEvent();
+                        if (evtMgrI.returnid() == TEMPERATURE_CONTROLLER) {
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_ON)) { // heater on
                             heaterState = true;
                             messageWin.writeMessage("Received heater on event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_ON);
                         }
 
-                        if (evt.getMessage().equalsIgnoreCase(HEATER_OFF)) { // heater off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_OFF)) { // heater off
                             heaterState = false;
                             messageWin.writeMessage("Received heater off event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_OFF);
                         }
 
-                        if (evt.getMessage().equalsIgnoreCase(CHILLER_ON)) { // chiller on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_ON)) { // chiller on
                             chillerState = true;
                             messageWin.writeMessage("Received chiller on event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_ON);
                         }
 
-                        if (evt.getMessage().equalsIgnoreCase(CHILLER_OFF)) { // chiller off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_OFF)) { // chiller off
                             chillerState = false;
                             messageWin.writeMessage("Received chiller off event");
                             // Confirm that the message was recieved and acted on
@@ -124,21 +124,15 @@ public class TemperatureController extends Controller implements Runnable {
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
-                    if (evt.getEventId() == END) {
+                    if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        try {
-                            evtMgrI.unRegister();
-                        }
-                        catch (Exception e) {
-                            messageWin.writeMessage("Error unregistering: " + e);
-                        }
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                       messageWin.writeMessage("\n\nSimulation Stopped. \n");
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
                         heatIndicator.dispose();
                         chillIndicator.dispose();
                     }
-                }
+//Mod                }
 
                 // Update the lamp status
                 if (heaterState) {
