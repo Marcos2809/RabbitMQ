@@ -191,7 +191,6 @@ public class RabbitMQInterface {
             channel = connection.createChannel();
             channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
             channel.basicPublish(EXCHANGE_NAME, "", null, messages.getBytes("UTF-8"));
-            System.out.println(" [x] Sent '" + messages + "'");
             message=messages;
         }
 //   
@@ -207,36 +206,21 @@ public class RabbitMQInterface {
         Channel channel = connection.createChannel();
         String queueName = channel.queueDeclare().getQueue();
         channel.queueBind(queueName, EXCHANGE_NAME, "");
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         Consumer consumer = new DefaultConsumer(channel) {
           @Override
           public void handleDelivery(String consumerTag, Envelope envelope,
                                      AMQP.BasicProperties properties, byte[] body) throws IOException {
             message = new String(body, "UTF-8");
-            System.out.println(" [x] Received '" + message + "'");
           }
         };
-       /* String []values = message.split("&");
-                if (values.length == 2){
-        String msg_texto = values[0];
-                    msg_numero = Integer.parseInt(values[1]); 
-                }*/
-                
         channel.basicConsume(queueName, true, consumer);
         return message;
   }
     
      public String returnMessage(){
-        
         return message;
     } 
-     public int retunrc (){
-         //a= a+1;
-        // System.out.println ("calculos :"+ a);
-         return a;
-     }
     public int returnid(){
-       // event_id=-5;
         return event_id;
     }
     

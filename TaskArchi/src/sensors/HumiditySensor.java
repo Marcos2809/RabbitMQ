@@ -35,7 +35,7 @@ public class HumiditySensor extends Sensor implements Runnable {
     public void run() {
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
-        if (evtMgrI != null) {
+      // if (evtMgrI != null) {
 
             // We create a message window. Note that we place this panel about 1/2 across 
             // and 2/3s down the screen
@@ -77,13 +77,13 @@ public class HumiditySensor extends Sensor implements Runnable {
                 postEvent(evtMgrI, HUMIDITY, relativeHumidity);
                 messageWin.writeMessage("Current Relative Humidity:: " + relativeHumidity + "%");
                 // Get the message queue
+                // Get the message queue
                 try {
-                      evtMgrI.returnMessage();
-                } 
+                    evtMgrI.returnMessage();
+                } // try
                 catch (Exception e) {
                     messageWin.writeMessage("Error getting event queue::" + e);
-                } 
-
+                }
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = -4, this means the the humidify or
                 // dehumidifier has been turned on/off. Note that we get all the messages
@@ -140,13 +140,13 @@ public class HumiditySensor extends Sensor implements Runnable {
                     Thread.sleep(delay);
                 }
                 catch (Exception e) {
-                    messageWin.writeMessage("Sleep error:: " + e);
+                  messageWin.writeMessage("Sleep error:: " + e);
                 } 
             } 
-        }
-        else {
-            System.out.println("Unable to register with the event manager.\n\n");
-        } 
+        //}
+        //else {
+            //System.out.println("Unable to register with the event manager.\n\n");
+       // } 
     }
     
     private static void createInstance() {

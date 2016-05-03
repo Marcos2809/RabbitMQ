@@ -94,12 +94,13 @@ public class TemperatureSensor extends Sensor implements Runnable {
                 // the assumption is that there should only be a message at most.
                 // If there are more, it is the last message that will effect the
                 // output of the temperature as it would in reality.
-                System.out.println(evtMgrI.returnid()+"Valor del ID" );
-                System.out.println(TEMPERATURE_SENSOR+"Valor del Sensor" );
+                //System.out.println(evtMgrI.returnid()+"Valor del ID" );
+               // System.out.println(evtMgrI.returnMessage());
+               // System.out.println(TEMPERATURE_SENSOR+"Valor del Sensor" );
 //                System.out.println(evtMgrI.returnMessage()+"Valor del mensade del sensor" );
 
                     if (evtMgrI.returnid() == TEMPERATURE_SENSOR) {
-                        System.out.println("Probando Sensor: "+evtMgrI.returnid());
+                       // System.out.println("Probando Sensor: "+evtMgrI.returnid());
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_ON)) // heater on
                         {
                             heaterState = true;

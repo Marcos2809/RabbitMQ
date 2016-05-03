@@ -65,6 +65,9 @@ public class ECSMonitor extends Thread {
 
     @Override
     public void run() {
+        int msg_numero = 0;
+        String msg_texto = "0";
+                
         RabbitMQInterface em = null;
         Event evt = null;			// Event object
         EventQueue eq = null;			// Message Queue
@@ -125,22 +128,35 @@ public class ECSMonitor extends Thread {
                 // only be a message at most. If there are more, it is the last message
                 // that will effect the status of the temperature and humidity controllers
                 // as it would in reality.
-                System.out.println("Mensaje: "+ em.returnMessage());
-                   System.out.println("ID Event: "+ em.returnid());
+                 
+                String message = em.returnMessage();
+                String []values = message.split("&");
+                if (values.length == 2){
+                    msg_texto = values[0];
+                  //  System.out.println(msg_texto);
+                    msg_numero = Integer.parseInt(values[1]); 
+                   //   System.out.println(msg_numero);
+                }
+               // System.out.println("Codigo "+msg_numero);
+               
+               // System.out.println("Mensaje: "+ em.returnMessage());
+               // System.out.println("Mensaje: "+ Float.valueOf(message).floatValue());
+                
+                 //  System.out.println("ID Event: "+ em.returnid());
             
-                    if (em.returnid() == 1) { // Temperature reading
+                    if (msg_numero == 1) { // Temperature reading
                         try {
-                            currentTemperature = Float.valueOf(em.returnMessage());
-                            System.out.println("PRueba del elelmento: "+ currentTemperature);
+                            currentTemperature = Float.valueOf(msg_texto);
+                          //  System.out.println("PRueba del elelmento: "+ currentTemperature);
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading temperature: " + e);
                         } // catch // catch
                     } // if
 
-                    if (em.returnid() == 2) { // Humidity reading
+                    if (msg_numero == 2) { // Humidity reading
                         try {
-                            currentHumidity = Float.valueOf(evt.getMessage()).floatValue();
+                            currentHumidity = Float.valueOf(msg_texto);
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading humidity: " + e);
@@ -150,7 +166,7 @@ public class ECSMonitor extends Thread {
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
-                    if (em.returnid() == 99) {
+                    if (msg_numero == 99) {
                         isDone = true;
                        
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");
