@@ -85,4 +85,5 @@ public class Event implements Serializable {
         return messageText;
     } // getMessage
 
+ 
 } // Event class

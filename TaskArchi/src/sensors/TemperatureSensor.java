@@ -96,6 +96,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
                 // output of the temperature as it would in reality.
                 System.out.println(evtMgrI.returnid()+"Valor del ID" );
                 System.out.println(TEMPERATURE_SENSOR+"Valor del Sensor" );
+//                System.out.println(evtMgrI.returnMessage()+"Valor del mensade del sensor" );
 
                     if (evtMgrI.returnid() == TEMPERATURE_SENSOR) {
                         System.out.println("Probando Sensor: "+evtMgrI.returnid());
