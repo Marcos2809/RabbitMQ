@@ -33,10 +33,12 @@ public class RabbitMQInterface {
 
     private long participantId = -1;			// This processes ID
     private static final String EXCHANGE_NAME = "logs";
-    private static String message = "";
-    private static int event_id;
+    public static String message = "";
+    public static int event_id;
+    public static String x;
     Channel channel;
     Connection connection;
+    public int a = 1;
 
       
     /**
@@ -185,13 +187,13 @@ public class RabbitMQInterface {
 
     } // getRegistrationTime
 
-      public void sendEvent(String message, String ideven) throws Exception {
+      public void sendEvent(String messages, String ideven) throws Exception {
             channel = connection.createChannel();
             channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-            channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
-            System.out.println(" [x] Sent '" + message + "'");
-            
-      }
+            channel.basicPublish(EXCHANGE_NAME, "", null, messages.getBytes("UTF-8"));
+            System.out.println(" [x] Sent '" + messages + "'");
+            message=messages;
+        }
 //   
     /**
      * This methoourd get an event to the
@@ -201,10 +203,10 @@ public class RabbitMQInterface {
      * @throws event.RabbitMQInterface.ParticipantNotRegisteredException
      * @throws event.RabbitMQInterface.GetEventException 
      */
-    public void getEvent (String eventId) throws Exception {
+    public String getEvent () throws Exception {
         Channel channel = connection.createChannel();
         String queueName = channel.queueDeclare().getQueue();
-        channel.queueBind(queueName, EXCHANGE_NAME, eventId+"");
+        channel.queueBind(queueName, EXCHANGE_NAME, "");
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         Consumer consumer = new DefaultConsumer(channel) {
           @Override
@@ -214,15 +216,27 @@ public class RabbitMQInterface {
             System.out.println(" [x] Received '" + message + "'");
           }
         };
+       /* String []values = message.split("&");
+                if (values.length == 2){
+        String msg_texto = values[0];
+                    msg_numero = Integer.parseInt(values[1]); 
+                }*/
+                
         channel.basicConsume(queueName, true, consumer);
-        //return message;
+        return message;
   }
+    
      public String returnMessage(){
         
         return message;
     } 
+     public int retunrc (){
+         //a= a+1;
+        // System.out.println ("calculos :"+ a);
+         return a;
+     }
     public int returnid(){
-        event_id=-5;
+       // event_id=-5;
         return event_id;
     }
     
