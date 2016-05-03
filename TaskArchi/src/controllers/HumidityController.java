@@ -39,7 +39,7 @@ public class HumidityController extends Controller implements Runnable {
     public void run() {
         // Here we check to see if registration worked. If em is null then the
         // event manager interface was not properly created.
-        if (evtMgrI != null) {
+        //if (evtMgrI != null) {
             System.out.println("Registered with the event manager.");
 
             /* Now we create the humidity control status and message panel
@@ -73,12 +73,12 @@ public class HumidityController extends Controller implements Runnable {
              * *******************************************************************
              */
             while (!isDone) {
-                try {
-                    evtMgrI.returnMessage();
-                }
-                catch (Exception e) {
-                    messageWin.writeMessage("Error getting event queue::" + e);
-                }
+                 try {
+                  evtMgrI.returnMessage();
+              }
+              catch (Exception e){
+                  
+              }
 
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = 4, this is a request to turn the
@@ -88,7 +88,7 @@ public class HumidityController extends Controller implements Runnable {
                 // If there are more, it is the last message that will effect the
                 // output of the humidity as it would in reality.
                
-                    if (evtMgrI.returnid()  == HUMIDITY_CONTROLLER) {
+                    if (evtMgrI.returnid()   == HUMIDITY_CONTROLLER) {
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_ON)) { // humidifier on
                             humidifierState = true;
                             messageWin.writeMessage("Received humidifier on event");
@@ -159,10 +159,10 @@ public class HumidityController extends Controller implements Runnable {
                     System.out.println("Sleep error:: " + e);
                 }
             }
-        }
-        else {
-            System.out.println("Unable to register with the event manager.\n\n");
-        }
+       // }
+       // else {
+     //       System.out.println("Unable to register with the event manager.\n\n");
+       // }
     }
 
     private static void createInstance() {
