@@ -74,7 +74,7 @@ public class HumidityController extends Controller implements Runnable {
              */
             while (!isDone) {
                  try {
-                  evtMgrI.returnMessage();
+                  evtMgrI.getEvent();
               }
               catch (Exception e){
                   

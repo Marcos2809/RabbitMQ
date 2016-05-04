@@ -26,7 +26,7 @@ public class ECSMonitor extends Thread {
 
     //private RabbitMQInterface em = null;            // Interface object to the event manager
     private String evtMgrIP = null;			// Event Manager IP address
-    private float tempRangeHigh = 10;                  // These parameters signify the temperature and humidity ranges in terms
+    private float tempRangeHigh = 100;                  // These parameters signify the temperature and humidity ranges in terms
     private float tempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
     private float humiRangeHigh = 100;                  // this temperature and humidity. Temperatures are in degrees Fahrenheit
     private float humiRangeLow = 0;			// and humidity is in relative humidity percentage.
