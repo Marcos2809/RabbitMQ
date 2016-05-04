@@ -7,6 +7,9 @@
  * Date: November 2015
  * Developer: Ferman Ivan Tovar 
  * Reviewer: Perla Velasco Elizondo
+ * * Update: Equipo MEETMECORP
+ * Institution: CIMAT
+ * Date: 29/04/2016 
  * **************************************************************************************
  * This class is the parent of all devices on this system, sensors and controllers.
  * Contains the IP address of the server where is the event manager.
@@ -25,12 +28,26 @@ public class Component {
 
     public final static int TEMPERATURE = 1;
     public final static int HUMIDITY = 2;
+    public final static int DOOR = 3;
+    public final static int WINDOW= 4;
+    public final static int MOVEMENT=5;
 
     public final static int TEMPERATURE_SENSOR = -5;
     public final static int HUMIDITY_SENSOR = -4;
+    public final static int DOOR_SENSOR= -3;
+    public final static int WINDOW_SENSOR= -6;
+    public final static int MOVEMENT_SENSOR = -7;
+    public final static int FIRE_SENSOR= -9;
     public final static int TEMPERATURE_CONTROLLER = 5;
     public final static int HUMIDITY_CONTROLLER = 4;
+    public final static int SECURITY_CONTROLLER= 8;
+    public final static int FIRE_CONTROLLER= 9;
     public final static int END = 99;
+    
+    public final static int DOOR_CONTROLLER = 7;  
+    public final static int WINDOW_CONTROLLER = 9;
+    public final static int MOTION_SENSOR = -11;
+    public final static int MOTION_CONTROLLER = 11; 
 
     public final static String HEATER_ON = "H1";
     public final static String HEATER_OFF = "H0";
@@ -41,6 +58,16 @@ public class Component {
     public final static String HUMIDIFIER_OFF = "H0";
     public final static String DEHUMIDIFIER_ON = "D1";
     public final static String DEHUMIDIFIER_OFF = "D0";
+    public final static String DOOR_ON = "DO1";
+    public final static String DOOR_OFF = "DO0";
+    public final static String WINDOW_ON = "W1";
+    public final static String WINDOW_OFF = "W0";
+    public final static String MOVEMENT_ON = "M1";
+    public final static String MOVEMENT_OFF = "M0";
+    public final static String FIRE_ON = "FD1";
+    public final static String FIRE_OFF = "FD0";
+    public final static String SPRINKLE_ON = "SP1";
+    public final static String SPRINKLE_OFF = "SP0";
 
     protected RabbitMQInterface evtMgrI = null;         // Interface object to the RabbitMQ Interface
 

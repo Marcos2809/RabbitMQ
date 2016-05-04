@@ -7,6 +7,9 @@
  * Date: November 2015
  * Developer: Ferman Ivan Tovar 
  * Reviewer: Perla Velasco Elizondo
+ * Update: Equipo MEETMECORP
+ * Institution: CIMAT
+ * Date: 29/04/2016
  * **************************************************************************************
  * This class simulates a temperature sensor. It polls the event manager for
  * events corresponding to changes in state of the heater or chiller and reacts

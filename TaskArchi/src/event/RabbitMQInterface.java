@@ -1,19 +1,12 @@
-/**
- * **************************************************************************************
- * File:EventManagerInterface.java 
+/***
+ * File:DoorSensor.java 
  * Course: Software Architecture 
  * Project: Event Architectures
- * Institution: Autonomous University of Zacatecas 
- * Date: November 2015
- * Developer: Ferman Ivan Tovar 
+ * Institution: CIMAT
  * Reviewer: Perla Velasco Elizondo
- * **************************************************************************************
- * This class provides an interface to the event manager for
- * participants (processes), enabling them to to send and receive events between
- * participants. A participant is any thing (thread, object, process) that
- * instantiates an EventEventManagerInterface object - this automatically
- * attempts to register that entity with the event manager
- * **************************************************************************************
+ * Update by: Equipo MEETMECORP
+ * Date: 29/04/2016
+ * Conection Rabbit MQ 
  */
 package event;
 
