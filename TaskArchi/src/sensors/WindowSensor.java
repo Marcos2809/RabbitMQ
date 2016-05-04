@@ -24,7 +24,7 @@ import instrumentation.MessageWindow;
 public class WindowSensor extends Sensor implements Runnable {
      private float CurrentState;
      boolean WindowState = false;
-     boolean Done = false;
+     //boolean Done = false;
 
 private static WindowSensor INSTANCE = new WindowSensor();
     private WindowSensor(){
@@ -49,7 +49,7 @@ private static WindowSensor INSTANCE = new WindowSensor();
 
      messageWin.writeMessage("\n Initializating simulation ... ");
      
-     while (!Done)
+     while (!isDone)
      {
          //post de current state
          
@@ -76,13 +76,15 @@ private static WindowSensor INSTANCE = new WindowSensor();
 
             if ( evtMgrI.returnid() == WINDOW_SENSOR )
             {
-                    if (evtMgrI.returnMessage().equalsIgnoreCase("WINDOW_ON")) // chiller on
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_ON)) // chiller on
                     {
                             WindowState = true;
+                            CurrentState = 1;
                     } // if
-                    if (evtMgrI.returnMessage().equalsIgnoreCase("WINDOW_OFF")) // chiller off
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_OFF)) // chiller off
                     {
                             WindowState = false;
+                            CurrentState= 0;
                     } // if
 
             } // if

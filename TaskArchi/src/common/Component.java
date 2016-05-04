@@ -29,8 +29,10 @@ public class Component {
     public final static int TEMPERATURE = 1;
     public final static int HUMIDITY = 2;
     public final static int DOOR = 3;
-    public final static int WINDOW= 4;
-    public final static int MOVEMENT=5;
+    public final static int WINDOW= 6;
+    public final static int MOVEMENT=7;
+    public final static int FIRE=10;
+    public final static int SPRINKE=11;
 
     public final static int TEMPERATURE_SENSOR = -5;
     public final static int HUMIDITY_SENSOR = -4;
@@ -44,11 +46,6 @@ public class Component {
     public final static int FIRE_CONTROLLER= 9;
     public final static int END = 99;
     
-    public final static int DOOR_CONTROLLER = 7;  
-    public final static int WINDOW_CONTROLLER = 9;
-    public final static int MOTION_SENSOR = -11;
-    public final static int MOTION_CONTROLLER = 11; 
-
     public final static String HEATER_ON = "H1";
     public final static String HEATER_OFF = "H0";
     public final static String CHILLER_ON = "C1";

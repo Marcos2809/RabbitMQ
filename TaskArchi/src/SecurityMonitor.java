@@ -32,8 +32,8 @@ class SecurityMonitor extends Thread
     Indicator wi;                                       //indicador de ventana rota
     Indicator di;                                       //indicador de puerta rota
     Indicator mi;                                       //indicador de movimiento
-    Indicator fi;
-    Indicator si;
+    //Indicator fi;
+    //Indicator si;
     
     boolean registered = true;				// Signifies that this class is registered with an event manager.
     MessageWindow messageWin = null;			// This is the message window
@@ -83,7 +83,7 @@ class SecurityMonitor extends Thread
         try {
             em = new RabbitMQInterface();
         } catch (Exception ex) {
-            Logger.getLogger(ECSMonitor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (em != null) {
             // Now we create the ECS status and message panel
@@ -96,8 +96,8 @@ class SecurityMonitor extends Thread
             wi= new Indicator("WINDOW BROKEN", messageWin.getX() + messageWin.width(), 0);
             di= new Indicator("DOOR BROKEN", messageWin.getX() + messageWin.width(), wi.height());
             mi= new Indicator("MOVEMENT DETECTION", messageWin.getX() + messageWin.width(), di.height()*2);
-            fi= new Indicator("FIRE DETECTION", messageWin.getX() + messageWin.width(), mi.height()*2);
-            si= new Indicator("SPRINKLE ACTIVATIONN", messageWin.getX() + messageWin.width(), fi.height()*2);
+            //fi= new Indicator("FIRE DETECTION", messageWin.getX() + messageWin.width(), mi.height()*2);
+            //si= new Indicator("SPRINKLE ACTIVATIONN", messageWin.getX() + messageWin.width(), fi.height()*2);
 
             messageWin.writeMessage("Registered with the event manager.");
 
@@ -157,7 +157,7 @@ class SecurityMonitor extends Thread
                         } // catch // catch
                     } // if
 
-                    if (em.returnid() == 10) { //  fire reading
+                    /*if (em.returnid() == 10) { //  fire reading
                         try {
                              CurrentState = em.returnMessage();
                         } // try
@@ -174,6 +174,7 @@ class SecurityMonitor extends Thread
                             messageWin.writeMessage("Error reading movement: " + e);
                         } // catch // catch
                     } // if
+                    */
                     
                     
                     // If the event ID == 99 then this is a signal that the simulation
@@ -188,8 +189,8 @@ class SecurityMonitor extends Thread
                         wi.dispose();
                         di.dispose();
                         mi.dispose();
-                        fi.dispose();
-                        si.dispose();
+                        //fi.dispose();
+                        //si.dispose();
                     } // if
                 if(isActive && em.returnMessage()!= null){
 
@@ -222,17 +223,17 @@ class SecurityMonitor extends Thread
                 if(em.returnMessage().equalsIgnoreCase("M1")){
 
                         messageWin.writeMessage("Security:: ALERT! Movement detection");
-                        mi.setLampColorAndMessage("Movement Broken", 1); // Movement detection
+                        mi.setLampColorAndMessage("Exist Movement", 1); // Movement detection
 
                 }
                 if(em.returnMessage().equalsIgnoreCase("M0")) {
 
                         messageWin.writeMessage("Security:: Movement detection: False");
-                        mi.setLampColorAndMessage("nOT Movement", 0); // Movement is ok
+                        mi.setLampColorAndMessage("Not Movement", 0); // Movement is ok
 
                 }
 
-                if(em.returnMessage().equalsIgnoreCase("FD1")){
+               /* if(em.returnMessage().equalsIgnoreCase("FD1")){
 
                         messageWin.writeMessage("Security:: ALERT! Fire detection");
                         fi.setLampColorAndMessage("Fire detected", 1); // Movement detection
@@ -248,10 +249,9 @@ class SecurityMonitor extends Thread
                         si.setLampColorAndMessage("Sprinkler not activated",1);
 
                 }
-                }
+                }*/
 
                 
-                // This delay slows down the sample rate to Delay milliseconds
                 try {
                     Thread.sleep(delay);
                 } // try
@@ -260,10 +260,11 @@ class SecurityMonitor extends Thread
                 } // catch
             } // while
         }
+    }
         else {
             System.out.println("Unable to register with the event manager.\n\n");
         } // if
-    } // main
+} // main
 
     /**
      * This method returns the registered status

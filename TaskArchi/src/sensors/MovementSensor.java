@@ -25,7 +25,7 @@ import instrumentation.MessageWindow;
 public class MovementSensor extends Sensor implements Runnable {
      private float CurrentState;
      boolean MovementState = false;
-     boolean Done = false;
+     //boolean Done = false;
 
     private static MovementSensor INSTANCE = new MovementSensor();
         private MovementSensor(){
@@ -50,7 +50,7 @@ public class MovementSensor extends Sensor implements Runnable {
 
              messageWin.writeMessage("\n Initializating simulation ... ");
 
-             while (!Done)
+             while (!isDone)
              {
                  //post de current state
                 postEvent(evtMgrI,MOVEMENT,CurrentState);
@@ -79,13 +79,15 @@ public class MovementSensor extends Sensor implements Runnable {
                                         // output of the temperature as it would in reality.
                 if (evtMgrI.returnid() == MOVEMENT_SENSOR )
                     {
-                      if (evtMgrI.returnMessage().equalsIgnoreCase("MOVEMENT_ON")) // chiller on
+                      if (evtMgrI.returnMessage().equalsIgnoreCase(MOVEMENT_ON)) // chiller on
                             {
                                     MovementState = true;
+                                    CurrentState = 1;
                           } // if
-                            if (evtMgrI.returnMessage().equalsIgnoreCase("MOVEMENT_OFF")) // chiller off
+                            if (evtMgrI.returnMessage().equalsIgnoreCase(MOVEMENT_OFF)) // chiller off
                             {
-                                    MovementState = false;  
+                                    MovementState = false;
+                                    CurrentState=0;
                             } // if
 
 

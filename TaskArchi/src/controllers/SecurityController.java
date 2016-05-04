@@ -22,7 +22,7 @@ public class SecurityController  extends Controller implements Runnable {
     boolean DoorState = false;	// Chiller state: false == off, true == on
     boolean MovementState = false;
     int Delay = 1000;
-    boolean Done = false;
+    //boolean Done = false;
     
     private static SecurityController INSTANCE = new SecurityController();
     
@@ -87,7 +87,7 @@ public class SecurityController  extends Controller implements Runnable {
                 // output of the temperature as it would in reality.
                 System.out.println(evtMgrI.returnid());
                    if (evtMgrI.returnid() == SECURITY_CONTROLLER) {
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("W1")) { // heater on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_ON)) { // heater on
                             WindowState = true;
                             //messageWin.writeMessage("Received heater on event");
                             // Confirm that the message was recieved and acted on
@@ -97,7 +97,7 @@ public class SecurityController  extends Controller implements Runnable {
                         confirmMessage(evtMgrI,WINDOW_SENSOR,WINDOW_ON);
                         }
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("W0")) { // heater off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_OFF)) { // heater off
                             WindowState = false;
                             //messageWin.writeMessage("Received heater off event");
                             // Confirm that the message was recieved and acted on
@@ -107,7 +107,7 @@ public class SecurityController  extends Controller implements Runnable {
                         confirmMessage(evtMgrI,WINDOW_SENSOR,WINDOW_OFF);
                         }
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DO1")) { // chiller on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DOOR_ON)) { // chiller on
                             DoorState = true;
                             //messageWin.writeMessage("Received chiller on event");
                             // Confirm that the message was recieved and acted on
@@ -117,7 +117,7 @@ public class SecurityController  extends Controller implements Runnable {
                         confirmMessage(evtMgrI,DOOR_SENSOR,DOOR_ON);
                         }
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DO0")) { // chiller off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DOOR_OFF)) { // chiller off
                             DoorState = false;
                             //messageWin.writeMessage("Received chiller off event");
                             // Confirm that the message was recieved and acted on
@@ -126,7 +126,7 @@ public class SecurityController  extends Controller implements Runnable {
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,DOOR_SENSOR,DOOR_OFF);
                         }
-                    if (evtMgrI.returnMessage().equalsIgnoreCase("M1")) { // chiller on
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(MOVEMENT_ON)) { // chiller on
                             MovementState = true;
                             //messageWin.writeMessage("Received chiller on event");
                             // Confirm that the message was recieved and acted on
@@ -136,7 +136,7 @@ public class SecurityController  extends Controller implements Runnable {
                         confirmMessage(evtMgrI,MOVEMENT_SENSOR,MOVEMENT_ON);
                         }
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("M0")) { // chiller off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(MOVEMENT_OFF)) { // chiller off
                             MovementState = false;
                             //messageWin.writeMessage("Received chiller off event");
                             // Confirm that the message was recieved and acted on

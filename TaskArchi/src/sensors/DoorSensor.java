@@ -4,7 +4,7 @@
  * Project: Event Architectures
  * Institution: CIMAT
  * Reviewer: Perla Velasco Elizondo
- * Update by: Equipo MEETMECORP
+ * Authors: Equipo EasyMeetCorp
  * Date: 29/04/2016
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,15 +15,10 @@ package sensors;
 import common.Component;
 import instrumentation.MessageWindow;
 
-
-/**
- *
- * @author YMGM,MGL,JMMM
- */
 public class DoorSensor extends Sensor implements Runnable {
     private float CurrentState;
     private boolean DoorState = false;
-    private boolean Done = false;
+    //private boolean Done = false;
 
     private static DoorSensor INSTANCE = new DoorSensor();
 
@@ -51,7 +46,7 @@ public class DoorSensor extends Sensor implements Runnable {
 
         messageWin.writeMessage("\n Initializating simulation ... ");
      
-     while (!Done)
+     while (!isDone)
      {
          //post de current state
          
@@ -74,18 +69,20 @@ public class DoorSensor extends Sensor implements Runnable {
         // If there are more, it is the last message that will effect the
         // output of the temperature as it would in reality.
 
-                if ( evtMgrI.returnid() == DOOR)
+                if ( evtMgrI.returnid() == DOOR_SENSOR)
                 {
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_ON")) // chiller on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DOOR_ON)) // chiller on
                         {
                                 DoorState = true;
+                                CurrentState=1;
 
                          } // if
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_OFF")) // chiller off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DOOR_OFF)) // chiller off
                         {
                                 DoorState = false;
+                                CurrentState=0;
                          } // if
                         //CurrentState = evtMgrI.getEvent()
 
@@ -95,7 +92,8 @@ public class DoorSensor extends Sensor implements Runnable {
                // Here we wait for a 2.5 seconds before we start the next sample
                 if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                                   
+                    messageWin.writeMessage("\n\nSimulation Stopped. \n");
                 }
                  try {
                     Thread.sleep(delay);
@@ -141,7 +139,7 @@ public class DoorSensor extends Sensor implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        //if(args[0] != null) Component.SERVER_IP = args[0];
+        if(args[0] != null) Component.SERVER_IP = args[0];
         Component.SERVER_IP = "127.0.0.1";
         DoorSensor sensor = DoorSensor.getInstance();
         sensor.run();
