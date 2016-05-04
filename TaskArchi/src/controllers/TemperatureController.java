@@ -75,7 +75,7 @@ public class TemperatureController extends Controller implements Runnable {
              */
             while (!isDone) {
               try {
-                  evtMgrI.returnMessage();
+                  evtMgrI.getEvent();
               }
               catch (Exception e){
                   
@@ -89,6 +89,7 @@ public class TemperatureController extends Controller implements Runnable {
                 // If there are more, it is the last message that will effect the
                 // output of the temperature as it would in reality.
 //mod                int qlen = queue.getSize();
+                //System.out.println(evtMgrI.returnMessage()+ "Valor que yo regreso");
 
  //mod               for (int i = 0; i < qlen; i++) {
 //mod                    evt = queue.getEvent();

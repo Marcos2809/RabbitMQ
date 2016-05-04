@@ -218,10 +218,25 @@ public class RabbitMQInterface {
   }
     
      public String returnMessage(){
-        return message;
+        String []values = this.message.split("&");
+        
+        if (values.length == 2)
+          return values[0];
+        
+        return "";
     } 
     public int returnid(){
-        return event_id;
+        String []values = this.message.split("&");
+        
+        if (values.length == 2)
+           
+           try {
+               return Integer.parseInt(values[1]);
+           } catch (NumberFormatException e) {
+               return -1;
+           }
+       
+        return -1;
     }
     
 } // EventManagerInterface

@@ -81,7 +81,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
 
                 // Get the message queue
                 try {
-                    evtMgrI.returnMessage();
+                    evtMgrI.getEvent();
                 } // try
                 catch (Exception e) {
                     messageWin.writeMessage("Error getting event queue::" + e);
