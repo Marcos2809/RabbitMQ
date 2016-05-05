@@ -7,7 +7,7 @@
  * Date: November 2015
  * Developer: Ferman Ivan Tovar 
  * Reviewer: Perla Velasco Elizondo
- * * Update: Equipo MEETMECORP
+ * Update: Equipo MEETMECORP
  * Institution: CIMAT
  * Date: 29/04/2016 
  * **************************************************************************************
