@@ -30,6 +30,7 @@ public class ECSConsole {
         String option;                          // Menu choice from user
         boolean isError;                        // Error flag
         ECSMonitor monitor;                     // The environmental control system monitor
+        SecurityMonitor smonitor;               // Alarmas    
         float tempRangeHigh = (float) 100.0;	// These parameters signify the temperature and humidity ranges in terms
         float tempRangeLow = (float) 0.0;	// of high value and low values. The ECSmonitor will attempt to maintain
         float humiRangeHigh = (float) 100.0;	// this temperature and humidity. Temperatures are in degrees Fahrenheit
@@ -41,15 +42,18 @@ public class ECSConsole {
         if (args.length != 0) {
             // event manager is not on the local system
             monitor = new ECSMonitor(args[0]);
+            smonitor = new SecurityMonitor();
         }
         else {
             monitor = new ECSMonitor();
+            smonitor = new SecurityMonitor();
         } // if
 
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
         if (monitor.isRegistered()) {
             monitor.start(); // Here we start the monitoring and control thread
+            smonitor.start();
 
             while (!isDone) {
                 // Here, the main thread continues and provides the main menu

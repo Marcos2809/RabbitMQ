@@ -59,7 +59,7 @@ public class HumiditySensor extends Sensor implements Runnable {
             } 
 
             messageWin.writeMessage("\nInitializing Humidity Simulation::");
-            relativeHumidity = getRandomNumber() * (float) 100.00;
+            relativeHumidity = getRandomNumber() * (float) 10.00;
             if (coinToss()) {
                 driftValue = getRandomNumber() * (float) -1.0;
             }
@@ -95,7 +95,7 @@ public class HumiditySensor extends Sensor implements Runnable {
                 // If there are more, it is the last message that will effect the
                 // output of the humidity as it would in reality.
       
-                    if (evtMgrI.returnid() == HUMIDITY_SENSOR) {
+                    if (evtMgrI.returnid() == HUMIDITY_CONTROLLER) {
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_ON)) // humidifier on
                         {
                             humidifierState = true;

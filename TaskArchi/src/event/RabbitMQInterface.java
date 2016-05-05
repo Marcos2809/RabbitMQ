@@ -190,8 +190,7 @@ public class RabbitMQInterface {
     } // getRegistrationTime
 
       public void sendEvent(String messages, String ideven) throws Exception {
-            
-            channel.basicPublish(EXCHANGE_NAME, "", null, messages.getBytes("UTF-8"));
+             channel.basicPublish(EXCHANGE_NAME, "", null, messages.getBytes("UTF-8"));
             message=messages;
         }
 //   
