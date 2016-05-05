@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 public class ECSMonitor extends Thread {
 
-    //private RabbitMQInterface em = null;            // Interface object to the event manager
+    private RabbitMQInterface em = null;            // Interface object to the event manager
     private String evtMgrIP = null;			// Event Manager IP address
     private float tempRangeHigh = 100;                  // These parameters signify the temperature and humidity ranges in terms
     private float tempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
@@ -40,7 +40,7 @@ public class ECSMonitor extends Thread {
         try {
             // Here we create an event manager interface object. This assumes
             // that the event manager is on the local machine
-         //   em = new RabbitMQInterface();
+            em = new RabbitMQInterface();
         }
         catch (Exception e) {
             System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
@@ -68,7 +68,7 @@ public class ECSMonitor extends Thread {
         //int msg_numero = 0;
         //String msg_texto = "0";
                 
-        RabbitMQInterface em = null;
+        //RabbitMQInterface em = null;
         Event evt = null;			// Event object
         EventQueue eq = null;			// Message Queue
         int evtId = 0;				// User specified event ID
@@ -283,7 +283,7 @@ public class ECSMonitor extends Thread {
         
       // Here we send the event to the event manager.
         try {
-            RabbitMQInterface em = new RabbitMQInterface();
+            //RabbitMQInterface em = new RabbitMQInterface();
         if (ON) {
             em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
              
@@ -310,7 +310,7 @@ public class ECSMonitor extends Thread {
                 
         // Here we send the event to the event manager.
         try {
-            RabbitMQInterface em = new RabbitMQInterface();
+           // RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             em.sendEvent(Component.CHILLER_ON+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
            // em.sendEvent(Component.CHILLER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
@@ -336,7 +336,7 @@ public class ECSMonitor extends Thread {
     private void humidifier(boolean ON) {
         // Here we create the event.
         try {
-            RabbitMQInterface em = new RabbitMQInterface();
+           // RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }
@@ -360,7 +360,7 @@ public class ECSMonitor extends Thread {
     private void dehumidifier(boolean ON) {
         // Here we create the event.
         try {
-            RabbitMQInterface em = new RabbitMQInterface();
+            //RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             em.sendEvent(Component.DEHUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }

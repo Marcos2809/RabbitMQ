@@ -50,6 +50,8 @@ public class DoorSensor extends Sensor implements Runnable {
 
 
         messageWin.writeMessage("\n Initializating simulation ... ");
+        CurrentState = (float) 50.00;
+        
      
      while (!Done)
      {
@@ -93,6 +95,9 @@ public class DoorSensor extends Sensor implements Runnable {
                 } // Now we trend the relative humidity according to the status of the
                 // humidifier/dehumidifier controller.
                // Here we wait for a 2.5 seconds before we start the next sample
+                if (DoorState) {
+                    CurrentState += getRandomNumber();
+                }
                 if (evtMgrI.returnid() == END) {
                         isDone = true;
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");

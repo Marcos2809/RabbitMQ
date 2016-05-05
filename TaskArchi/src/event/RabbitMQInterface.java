@@ -10,8 +10,8 @@
  */
 package event;
 
-import java.rmi.*;
-import java.net.*;
+//import java.rmi.*;
+//import java.net.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import com.rabbitmq.client.*;
@@ -20,6 +20,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
 
 
 public class RabbitMQInterface {
@@ -31,7 +32,9 @@ public class RabbitMQInterface {
     public static String x;
     Channel channel;
     Connection connection;
+    String queueName;
     public int a = 1;
+    
 
       
     /**
@@ -137,8 +140,13 @@ public class RabbitMQInterface {
             factory.setHost("localhost");
             try{
                 connection = factory.newConnection();
+                channel = connection.createChannel();
+                channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+                
+                queueName = channel.queueDeclare().getQueue();
+                channel.queueBind(queueName, EXCHANGE_NAME, "fanout");
+
                 }catch(Exception e){
-                        e.printStackTrace();
             }
 
     }
@@ -181,8 +189,7 @@ public class RabbitMQInterface {
     } // getRegistrationTime
 
       public void sendEvent(String messages, String ideven) throws Exception {
-            channel = connection.createChannel();
-            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+            
             channel.basicPublish(EXCHANGE_NAME, "", null, messages.getBytes("UTF-8"));
             message=messages;
         }
@@ -196,9 +203,7 @@ public class RabbitMQInterface {
      * @throws event.RabbitMQInterface.GetEventException 
      */
     public String getEvent () throws Exception {
-        Channel channel = connection.createChannel();
-        String queueName = channel.queueDeclare().getQueue();
-        channel.queueBind(queueName, EXCHANGE_NAME, "");
+       
         Consumer consumer = new DefaultConsumer(channel) {
           @Override
           public void handleDelivery(String consumerTag, Envelope envelope,
