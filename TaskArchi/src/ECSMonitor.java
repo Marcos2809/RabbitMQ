@@ -7,6 +7,9 @@
  * Date: November 2015
  * Developer: Ferman Ivan Tovar 
  * Reviewer: Perla Velasco Elizondo
+ * Update: Equipo MEETMECORP
+ * Institution: CIMAT
+ * Date: 29/04/2016
  * **************************************************************************************
  * This class monitors the environmental control systems that control museum
  * temperature and humidity. In addition to monitoring the temperature and
@@ -65,10 +68,6 @@ public class ECSMonitor extends Thread {
 
     @Override
     public void run() {
-        //int msg_numero = 0;
-        //String msg_texto = "0";
-                
-        //RabbitMQInterface em = null;
         Event evt = null;			// Event object
         EventQueue eq = null;			// Message Queue
         int evtId = 0;				// User specified event ID
@@ -128,13 +127,12 @@ public class ECSMonitor extends Thread {
                 // that will effect the status of the temperature and humidity controllers
                 // as it would in reality.
                  
-                    //  System.out.println("ID Event: "+ em.returnid());
+                    
             
                     if (em.returnid() == 1) { // Temperature reading
                         try {
                             currentTemperature = Float.valueOf(em.returnMessage());
-                          //  System.out.println("PRueba del elelmento: "+ currentTemperature);
-                        } // try
+                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading temperature: " + e);
                         } // catch // catch
@@ -164,24 +162,20 @@ public class ECSMonitor extends Thread {
                 
                 messageWin.writeMessage("Temperature:: " + currentTemperature + "F  Humidity:: " + currentHumidity);
                 // Check temperature and effect control as necessary
-               // System.out.println("Mi temperatrura tempRangeLow: "+tempRangeLow+" Mi temperatrura tempRangeHigh"+tempRangeHigh+ "ACtual"+ currentTemperature);
-                if (currentTemperature < tempRangeLow) { // temperature is below threshhold
+               if (currentTemperature < tempRangeLow) { // temperature is below threshhold
                     tempIndicator.setLampColorAndMessage("TEMP LOW", 3);
-                   // System.out.println("Aqui si entro el maldito");
                    heater(on);
                    chiller(off);
                 }
                 else {
                     if (currentTemperature > tempRangeHigh) { // temperature is above threshhold
-                       // System.out.println("Aqui tambien entro ewl maldito");
-                        tempIndicator.setLampColorAndMessage("TEMP HIGH", 3);
+                       tempIndicator.setLampColorAndMessage("TEMP HIGH", 3);
                        heater(off);
                        chiller(on);
                     }
                     else {
                         tempIndicator.setLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
-                      //  System.out.println("Aqui tambien se la pelo y entro");
-                        heater(off);
+                       heater(off);
                         chiller(off);
                     } // if
                 } // if
@@ -258,17 +252,7 @@ public class ECSMonitor extends Thread {
      */
     public void halt() {
         messageWin.writeMessage("***HALT MESSAGE RECEIVED - SHUTTING DOWN SYSTEM***");
-        // Here we create the stop event.
-       // Event evt;
-       // evt = new Event(Component.END, "XXX");
-        // Here we send the event to the event manager.
-        try {
-            //em.sendEvent("", "");
-            
-        }
-        catch (Exception e) {
-            System.out.println("Error sending halt message:: " + e);
-        }
+          
     } // halt
 
     /**
@@ -283,17 +267,14 @@ public class ECSMonitor extends Thread {
         
       // Here we send the event to the event manager.
         try {
-            //RabbitMQInterface em = new RabbitMQInterface();
         if (ON) {
             em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
-             
         }
         else {
             em.sendEvent(Component.HEATER_OFF+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
         }
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending heater control message:: " + e);
            
         } // catch
     } // heater
@@ -310,19 +291,14 @@ public class ECSMonitor extends Thread {
                 
         // Here we send the event to the event manager.
         try {
-           // RabbitMQInterface em = new RabbitMQInterface();
-          if (ON) {
+           if (ON) {
             em.sendEvent(Component.CHILLER_ON+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
-           // em.sendEvent(Component.CHILLER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
         }
         else {
             em.sendEvent(Component.CHILLER_OFF+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
-           // em.sendEvent(Component.CHILLER_OFF+"&"+Component.TEMPERATURE_SENSOR, "logs");
         } // 
-//            em.sendEvent("", "");
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending chiller control message:: " + e);
         } // catch
     } // Chiller
 
@@ -336,18 +312,15 @@ public class ECSMonitor extends Thread {
     private void humidifier(boolean ON) {
         // Here we create the event.
         try {
-           // RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }
         else {
             em.sendEvent(Component.HUMIDIFIER_OFF+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         } // 
-//            em.sendEvent("", "");
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending chiller control message:: " + e);
-        } // catch
+         } // catch
     } // Humidifier
 
     /**
@@ -360,17 +333,14 @@ public class ECSMonitor extends Thread {
     private void dehumidifier(boolean ON) {
         // Here we create the event.
         try {
-            //RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             em.sendEvent(Component.DEHUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }
         else {
             em.sendEvent(Component.DEHUMIDIFIER_OFF+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         } // 
-//            em.sendEvent("", "");
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending chiller control message:: " + e);
         } // catch
     } // Dehumidifier
 } // ECSMonitor

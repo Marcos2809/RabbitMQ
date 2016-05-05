@@ -139,10 +139,11 @@ public class RabbitMQInterface {
         ConnectionFactory factory = new ConnectionFactory();
             factory.setHost("localhost");
             try{
+                // Declaration Publish 
                 connection = factory.newConnection();
                 channel = connection.createChannel();
                 channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-                
+              // Declaration Suscribe Message  
                 queueName = channel.queueDeclare().getQueue();
                 channel.queueBind(queueName, EXCHANGE_NAME, "fanout");
 
