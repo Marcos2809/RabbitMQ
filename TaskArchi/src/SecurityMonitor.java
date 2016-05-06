@@ -69,7 +69,7 @@ public class SecurityMonitor extends Thread {
             System.out.println("SecurityMonitor::Error instantiating event manager interface: " + e);
             registered = false;
         } // catch // catch
-    } // Constructor
+    } // 
 
 
     @Override
