@@ -59,7 +59,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
             } // catch
 
             messageWin.writeMessage("\nInitializing Temperature Simulation::");
-            currentTemperature = (float) 5.00;
+            currentTemperature = (float) 50.00;
             if (coinToss()) {
                 driftValue = getRandomNumber() * (float) -1.0;
             }

@@ -57,9 +57,9 @@ public class ECSConsole {
 
             while (!isDone) {
                 // Here, the main thread continues and provides the main menu
-                System.out.println("\n\n\n\n");
-                System.out.println("Environmental Control System (ECS) Command Console: \n");
-
+                //System.out.println("\n\n\n\n");
+                //System.out.println("Environmental Control System (ECS) Command Console: \n");
+                /*
                 if (args.length != 0) {
                     System.out.println("Using event manger at: " + args[0] + "\n");
                 }
@@ -75,7 +75,7 @@ public class ECSConsole {
                 System.out.println("X: Stop System\n");
                 System.out.print("\n>>>> ");
                 option = userInput.keyboardReadString();
-
+                
                 //////////// option 1 ////////////
                 if (option.equals("1")) {
                     // Here we get the temperature ranges
@@ -173,12 +173,14 @@ public class ECSConsole {
                     // become dead queues and they collect events and will eventually
                     // cause problems for the event manager.
 
-                    monitor.halt();
+                    //monitor.halt();
                     isDone = true;
-                    System.out.println("\nConsole Stopped... Exit monitor mindow to return to command prompt.");
-                    smonitor.halt();
+                    //System.out.println("\nConsole Stopped... Exit monitor mindow to return to command prompt.");
+                    //smonitor.halt();
                 } // if
+                */
             } // while
+            
         }
         else {
             System.out.println("\n\nUnable start the monitor.\n\n");

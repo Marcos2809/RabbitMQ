@@ -22,16 +22,19 @@ import common.Component;
 import instrumentation.*;
 import event.*;
 import event.RabbitMQInterface;
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import views.MumaMonitor;
 
 public class ECSMonitor extends Thread {
 
-    private RabbitMQInterface em = null;            // Interface object to the event manager
+    private RabbitMQInterface em = null;                // Interface object to the event manager
+    private MumaMonitor mMonitor = null;
     private String evtMgrIP = null;			// Event Manager IP address
-    private float tempRangeHigh = 10;                  // These parameters signify the temperature and humidity ranges in terms
+    private float tempRangeHigh = 100;                  // These parameters signify the temperature and humidity ranges in terms
     private float tempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
-    private float humiRangeHigh = 10;                  // this temperature and humidity. Temperatures are in degrees Fahrenheit
+    private float humiRangeHigh = 100;                  // this temperature and humidity. Temperatures are in degrees Fahrenheit
     private float humiRangeLow = 0;			// and humidity is in relative humidity percentage.
     boolean registered = true;				// Signifies that this class is registered with an event manager.
     MessageWindow messageWin = null;			// This is the message window
@@ -83,6 +86,8 @@ public class ECSMonitor extends Thread {
         boolean isDone = false;			// Loop termination flag
         boolean on = true;			// Used to turn on heaters, chillers, humidifiers, and dehumidifiers
         boolean off = false;			// Used to turn off heaters, chillers, humidifiers, and dehumidifiers
+        mMonitor = new MumaMonitor();
+        
         try {
             em = new RabbitMQInterface();
         } catch (Exception ex) {
@@ -95,7 +100,7 @@ public class ECSMonitor extends Thread {
             // because we do not know if the temperature/humidity is high/low.
             // This panel is placed in the upper left hand corner and the status 
             // indicators are placed directly to the right, one on top of the other
-
+            /*
             messageWin = new MessageWindow("ECS Monitoring Console", 0, 0);
             tempIndicator = new Indicator("TEMP UNK", messageWin.getX() + messageWin.width(), 0);
             humIndicator = new Indicator("HUMI UNK", messageWin.getX() + messageWin.width(), (int) (messageWin.height() / 2), 2);
@@ -109,19 +114,20 @@ public class ECSMonitor extends Thread {
             catch (Exception e) {
                 System.out.println("Error:: " + e);
             } // catch
-
+            */
             /**
              * ******************************************************************
              ** Here we start the main simulation loop
              * *******************************************************************
              */
+            mMonitor.show();
             while (!isDone) {
                 // Here we get our event queue from the event manager
                 try {
                     em.getEvent();
                 } // try
                 catch (Exception e) {
-                    messageWin.writeMessage("Error getting event queue::" + e);
+                    //messageWin.writeMessage("Error getting event queue::" + e);
                 } // catch // catch
 
                 // If there are messages in the queue, we read through them.
@@ -141,7 +147,7 @@ public class ECSMonitor extends Thread {
                             yaLeyoTemperatura = true;
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading temperature: " + e);
+                            //messageWin.writeMessage("Error reading temperature: " + e);
                         } // catch // catch
                     } // if
 
@@ -151,7 +157,7 @@ public class ECSMonitor extends Thread {
                             yaLeyoHumedad = true;
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading humidity: " + e);
+                            //messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
 
@@ -161,52 +167,85 @@ public class ECSMonitor extends Thread {
                     if (em.returnid() == 99) {
                         isDone = true;
                        
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
-                        humIndicator.dispose();
-                        tempIndicator.dispose();
+                        //humIndicator.dispose();
+                        //tempIndicator.dispose();
                     } // if
                 
-                messageWin.writeMessage("Temperature:: " + currentTemperature + "F  Humidity:: " + currentHumidity);
+                //messageWin.writeMessage("Temperature:: " + currentTemperature + "F  Humidity:: " + currentHumidity);
                 // Check temperature and effect control as necessary
+                mMonitor.txtTemperature.setText(currentTemperature + " F");
+                mMonitor.txtHumidity.setText(currentHumidity + " %");
+
                 if (currentTemperature < tempRangeLow) { // temperature is below threshhold
-                    tempIndicator.setLampColorAndMessage("TEMP LOW", 3);
-                   heater(on);
-                   chiller(off);
+                   //tempIndicator.setLampColorAndMessage("TEMP LOW", 3);
+                   //heater(on);
+                   //chiller(off);
+                   mMonitor.txtTemperature.setBackground(Color.red);
+                   mMonitor.lblHeater.setText("HEATER ON");
+                   mMonitor.txtHeater.setBackground(Color.green);
+                   mMonitor.lblChiller.setText("CHILLER OFF");
+                   mMonitor.txtChiller.setBackground(Color.black);
                 }
                 else {
                     if (currentTemperature > tempRangeHigh) { // temperature is above threshhold
-                       tempIndicator.setLampColorAndMessage("TEMP HIGH", 3);
-                       heater(off);
-                       chiller(on);
+                       //tempIndicator.setLampColorAndMessage("TEMP HIGH", 3);
+                       //heater(off);
+                       //chiller(on);
+                        mMonitor.txtTemperature.setBackground(Color.red);
+                        mMonitor.lblHeater.setText("HEATER OFF");
+                        mMonitor.txtHeater.setBackground(Color.black);
+                        mMonitor.lblChiller.setText("CHILLER ON");
+                        mMonitor.txtChiller.setBackground(Color.green);
                     }
                     else {
                         if (yaLeyoTemperatura) {
-                            tempIndicator.setLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
-                            heater(off);
-                            chiller(off);
+                            //tempIndicator.setLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
+                            //heater(off);
+                            //chiller(off);
+                            mMonitor.txtTemperature.setBackground(Color.green);
+                            mMonitor.lblHeater.setText("HEATER OFF");
+                            mMonitor.txtHeater.setBackground(Color.black);
+                            mMonitor.lblChiller.setText("CHILLER OFF");
+                            mMonitor.txtChiller.setBackground(Color.black);
                         }
                     } // if
                 } // if
 
                 // Check humidity and effect control as necessary
                 if (currentHumidity < humiRangeLow) {
-                    humIndicator.setLampColorAndMessage("HUMI LOW", 3); // humidity is below threshhold
-                    humidifier(on);
-                    dehumidifier(off);
+                    //humIndicator.setLampColorAndMessage("HUMI LOW", 3); // humidity is below threshhold
+                    //humidifier(on);
+                    //dehumidifier(off);
+                    mMonitor.txtHumidity.setBackground(Color.red);
+                    mMonitor.lblHumidifier.setText("HUMIDIFIER ON");
+                    mMonitor.txtHumidifier.setBackground(Color.green);
+                    mMonitor.lblDehumidifier.setText("DEHUMIDIFIER OFF");
+                    mMonitor.txtDehumidifier.setBackground(Color.black);
                 }
                 else {
                     if (currentHumidity > humiRangeHigh) { // humidity is above threshhold
-                        humIndicator.setLampColorAndMessage("HUMI HIGH", 3);
-                        humidifier(off);
-                        dehumidifier(on);
+                        //humIndicator.setLampColorAndMessage("HUMI HIGH", 3);
+                        //humidifier(off);
+                        //dehumidifier(on);
+                        mMonitor.txtHumidity.setBackground(Color.red);
+                        mMonitor.lblHumidifier.setText("HUMIDIFIER OFF");
+                        mMonitor.txtHumidifier.setBackground(Color.black);
+                        mMonitor.lblDehumidifier.setText("DEHUMIDIFIER ON");
+                        mMonitor.txtDehumidifier.setBackground(Color.green);
                     }
                     else {
                         if (yaLeyoHumedad) {
-                            humIndicator.setLampColorAndMessage("HUMI OK", 1); // humidity is within threshhold
-                            humidifier(off);
-                            dehumidifier(off);
+                            //humIndicator.setLampColorAndMessage("HUMI OK", 1); // humidity is within threshhold
+                            //humidifier(off);
+                            //dehumidifier(off);
+                            mMonitor.txtHumidity.setBackground(Color.green);
+                            mMonitor.lblHumidifier.setText("HUMIDIFIER OFF");
+                            mMonitor.txtHumidifier.setBackground(Color.black);
+                            mMonitor.lblDehumidifier.setText("DEHUMIDIFIER OFF");
+                            mMonitor.txtDehumidifier.setBackground(Color.black);
                         }
                     } // if
                 } // if
@@ -218,11 +257,15 @@ public class ECSMonitor extends Thread {
                 catch (Exception e) {
                     System.out.println("Sleep error:: " + e);
                 } // catch
+                tempRangeLow = mMonitor.sldTempMin.getValue();
+                tempRangeHigh = mMonitor.sldTempMax.getValue();
+                humiRangeLow = mMonitor.sldHumMin.getValue();
+                humiRangeHigh = mMonitor.sldHumMax.getValue();
             } // while
         }
-        else {
+        /*else {
             System.out.println("Unable to register with the event manager.\n\n");
-        } // if
+        } // if*/
     } // main
 
     /**
@@ -243,7 +286,7 @@ public class ECSMonitor extends Thread {
     public void setTemperatureRange(float lowtemp, float hightemp) {
         tempRangeHigh = hightemp;
         tempRangeLow = lowtemp;
-        messageWin.writeMessage("***Temperature range changed to::" + tempRangeLow + "F - " + tempRangeHigh + "F***");
+        //messageWin.writeMessage("***Temperature range changed to::" + tempRangeLow + "F - " + tempRangeHigh + "F***");
     } // setTemperatureRange
 
     /**
@@ -255,20 +298,20 @@ public class ECSMonitor extends Thread {
     public void setHumidityRange(float lowhumi, float highhumi) {
         humiRangeHigh = highhumi;
         humiRangeLow = lowhumi;
-        messageWin.writeMessage("***Humidity range changed to::" + humiRangeLow + "% - " + humiRangeHigh + "%***");
+        //messageWin.writeMessage("***Humidity range changed to::" + humiRangeLow + "% - " + humiRangeHigh + "%***");
     } // setTemperatureRange
 
     /**
      * This method posts an event that stops the environmental control system.
      * Exceptions: Posting to event manager exception
      */
-    public void halt() {
-        messageWin.writeMessage("***HALT MESSAGE RECEIVED - SHUTTING DOWN SYSTEM***");
+    //public void halt() {
+        //messageWin.writeMessage("***HALT MESSAGE RECEIVED - SHUTTING DOWN SYSTEM***");
         // Here we create the stop event.
        // Event evt;
        // evt = new Event(Component.END, "XXX");
         // Here we send the event to the event manager.
-        try {
+        /*try {
             //em.sendEvent("", "");
             
         }
@@ -276,7 +319,7 @@ public class ECSMonitor extends Thread {
             System.out.println("Error sending halt message:: " + e);
         }
     } // halt
-
+    */
     /**
      * This method posts events that will signal the temperature controller to
      * turn on/off the heater
@@ -284,7 +327,7 @@ public class ECSMonitor extends Thread {
      * @param ON indicates whether to turn the heater on or off. Exceptions:
      * Posting to event manager exception
      */
-    private void heater(boolean ON) {
+    /*private void heater(boolean ON) {
         // Here we create the event.
         
       // Here we send the event to the event manager.
@@ -304,7 +347,7 @@ public class ECSMonitor extends Thread {
            
         } // catch
     } // heater
-
+    */
     /**
      * This method posts events that will signal the temperature controller to
      * turn on/off the chiller
@@ -312,7 +355,7 @@ public class ECSMonitor extends Thread {
      * @param ON indicates whether to turn the chiller on or off. Exceptions:
      * Posting to event manager exception
      */
-    private void chiller(boolean ON) {
+    /*private void chiller(boolean ON) {
         // Here we create the event.
                 
         // Here we send the event to the event manager.
@@ -332,7 +375,8 @@ public class ECSMonitor extends Thread {
             //System.out.println("Error sending chiller control message:: " + e);
         } // catch
     } // Chiller
-
+    */
+    
     /**
      * This method posts events that will signal the humidity controller to turn
      * on/off the humidifier
@@ -340,13 +384,12 @@ public class ECSMonitor extends Thread {
      * @param ON indicates whether to turn the humidifier on or off. Exceptions:
      * Posting to event manager exception
      */
-    private void humidifier(boolean ON) {
+    /*private void humidifier(boolean ON) {
         // Here we create the event.
         try {
            // RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             //em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
-            System.out.println("Aca tambien le entra el pelñon");
              em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }
         else {
@@ -367,7 +410,7 @@ public class ECSMonitor extends Thread {
      * @param ON indicates whether to turn the dehumidifier on or off.
      * Exceptions: Posting to event manager exception
      */
-    private void dehumidifier(boolean ON) {
+    /*private void dehumidifier(boolean ON) {
         // Here we create the event.
         try {
             //RabbitMQInterface em = new RabbitMQInterface();
@@ -383,4 +426,5 @@ public class ECSMonitor extends Thread {
             //System.out.println("Error sending chiller control message:: " + e);
         } // catch
     } // Dehumidifier
+    */
 } // ECSMonitor
