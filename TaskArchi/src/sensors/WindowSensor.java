@@ -24,8 +24,7 @@ import instrumentation.MessageWindow;
 public class WindowSensor extends Sensor implements Runnable {
      private float CurrentState;
      boolean WindowState = false;
-     boolean Done = false;
-
+     
 private static WindowSensor INSTANCE = new WindowSensor();
     private WindowSensor(){
         super();
@@ -49,7 +48,7 @@ private static WindowSensor INSTANCE = new WindowSensor();
 
      messageWin.writeMessage("\n Initializating simulation ... ");
      
-     while (!Done)
+     while (!isDone)
      {
          //post de current state
          
@@ -76,11 +75,11 @@ private static WindowSensor INSTANCE = new WindowSensor();
 
             if ( evtMgrI.returnid() == WINDOW_SENSOR )
             {
-                    if (evtMgrI.returnMessage().equalsIgnoreCase("WINDOW_ON")) // chiller on
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_ON)) // chiller on
                     {
                             WindowState = true;
                     } // if
-                    if (evtMgrI.returnMessage().equalsIgnoreCase("WINDOW_OFF")) // chiller off
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_OFF)) // chiller off
                     {
                             WindowState = false;
                     } // if
@@ -135,7 +134,7 @@ private static WindowSensor INSTANCE = new WindowSensor();
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        if(args[0] != null) Component.SERVER_IP = args[0];
+       // if(args[0] != null) Component.SERVER_IP = args[0];
         WindowSensor sensor = WindowSensor.getInstance();
         sensor.run();
     }//fin de main

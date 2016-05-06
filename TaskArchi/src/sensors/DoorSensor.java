@@ -21,9 +21,8 @@ import instrumentation.MessageWindow;
  * @author YMGM,MGL,JMMM
  */
 public class DoorSensor extends Sensor implements Runnable {
-    private float CurrentState;
+    private int CurrentState;
     private boolean DoorState = false;
-    private boolean Done = false;
 
     private static DoorSensor INSTANCE = new DoorSensor();
 
@@ -50,13 +49,13 @@ public class DoorSensor extends Sensor implements Runnable {
 
 
         messageWin.writeMessage("\n Initializating simulation ... ");
-        CurrentState = (float) 50.00;
+       
         
      
-     while (!Done)
+     while (!isDone)
      {
          //post de current state
-         
+          CurrentState = getRandomNumberent();
          postEvent(evtMgrI,DOOR,CurrentState);
          messageWin.writeMessage("Current State:: " + CurrentState);
          
@@ -76,16 +75,16 @@ public class DoorSensor extends Sensor implements Runnable {
         // If there are more, it is the last message that will effect the
         // output of the temperature as it would in reality.
 
-                if ( evtMgrI.returnid() == DOOR)
+                if ( evtMgrI.returnid() == DOOR_SENSOR)
                 {
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_ON")) // chiller on
+                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_ON")) // 
                         {
                                 DoorState = true;
 
                          } // if
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_OFF")) // chiller off
+                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_OFF")) // 
                         {
                                 DoorState = false;
                          } // if

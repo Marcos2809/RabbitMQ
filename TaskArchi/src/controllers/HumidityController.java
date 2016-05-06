@@ -97,21 +97,22 @@ public class HumidityController extends Controller implements Runnable {
                             messageWin.writeMessage("Received humidifier on event");
 
                             // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, HUMIDITY_SENSOR, HUMIDIFIER_ON);
+                            confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, HUMIDIFIER_ON);
+                          //  confirmMessage(evtMgrI, HUMIDITY_SENSOR, HUMIDIFIER_ON);
                         }
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) { // humidifier off
                             humidifierState = false;
                             messageWin.writeMessage("Received humidifier off event");
 
                             // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, HUMIDITY_SENSOR, HUMIDIFIER_OFF);
+                            confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, HUMIDIFIER_OFF);
                         }
                         if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) { // dehumidifier on
                             dehumidifierState = true;
                             messageWin.writeMessage("Received dehumidifier on event");
 
                             // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, HUMIDITY_SENSOR, DEHUMIDIFIER_ON);
+                            confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, DEHUMIDIFIER_ON);
                         }
 
                         if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) { // dehumidifier off
@@ -119,7 +120,7 @@ public class HumidityController extends Controller implements Runnable {
                             messageWin.writeMessage("Received dehumidifier off event");
 
                             // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, HUMIDITY_SENSOR, DEHUMIDIFIER_OFF);
+                            confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, DEHUMIDIFIER_OFF);
                        
                     }
 
@@ -157,6 +158,7 @@ public class HumidityController extends Controller implements Runnable {
                 }
                 try {
                     Thread.sleep(delay);
+                    //Thread.yield();
                 }
                 catch (Exception e) {
                     System.out.println("Sleep error:: " + e);

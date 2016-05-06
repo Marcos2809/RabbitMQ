@@ -46,6 +46,20 @@ public class Sensor extends Component {
         }
         return (val.floatValue());
     } // GetRandomNumber
+    protected int getRandomNumberent() {
+        Random r = new Random();
+        int val=0;
+        int res=0;
+        val = (int)(Math.random()*100 + 1);
+        if (val % 3==0){
+            res =1;
+                } else
+        {
+            res=0;
+        }
+            
+        return res;
+    }
 
     /**
      * This method provides a random true or

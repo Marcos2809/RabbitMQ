@@ -41,7 +41,8 @@ public class Controller extends Component {
         Event evt = new Event(evtId, m);
         // Here we send the event to the event manager.
         try {
-             ei.sendEvent(m, "");
+             //ei.sendEvent(m, "");
+              ei.sendEvent(m+"&"+evtId, "logs");
         } // try
         catch (Exception e) {
             System.out.println("Error Confirming Message:: " + e);

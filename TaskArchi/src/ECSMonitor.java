@@ -29,10 +29,10 @@ public class ECSMonitor extends Thread {
 
     private RabbitMQInterface em = null;            // Interface object to the event manager
     private String evtMgrIP = null;			// Event Manager IP address
-    private float tempRangeHigh = 100;                  // These parameters signify the temperature and humidity ranges in terms
+    private float tempRangeHigh = 10;                  // These parameters signify the temperature and humidity ranges in terms
     private float tempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
     private float humiRangeHigh = 10;                  // this temperature and humidity. Temperatures are in degrees Fahrenheit
-    private float humiRangeLow = 1;			// and humidity is in relative humidity percentage.
+    private float humiRangeLow = 0;			// and humidity is in relative humidity percentage.
     boolean registered = true;				// Signifies that this class is registered with an event manager.
     MessageWindow messageWin = null;			// This is the message window
     Indicator tempIndicator;				// Temperature indicator
@@ -179,14 +179,12 @@ public class ECSMonitor extends Thread {
                     }
                     else {
                         tempIndicator.setLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
-                      //  System.out.println("Aqui tambien se la pelo y entro");
                         heater(off);
                         chiller(off);
                     } // if
                 } // if
 
                 // Check humidity and effect control as necessary
-                System.out.println("currentHumidity" + currentHumidity +"ranto"+humiRangeLow);
                 if (currentHumidity < humiRangeLow) {
                     humIndicator.setLampColorAndMessage("HUMI LOW", 3); // humidity is below threshhold
                     humidifier(on);
@@ -286,7 +284,7 @@ public class ECSMonitor extends Thread {
             //RabbitMQInterface em = new RabbitMQInterface();
         if (ON) {
             em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
-             em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
+         //    em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
              
         }
         else {
@@ -340,6 +338,7 @@ public class ECSMonitor extends Thread {
            // RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             //em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
+            System.out.println("Aca tambien le entra el pelñon");
              em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }
         else {
