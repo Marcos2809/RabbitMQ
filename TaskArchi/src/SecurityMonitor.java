@@ -3,9 +3,6 @@
  * File:ECSMonitor.java 
  * Course: Software Architecture 
  * Project: Event Architectures  
- * Institution: Autonomous University of Zacatecas 
- * Date: November 2015
- * Developer: Ferman Ivan Tovar 
  * Reviewer: Perla Velasco Elizondo
  * Update: Equipo MEETMECORP
  * Institution: CIMAT
