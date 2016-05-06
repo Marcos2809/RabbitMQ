@@ -121,7 +121,10 @@ public class SecurityMonitor extends Thread {
                 catch (Exception e) {
                     messageWin.writeMessage("Error getting event queue::" + e);
                 } // catch // catch
-
+                String DoorStatus="OK";
+                String WinStatus="OK";
+                String MovStatus="None";
+                
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = 1 or 2. Event IDs of 1 are temperature
                 // readings from the temperature sensor; event IDs of 2 are humidity sensor
@@ -135,8 +138,10 @@ public class SecurityMonitor extends Thread {
             
                     if (em.returnid() == 3) { // Door reading
                         try {
-                            messageWin.writeMessage("Seguridad: " + em.returnMessage() + " ID MEssage"+ em.returnid());
-                         
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage() + " ID MEssage"+ em.returnid());
+                            if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                DoorStatus="Broken";
+                            }
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading temperature: " + e);
@@ -145,7 +150,10 @@ public class SecurityMonitor extends Thread {
 
                     if (em.returnid() == 6) { // Window reading
                         try {
-                            messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            if (em.returnMessage()=="1.0"){
+                                WinStatus="Broken";
+                            }
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading humidity: " + e);
@@ -154,13 +162,16 @@ public class SecurityMonitor extends Thread {
                     
                     if (em.returnid() == 7) { // movement reading
                         try {
-                            messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            if (em.returnMessage()=="1.0"){
+                                MovStatus="Detected";
+                            }
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
-                    if (em.returnid() == 10) { // fire reading
+                    /*if (em.returnid() == 10) { // fire reading
                         try {
                             messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
                         } // try
@@ -176,7 +187,9 @@ public class SecurityMonitor extends Thread {
                             messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
-
+                    */
+                    messageWin.writeMessage("Door Status: " + DoorStatus + " :: Window Status: "+ WinStatus + " :: Movement Status: " + MovStatus);
+                    
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
@@ -219,7 +232,7 @@ public class SecurityMonitor extends Thread {
                 if(em.returnMessage().equalsIgnoreCase("M1")) {
                           Activatemov(on);
                         messageWin.writeMessage("Security:: ALERT! Movement detection");
-                        mi.setLampColorAndMessage("Movement Broken", 1); // Movement detection
+                        mi.setLampColorAndMessage("Movement Detected", 1); // Movement detection
 
 
                 }
