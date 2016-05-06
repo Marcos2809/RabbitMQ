@@ -22,10 +22,11 @@ import instrumentation.MessageWindow;
  * @author YMGM,MGL,JMMM
  */
 public class WindowSensor extends Sensor implements Runnable {
-     private float CurrentState;
+     private int CurrentState;
      boolean WindowState = false;
      
 private static WindowSensor INSTANCE = new WindowSensor();
+
     private WindowSensor(){
         super();
     }
@@ -51,10 +52,8 @@ private static WindowSensor INSTANCE = new WindowSensor();
      while (!isDone)
      {
          //post de current state
-         
-         postEvent(evtMgrI,WINDOW,CurrentState);
-         
-         
+          CurrentState = getRandomNumberent();
+         postEvent(evtMgrI,DOOR,CurrentState);
          messageWin.writeMessage("Current State:: " + CurrentState);
          
           //Get the message queue
@@ -75,11 +74,11 @@ private static WindowSensor INSTANCE = new WindowSensor();
 
             if ( evtMgrI.returnid() == WINDOW_SENSOR )
             {
-                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_ON)) // chiller on
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_ON)) //  on
                     {
                             WindowState = true;
                     } // if
-                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_OFF)) // chiller off
+                    if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_OFF)) //  off
                     {
                             WindowState = false;
                     } // if
@@ -89,6 +88,9 @@ private static WindowSensor INSTANCE = new WindowSensor();
             // If the event ID == 99 then this is a signal that the simulation
             // is to end. At this point, the loop termination flag is set to
             // true and this process unregisters from the event manager.
+            if (WindowState) {
+                    CurrentState += getRandomNumber();
+                }
             if (evtMgrI.returnid() == END) {
                         isDone = true;
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");
@@ -99,8 +101,8 @@ private static WindowSensor INSTANCE = new WindowSensor();
                 catch (Exception e) {
                   messageWin.writeMessage("Sleep error:: " + e);
                 } 
-            } }
-
+            } 
+     }
 }//fin de run
 
 
@@ -135,6 +137,7 @@ private static WindowSensor INSTANCE = new WindowSensor();
      */
     public static void main(String args[]) {
        // if(args[0] != null) Component.SERVER_IP = args[0];
+       Component.SERVER_IP = "127.0.0.1";
         WindowSensor sensor = WindowSensor.getInstance();
         sensor.run();
     }//fin de main
