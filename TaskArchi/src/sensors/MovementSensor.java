@@ -27,6 +27,7 @@ public class MovementSensor extends Sensor implements Runnable {
      boolean MovementState = false;
 
     private static MovementSensor INSTANCE = new MovementSensor();
+    
         private MovementSensor(){
             super();
         }
@@ -52,19 +53,17 @@ public class MovementSensor extends Sensor implements Runnable {
              while (!isDone)
              {
                  //post de current state
-                postEvent(evtMgrI,MOVEMENT,CurrentState);
-
-                 // Get the message queue
-                 try {
-                     evtMgrI.getEvent();
-                    } // try
-                    catch (Exception e) {
-                        messageWin.writeMessage("Error getting event queue::" + e);
-                    } // catch
-
-                 messageWin.writeMessage("Current State:: " + CurrentState);
-
-                  //Get the message queue
+               CurrentState = getRandomNumberent();
+               postEvent(evtMgrI,MOVEMENT,CurrentState);
+               messageWin.writeMessage("Current State:: " + CurrentState); //post de current state
+                       // Get the message queue
+                try {
+                evtMgrI.getEvent();
+                } // try
+                catch (Exception e) {
+                    messageWin.writeMessage("Error getting event queue::" + e);
+                } //
+                 //Get the message queue
                   // Get the message queue
 
 
@@ -90,6 +89,9 @@ public class MovementSensor extends Sensor implements Runnable {
 
                        //     CurrentState = evtMgrI.returnMessage();
                     }
+                if (MovementState) {
+                    CurrentState += getRandomNumber();
+                }
                 if (evtMgrI.returnid() == END) {
                         isDone = true;
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");
