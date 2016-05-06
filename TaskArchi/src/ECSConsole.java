@@ -42,7 +42,7 @@ public class ECSConsole {
         if (args.length != 0) {
             // event manager is not on the local system
             monitor = new ECSMonitor(args[0]);
-            smonitor = new SecurityMonitor();
+            smonitor = new SecurityMonitor(args[0]);
         }
         else {
             monitor = new ECSMonitor();
@@ -51,7 +51,7 @@ public class ECSConsole {
 
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
-        if (monitor.isRegistered()) {
+        if (monitor.isRegistered() && smonitor.isRegistered()) {
             monitor.start(); // Here we start the monitoring and control thread
             smonitor.start();
 
@@ -176,7 +176,7 @@ public class ECSConsole {
                     monitor.halt();
                     isDone = true;
                     System.out.println("\nConsole Stopped... Exit monitor mindow to return to command prompt.");
-                    monitor.halt();
+                    smonitor.halt();
                 } // if
             } // while
         }

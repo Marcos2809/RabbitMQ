@@ -78,13 +78,13 @@ public class DoorSensor extends Sensor implements Runnable {
                 if ( evtMgrI.returnid() == DOOR_SENSOR)
                 {
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_ON")) // 
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DOOR_ON)) // 
                         {
                                 DoorState = true;
 
                          } // if
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase("DOOR_OFF")) // 
+                        if (evtMgrI.returnMessage().equalsIgnoreCase(DOOR_OFF)) // 
                         {
                                 DoorState = false;
                          } // if

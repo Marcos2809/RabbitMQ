@@ -43,7 +43,7 @@ public class ECSMonitor extends Thread {
         try {
             // Here we create an event manager interface object. This assumes
             // that the event manager is on the local machine
-            em = new RabbitMQInterface();
+            //em = new RabbitMQInterface();
         }
         catch (Exception e) {
             System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
@@ -78,6 +78,8 @@ public class ECSMonitor extends Thread {
         float currentTemperature = 0;           // Current temperature as reported by the temperature sensor
         float currentHumidity = 0;		// Current relative humidity as reported by the humidity sensor
         int delay = 1000;			// The loop delay (1 second)
+        boolean yaLeyoTemperatura = false;	// Used to turn on heaters, chillers, humidifiers, and dehumidifiers
+        boolean yaLeyoHumedad = false;
         boolean isDone = false;			// Loop termination flag
         boolean on = true;			// Used to turn on heaters, chillers, humidifiers, and dehumidifiers
         boolean off = false;			// Used to turn off heaters, chillers, humidifiers, and dehumidifiers
@@ -136,6 +138,7 @@ public class ECSMonitor extends Thread {
                     if (em.returnid() == 1) { // Temperature reading
                         try {
                             currentTemperature = Float.valueOf(em.returnMessage());
+                            yaLeyoTemperatura = true;
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading temperature: " + e);
@@ -145,6 +148,7 @@ public class ECSMonitor extends Thread {
                     if (em.returnid() == 2) { // Humidity reading
                         try {
                             currentHumidity = Float.valueOf(em.returnMessage());
+                            yaLeyoHumedad = true;
                         } // try
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading humidity: " + e);
@@ -178,9 +182,11 @@ public class ECSMonitor extends Thread {
                        chiller(on);
                     }
                     else {
-                        tempIndicator.setLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
-                        heater(off);
-                        chiller(off);
+                        if (yaLeyoTemperatura) {
+                            tempIndicator.setLampColorAndMessage("TEMP OK", 1); // temperature is within threshhold
+                            heater(off);
+                            chiller(off);
+                        }
                     } // if
                 } // if
 
@@ -197,9 +203,11 @@ public class ECSMonitor extends Thread {
                         dehumidifier(on);
                     }
                     else {
-                        humIndicator.setLampColorAndMessage("HUMI OK", 1); // humidity is within threshhold
-                        humidifier(off);
-                        dehumidifier(off);
+                        if (yaLeyoHumedad) {
+                            humIndicator.setLampColorAndMessage("HUMI OK", 1); // humidity is within threshhold
+                            humidifier(off);
+                            dehumidifier(off);
+                        }
                     } // if
                 } // if
 

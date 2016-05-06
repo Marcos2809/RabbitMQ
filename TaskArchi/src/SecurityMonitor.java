@@ -1,17 +1,23 @@
 /**
  * **************************************************************************************
- * File:SecurityController.java 
+ * File:ECSMonitor.java 
  * Course: Software Architecture 
- * Project: Event Architectures
- * Institution: CIMAT
+ * Project: Event Architectures  
+ * Institution: Autonomous University of Zacatecas 
+ * Date: November 2015
+ * Developer: Ferman Ivan Tovar 
  * Reviewer: Perla Velasco Elizondo
- * Update by: Equipo MEETMECORP
+ * Update: Equipo MEETMECORP
  * Institution: CIMAT
  * Date: 29/04/2016
- * 
-* Monitor de seguridad: Esta clase controla el sensor de puerta, de ventana y de movimiento
-******************************************************************************************************************/
-
+ * **************************************************************************************
+ * This class monitors the environmental control systems that control museum
+ * temperature and humidity. In addition to monitoring the temperature and
+ * humidity, the ECSMonitor also allows a user to set the humidity and
+ * temperature ranges to be maintained. If temperatures exceed those limits
+ * over/under alarm indicators are triggered.
+ * **************************************************************************************
+ */
 import common.Component;
 import instrumentation.*;
 import event.*;
@@ -19,21 +25,24 @@ import event.RabbitMQInterface;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class SecurityMonitor extends Thread
-{
-    private RabbitMQInterface em = null;            
+public class SecurityMonitor extends Thread {
+
+    private RabbitMQInterface em = null;            // Interface object to the event manager
     private String evtMgrIP = null;			// Event Manager IP address
-    boolean isActive=true;
-    Indicator wi;                                       //indicador de ventana rota
-    Indicator di;                                       //indicador de puerta rota
-    Indicator mi;                                       //indicador de movimiento
-    Indicator fi;
-    Indicator si;
+    
+    private boolean isActive= true;                 // These parameters signify the temperature and humidity ranges in terms
+    
+    private Indicator wi;      			// of high value and low values. The ECSmonitor will attempt to maintain
+    private Indicator di;                    // this temperature and humidity. Temperatures are in degrees Fahrenheit
+    private Indicator mi;     			// and humidity is in relative humidity percentage.
+    private Indicator fi;    			// and humidity is in relative humidity percentage.
+    private Indicator si;
+    
     
     boolean registered = true;				// Signifies that this class is registered with an event manager.
     MessageWindow messageWin = null;			// This is the message window
     
-
+    
     public SecurityMonitor() {
         // event manager is on the local system
         try {
@@ -41,16 +50,15 @@ class SecurityMonitor extends Thread
             // that the event manager is on the local machine
             em = new RabbitMQInterface();
         }
-        catch (Exception e) {
+         catch (Exception e) {
             System.out.println("SecurityMonitor::Error instantiating event manager interface: " + e);
             registered = false;
         } // catch // catch
     } //Constructor
 
-    @SuppressWarnings("UseSpecificCatch")
     public SecurityMonitor(String evmIpAddress) {
         // event manager is not on the local system
-        evtMgrIP = evmIpAddress;
+       // evtMgrIP = evmIpAddress;
         try {
             // Here we create an event manager interface object. This assumes
             // that the event manager is NOT on the local machine
@@ -63,9 +71,10 @@ class SecurityMonitor extends Thread
         } // catch // catch
     } // Constructor
 
+
     @Override
     public void run() {
-        Event evt = null;			// Event object
+       Event evt = null;			// Event object
         EventQueue eq = null;			// Message Queue
         int evtId = 0;				// User specified event ID
         int delay = 1000;			// The loop delay (1 second)
@@ -73,12 +82,7 @@ class SecurityMonitor extends Thread
         boolean on = true;			// Used to turn on security
         boolean off = false;			// Used to turn off security
         String CurrentState2= "";
-    
-        try {
-            em = new RabbitMQInterface();
-        } catch (Exception ex) {
-            Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
        
         if (em != null) {
             // Now we create the ECS status and message panel
@@ -96,7 +100,7 @@ class SecurityMonitor extends Thread
 
             messageWin.writeMessage("Registered with the event manager.");
 
-            try {
+           try {
                 messageWin.writeMessage("   Participant id: " + em.getMyId());
                 messageWin.writeMessage("   Registration Time: " + em.getRegistrationTime());
             } // try // try
@@ -112,7 +116,7 @@ class SecurityMonitor extends Thread
             while (!isDone) {
                 // Here we get our event queue from the event manager
                 try {
-                     em.getEvent();
+                    em.getEvent();
                 } // try
                 catch (Exception e) {
                     messageWin.writeMessage("Error getting event queue::" + e);
@@ -126,58 +130,59 @@ class SecurityMonitor extends Thread
                 // only be a message at most. If there are more, it is the last message
                 // that will effect the status of the temperature and humidity controllers
                 // as it would in reality.
-                     if (em.returnid() == 3) { // Door reading
+                 
+                    //  System.out.println("ID Event: "+ em.returnid());
+            
+                    if (em.returnid() == 3) { // Door reading
                         try {
-                            CurrentState2 = em.returnMessage();
+                            messageWin.writeMessage("Seguridad: " + em.returnMessage() + " ID MEssage"+ em.returnid());
+                         
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading door alarm: " + e);
+                            messageWin.writeMessage("Error reading temperature: " + e);
                         } // catch // catch
                     } // if
 
                     if (em.returnid() == 6) { // Window reading
                         try {
-                            CurrentState2 = em.returnMessage();
+                            messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading window: " + e);
+                            messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
                     
                     if (em.returnid() == 7) { // movement reading
                         try {
-                            CurrentState2 = em.returnMessage();
+                            messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading movement: " + e);
+                            messageWin.writeMessage("Error reading humidity: " + e);
+                        } // catch // catch
+                    } // if
+                    if (em.returnid() == 10) { // fire reading
+                        try {
+                            messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading humidity: " + e);
+                        } // catch // catch
+                    } // if
+                    if (em.returnid() == 11) { // sprinkler reading
+                        try {
+                            messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
 
-                    if (em.returnid() == 10) { //  fire reading
-                        try {
-                            CurrentState2 = em.returnMessage();
-                        } // try
-                        catch (Exception e) {
-                            messageWin.writeMessage("Error reading fire sensor: " + e);
-                        } // catch // catch
-                    } // if
-                    
-                    if (em.returnid() == 11) { //  sprinkler reading
-                        try {
-                            CurrentState2 = em.returnMessage();
-                        } // try
-                        catch (Exception e) {
-                            messageWin.writeMessage("Error reading sprinkler sensor: " + e);
-                        } // catch // catch
-                    } // if
-                    
-                    
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
                     if (em.returnid() == 99) {
                         isDone = true;
-                        
+                       
                         messageWin.writeMessage("\n\nSimulation Stopped. \n");
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
@@ -186,55 +191,44 @@ class SecurityMonitor extends Thread
                         mi.dispose();
                         fi.dispose();
                         si.dispose();
-                    }
-    
-
-                if(isActive && em.returnMessage()!= null){
-
-                    if(em.returnMessage().equalsIgnoreCase("WINDOW_ON")){ //Window
-
-                            messageWin.writeMessage("Security:: ALERT! Window broken");
-                            wi.setLampColorAndMessage("Window broken", 1); // Window is broken
-                            Activatewindow(on);
-                    }
+                    } // if
+                
+                // Check temperature and effect control as necessary
+                if (em.returnMessage().equalsIgnoreCase("W1")) { // temperature is below threshhold
+                    messageWin.writeMessage("Security:: ALERT! Window broken");
+                    wi.setLampColorAndMessage("TEMP LOW", 3);
+                   Activatewindow(on);
+                   
                 }
-                if (em.returnMessage().equalsIgnoreCase("W0")){
-                        Activatewindow(off);
-                        messageWin.writeMessage("Security:: Window broken: False");
-                        wi.setLampColorAndMessage("Window OK", 0); // Window is ok
-
-                }
-
+                if (em.returnMessage().equalsIgnoreCase("W0")) { // temperature is above threshhold
+                       messageWin.writeMessage("Security:: Window broken: False");
+                       wi.setLampColorAndMessage("Window OK", 0);
+                       Activatewindow(off);
+                    }
                 if(em.returnMessage().equalsIgnoreCase("DO1")){
                     Activatedoor(on);
-
                         messageWin.writeMessage("Security:: ALERT! Door broken");
                         di.setLampColorAndMessage("Door Broken", 1); // Door is broken
-
-                }
+           } 
                 if(em.returnMessage().equalsIgnoreCase("DO0")) {
                           Activatedoor(on);
-
                         messageWin.writeMessage("Security:: Door broken: False");
                         di.setLampColorAndMessage("Door OK", 0); // Door is ok
 
                 }
-
-                if(em.returnMessage().equalsIgnoreCase("M1")){
+                if(em.returnMessage().equalsIgnoreCase("M1")) {
                           Activatemov(on);
-
                         messageWin.writeMessage("Security:: ALERT! Movement detection");
                         mi.setLampColorAndMessage("Movement Broken", 1); // Movement detection
 
+
                 }
                 if(em.returnMessage().equalsIgnoreCase("M0")) {
-                          Activatemov(off);
+                     Activatemov(off);
 
                         messageWin.writeMessage("Security:: Movement detection: False");
                         mi.setLampColorAndMessage("nOT Movement", 0); // Movement is ok
-
                 }
-
                 if(em.returnMessage().equalsIgnoreCase("FD1")){
                           Activatefire(on);
                         messageWin.writeMessage("Security:: ALERT! Fire detection");
@@ -250,7 +244,8 @@ class SecurityMonitor extends Thread
                         messageWin.writeMessage("Sprinkler not activated");
                         si.setLampColorAndMessage("Sprinkler not activated",1);
 
-                } 
+                }
+                    
                 // This delay slows down the sample rate to Delay milliseconds
                 try {
                     Thread.sleep(delay);
@@ -263,7 +258,7 @@ class SecurityMonitor extends Thread
         else {
             System.out.println("Unable to register with the event manager.\n\n");
         } // if
-    } // main}
+    }// main
 
     /**
      * This method returns the registered status
@@ -275,37 +270,35 @@ class SecurityMonitor extends Thread
     } // setTemperatureRange
 
     
-    /**
-     * This method posts an event that stops the environmental control system.
-     * Exceptions: Posting to event manager exception
-     */
-    @SuppressWarnings("UseSpecificCatch")
     public void halt() {
         messageWin.writeMessage("***HALT MESSAGE RECEIVED - SHUTTING DOWN SYSTEM***");
-        // Here we create the stop event.
-        //Event evt;
-        //evt = new Event(Component.END, "XXX");
-        // Here we send the event to the event manager.
-        try {
-        //    em.sendEvent(evt);
+       try {
         }
         catch (Exception e) {
             System.out.println("Error sending halt message:: " + e);
         }
     } // halt
 
-    	public void Activatewindow(boolean ON)
-	{
+    /**
+     * This method posts events that will signal the temperature controller to
+     * turn on/off the heater
+     *
+     * @param ON indicates whether to turn the heater on or off. Exceptions:
+     * Posting to event manager exception
+     */
+    private void Activatewindow(boolean ON) {
+        // Here we create the event.
+        
+      // Here we send the event to the event manager.
         try {
+            //RabbitMQInterface em = new RabbitMQInterface();
         if (ON) {
-          //  em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
             em.sendEvent(Component.WINDOW_ON+"&"+Component.SECURITY_CONTROLLER, "logs");
+            isActive = false;
          //    em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
              
-		isActive = true;
         }
         else {
-            //em.sendEvent(Component.HEATER_OFF+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
             em.sendEvent(Component.WINDOW_OFF+"&"+Component.SECURITY_CONTROLLER, "logs");
             isActive = false;
         }
@@ -313,38 +306,27 @@ class SecurityMonitor extends Thread
         catch (Exception e) {
             //System.out.println("Error sending heater control message:: " + e);
            
-        } //
-	}
-        public void Activatedoor(boolean ON)
-	{
-        try {
+        } // catch
+    } // heater
+    private void Activatedoor(boolean ON) {
+         try {
         if (ON) {
-            //em.sendEvent(Component.DOOR_ON+"&"+Component.SECURITY_CONTROLLER, "logs");
             em.sendEvent(Component.DOOR_ON+"&"+Component.SECURITY_CONTROLLER, "logs");
-         //    em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
-             
-		isActive = true;
+            isActive = false;
         }
         else {
-            //em.sendEvent(Component.HEATER_OFF+"&"+Component.TEMPERATURE_CONTROLLER, "logs");
             em.sendEvent(Component.DOOR_OFF+"&"+Component.SECURITY_CONTROLLER, "logs");
             isActive = false;
         }
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending heater control message:: " + e);
-           
-        } //
-        }
-        public void Activatemov(boolean ON)
-	{
-        try {
+        } // catch
+    } 
+    private void Activatemov(boolean ON) {
+         try {
         if (ON) {
             em.sendEvent(Component.MOVEMENT_ON+"&"+Component.SECURITY_CONTROLLER, "logs");
-            
-		isActive = true;
-         //    em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
-             
+            isActive = false;
         }
         else {
             em.sendEvent(Component.MOVEMENT_OFF+"&"+Component.SECURITY_CONTROLLER, "logs");
@@ -352,28 +334,21 @@ class SecurityMonitor extends Thread
         }
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending heater control message:: " + e);
-           
-        } //
-	}
-        public void Activatefire(boolean ON)
-	{
-        try {
+        } // catch
+    } 
+     private void Activatefire(boolean ON) {
+         try {
         if (ON) {
             em.sendEvent(Component.FIRE_ON+"&"+Component.SECURITY_CONTROLLER, "logs");
-            isActive = true;
-         //    em.sendEvent(Component.HEATER_ON+"&"+Component.TEMPERATURE_SENSOR, "logs");
-                }
+            isActive = false;
+        }
         else {
             em.sendEvent(Component.FIRE_OFF+"&"+Component.SECURITY_CONTROLLER, "logs");
             isActive = false;
         }
         } // try
         catch (Exception e) {
-            //System.out.println("Error sending heater control message:: " + e);
-           
-        } //
-	}
-
-	   
-} // SecurityMonitor
+        } // catch
+    } 
+    
+} // ECSMonitor
