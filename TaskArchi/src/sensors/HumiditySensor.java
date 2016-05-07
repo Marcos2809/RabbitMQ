@@ -42,11 +42,11 @@ public class HumiditySensor extends Sensor implements Runnable {
 
             // We create a message window. Note that we place this panel about 1/2 across 
             // and 2/3s down the screen
-            float winPosX = 0.5f; 	//This is the X position of the message window in terms 
+            //float winPosX = 0.5f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            float winPosY = 0.60f;	//This is the Y position of the message window in terms 
+            //float winPosY = 0.60f;	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
-
+            /*
             MessageWindow messageWin = new MessageWindow("Humidity Sensor", winPosX, winPosY);
             messageWin.writeMessage("Registered with the event manager.");
 
@@ -59,33 +59,34 @@ public class HumiditySensor extends Sensor implements Runnable {
             } 
 
             messageWin.writeMessage("\nInitializing Humidity Simulation::");
-            relativeHumidity = getRandomNumber() * (float) 100.00;
+            */
+            relativeHumidity = getRandomNumber() * (float) 50.00;
             if (coinToss()) {
-                driftValue = getRandomNumber() * (float) 0.0;
+                driftValue = getRandomNumber() * (float) 0.5;
             }
             else {
                 driftValue = getRandomNumber();
             } 
-            messageWin.writeMessage("   Initial Humidity Set:: " + relativeHumidity);
-            messageWin.writeMessage("   Drift Value Set:: " + driftValue);
+            //messageWin.writeMessage("   Initial Humidity Set:: " + relativeHumidity);
+            //messageWin.writeMessage("   Drift Value Set:: " + driftValue);
             
             /**
              * ******************************************************************
              ** Here we start the main simulation loop
              * *******************************************************************
              */
-            messageWin.writeMessage("Beginning Simulation... ");
+            //messageWin.writeMessage("Beginning Simulation... ");
             while (!isDone) {
                 // Post the current relative humidity
                 postEvent(evtMgrI, HUMIDITY, relativeHumidity);
-                messageWin.writeMessage("Current Relative Humidity:: " + relativeHumidity + "%");
+                //messageWin.writeMessage("Current Relative Humidity:: " + relativeHumidity + "%");
                 // Get the message queue
                 // Get the message queue
                 try {
                     evtMgrI.getEvent();
                 } // try
                 catch (Exception e) {
-                    messageWin.writeMessage("Error getting event queue::" + e);
+                    //messageWin.writeMessage("Error getting event queue::" + e);
                 }
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = -4, this means the the humidify or
@@ -122,7 +123,7 @@ public class HumiditySensor extends Sensor implements Runnable {
                     // true and this process unregisters from the event manager.
                     if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                     }
                 // Now we trend the relative humidity according to the status of the
                 // humidifier/dehumidifier controller.
@@ -143,7 +144,7 @@ public class HumiditySensor extends Sensor implements Runnable {
                     Thread.sleep(delay);
                 }
                 catch (Exception e) {
-                  messageWin.writeMessage("Sleep error:: " + e);
+                  //messageWin.writeMessage("Sleep error:: " + e);
                 } 
             } 
         //}

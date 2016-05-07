@@ -74,7 +74,7 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="txtChiller" max="32767" attributes="0"/>
                               <Component id="txtHeater" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
                                   <Component id="lblTempMaxMin" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="lblTempMaxMax" min="-2" max="-2" attributes="0"/>
@@ -93,17 +93,15 @@
                               <Component id="txtTemperature" alignment="0" pref="177" max="32767" attributes="0"/>
                               <Component id="sldTempMax" alignment="0" pref="177" max="32767" attributes="0"/>
                               <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="lblTempMinVal" min="-2" pref="22" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="lblTempMinVal" min="-2" pref="22" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="lblHeater" min="-2" max="-2" attributes="0"/>
                           <Component id="lblChiller" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblHeater" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -132,67 +130,67 @@
                                       <Component id="sldHumMin" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="txtHumidifier" max="32767" attributes="0"/>
                                       <Component id="txtDehumidifier" max="32767" attributes="0"/>
-                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="lblHumMinVal" min="-2" pref="32" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="lblHumMinVal" min="-2" pref="32" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="lblHumidifier" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jLabel11" max="32767" attributes="0"/>
-                                          <Group type="102" attributes="0">
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Component id="txtDoor" pref="177" max="32767" attributes="0"/>
-                                                  <Component id="jLabel9" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLabel11" max="32767" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="txtDoor" pref="177" max="32767" attributes="0"/>
+                                                      <Component id="jLabel9" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="jLabel12" alignment="0" min="-2" pref="177" max="-2" attributes="0"/>
+                                                      <Component id="txtWindow" alignment="0" min="-2" pref="177" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="txtMovement" max="32767" attributes="0"/>
+                                                      <Component id="jLabel13" pref="177" max="32767" attributes="0"/>
+                                                  </Group>
                                               </Group>
-                                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jLabel12" alignment="0" min="-2" pref="177" max="-2" attributes="0"/>
-                                                  <Component id="txtWindow" alignment="0" min="-2" pref="177" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Component id="txtMovement" max="32767" attributes="0"/>
-                                                  <Component id="jLabel13" pref="177" max="32767" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace min="-2" pref="115" max="-2" attributes="0"/>
+                                                  <Component id="btnADFire" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="162" max="-2" attributes="0"/>
+                                                  <Component id="btnADSprinkler" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
-                                              <Component id="btnADFire" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="172" max="32767" attributes="0"/>
-                                              <Component id="btnADSprinkler" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                              <Component id="txtFire" pref="177" max="32767" attributes="0"/>
+                                              <Component id="jLabel14" max="32767" attributes="0"/>
                                           </Group>
+                                          <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLabel15" pref="177" max="32767" attributes="0"/>
+                                              <Component id="txtSprinkler" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
                                       <Component id="btnADDoor" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
+                                      <EmptySpace pref="118" max="32767" attributes="0"/>
                                       <Component id="btnADWindow" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
                                       <Component id="btnADMovement" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="txtFire" pref="177" max="32767" attributes="0"/>
-                                          <Component id="jLabel14" max="32767" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="jLabel15" pref="177" max="32767" attributes="0"/>
-                                          <Component id="txtSprinkler" max="32767" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -262,76 +260,67 @@
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtFire" alignment="3" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="txtSprinkler" alignment="3" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblTempMaxVal" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblHumMaxVal" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sldHumMax" min="-2" pref="42" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="sldHumMax" min="-2" pref="42" max="-2" attributes="0"/>
+                          <Component id="sldTempMax" min="-2" pref="42" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblHumMaxMin" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblHumMaxMax" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTempMaxMax" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTempMaxMin" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="sldTempMax" min="-2" pref="42" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblTempMaxMin" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblTempMaxMax" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="txtFire" alignment="3" min="-2" pref="100" max="-2" attributes="0"/>
-                                  <Component id="txtSprinkler" alignment="3" min="-2" pref="100" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblHeater" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblHumidifier" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnADSprinkler" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnADFire" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtHeater" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                          <Component id="txtHumidifier" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblChiller" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblDehumidifier" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtChiller" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                          <Component id="txtDehumidifier" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblHeater" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblHumidifier" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="btnADSprinkler" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnADFire" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="txtHeater" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="txtHumidifier" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblChiller" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblDehumidifier" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="txtChiller" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
+                  <Component id="txtDehumidifier" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

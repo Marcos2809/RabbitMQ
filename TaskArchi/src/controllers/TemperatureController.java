@@ -44,17 +44,17 @@ public class TemperatureController extends Controller implements Runnable {
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
       //  if (evtMgrI != null) {
-            System.out.println("Registered with the event manager.");
+            //System.out.println("Registered with the event manager.");
 
             /* Now we create the temperature control status and message panel
              ** We put this panel about 1/3 the way down the terminal, aligned to the left
              ** of the terminal. The status indicators are placed directly under this panel
              */
-            float winPosX = 0.0f; 	//This is the X position of the message window in terms 
+            //float winPosX = 0.0f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
+            //float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
-
+            /*
             MessageWindow messageWin = new MessageWindow("Temperature Controller Status Console", winPosX, winPosY);
 
             // Put the status indicators under the panel...
@@ -70,7 +70,7 @@ public class TemperatureController extends Controller implements Runnable {
             catch (Exception e) {
                 System.out.println("Error:: " + e);
             }
-
+            */
             /**
              * ******************************************************************
              ** Here we start the main simulation loop
@@ -99,28 +99,28 @@ public class TemperatureController extends Controller implements Runnable {
                         if (evtMgrI.returnid() == TEMPERATURE_CONTROLLER) {
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_ON)) { // heater on
                             heaterState = true;
-                            messageWin.writeMessage("Received heater on event");
+                            //messageWin.writeMessage("Received heater on event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_ON);
                         }
 
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_OFF)) { // heater off
                             heaterState = false;
-                            messageWin.writeMessage("Received heater off event");
+                            //messageWin.writeMessage("Received heater off event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_OFF);
                         }
 
                         if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_ON)) { // chiller on
                             chillerState = true;
-                            messageWin.writeMessage("Received chiller on event");
+                            //messageWin.writeMessage("Received chiller on event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_ON);
                         }
 
                         if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_OFF)) { // chiller off
                             chillerState = false;
-                            messageWin.writeMessage("Received chiller off event");
+                            //messageWin.writeMessage("Received chiller off event");
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_OFF);
                         }
@@ -130,14 +130,14 @@ public class TemperatureController extends Controller implements Runnable {
                     // true and this process unregisters from the event manager.
                     if (evtMgrI.returnid() == END) {
                         isDone = true;
-                       messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                       //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
-                        heatIndicator.dispose();
-                        chillIndicator.dispose();
+                        //heatIndicator.dispose();
+                        //chillIndicator.dispose();
                     }
 
-
+                /*
                 // Update the lamp status
                 if (heaterState) {
                     // Set to green, heater is on
@@ -161,6 +161,7 @@ public class TemperatureController extends Controller implements Runnable {
                 catch (Exception e) {
                     System.out.println("Sleep error:: " + e);
                 }
+                */
             }
         //}
 //        else {

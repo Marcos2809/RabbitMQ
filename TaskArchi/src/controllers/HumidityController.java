@@ -43,17 +43,17 @@ public class HumidityController extends Controller implements Runnable {
         // Here we check to see if registration worked. If em is null then the
         // event manager interface was not properly created.
         //if (evtMgrI != null) {
-            System.out.println("Registered with the event manager.");
+            //System.out.println("Registered with the event manager.");
 
             /* Now we create the humidity control status and message panel
              ** We put this panel about 2/3s the way down the terminal, aligned to the left
              ** of the terminal. The status indicators are placed directly under this panel
              */
-            float winPosX = 0.0f; 	//This is the X position of the message window in terms 
+            //float winPosX = 0.0f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            float winPosY = 0.60f;	//This is the Y position of the message window in terms 
+            //float winPosY = 0.60f;	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
-
+            /*
             MessageWindow messageWin = new MessageWindow("Humidity Controller Status Console", winPosX, winPosY);
 
             // Now we put the indicators directly under the humitity status and control panel
@@ -69,7 +69,7 @@ public class HumidityController extends Controller implements Runnable {
             catch (Exception e) {
                 System.out.println("Error:: " + e);               
             }
-
+            */
             /**
              * ******************************************************************
              ** Here we start the main simulation loop gls
@@ -94,7 +94,7 @@ public class HumidityController extends Controller implements Runnable {
                     if (evtMgrI.returnid()   == HUMIDITY_CONTROLLER) {
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_ON)) { // humidifier on
                             humidifierState = true;
-                            messageWin.writeMessage("Received humidifier on event");
+                            //messageWin.writeMessage("Received humidifier on event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, HUMIDIFIER_ON);
@@ -102,14 +102,14 @@ public class HumidityController extends Controller implements Runnable {
                         }
                         if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) { // humidifier off
                             humidifierState = false;
-                            messageWin.writeMessage("Received humidifier off event");
+                            //messageWin.writeMessage("Received humidifier off event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, HUMIDIFIER_OFF);
                         }
                         if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) { // dehumidifier on
                             dehumidifierState = true;
-                            messageWin.writeMessage("Received dehumidifier on event");
+                            //messageWin.writeMessage("Received dehumidifier on event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, DEHUMIDIFIER_ON);
@@ -117,7 +117,7 @@ public class HumidityController extends Controller implements Runnable {
 
                         if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) { // dehumidifier off
                             dehumidifierState = false;
-                            messageWin.writeMessage("Received dehumidifier off event");
+                            //messageWin.writeMessage("Received dehumidifier off event");
 
                             // Confirm that the message was recieved and acted on
                             confirmMessage(evtMgrI, HUMIDITY_CONTROLLER, DEHUMIDIFIER_OFF);
@@ -129,16 +129,17 @@ public class HumidityController extends Controller implements Runnable {
                     // true and this process unregisters from the event manager.
                     if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
 
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
-                        humIndicator.dispose();
-                        dehumIndicator.dispose();
+                        //humIndicator.dispose();
+                        //dehumIndicator.dispose();
                     }
                 }
 
                 // Update the lamp status
+                /*
                 if (humidifierState) {
                     // Set to green, humidifier is on
                     humIndicator.setLampColorAndMessage("HUMID ON", 1);
@@ -163,6 +164,7 @@ public class HumidityController extends Controller implements Runnable {
                 catch (Exception e) {
                     System.out.println("Sleep error:: " + e);
                 }
+                */
             }
        // }
        // else {
