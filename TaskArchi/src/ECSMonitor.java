@@ -164,75 +164,88 @@ public class ECSMonitor extends Thread {
                     if (em.returnid() == 3) { // Door reading
                         try {
                             //messageWin.writeMessage("Seguridad: " + em.returnMessage() + " ID MEssage"+ em.returnid());
-                            if (em.returnMessage().equalsIgnoreCase("1.0")){
-                                mMonitor.txtDoor.setText("BROKEN");
-                                mMonitor.txtDoor.setBackground(Color.red);
+                            if (mMonitor.btnADDoor.getText().equalsIgnoreCase("Deactivate")){
+                                if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                    mMonitor.txtDoor.setText("BROKEN");
+                                    mMonitor.txtDoor.setBackground(Color.red);
+                                }
+                                else{
+                                    mMonitor.txtDoor.setText("OK");
+                                    mMonitor.txtDoor.setBackground(Color.green);
+                                }
                             }
-                            else{
-                                mMonitor.txtDoor.setText("OK");
-                                mMonitor.txtDoor.setBackground(Color.green);
-                            }
+                                                        
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading door sensor: " + e);
+                            //messageWin.writeMessage("Error reading door sensor: " + e);
                         } // catch // catch
                     } // if
 
                     if (em.returnid() == 6) { // Window reading
                         try {
                             //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
-                            if (em.returnMessage().equalsIgnoreCase("1.0")){
-                                mMonitor.txtWindow.setText("BROKEN");
-                                mMonitor.txtWindow.setBackground(Color.red);
+                            if (mMonitor.btnADWindow.getText().equalsIgnoreCase("Deactivate")){
+                                if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                    mMonitor.txtWindow.setText("BROKEN");
+                                    mMonitor.txtWindow.setBackground(Color.red);
                                 
+                                }
+                                else{
+                                    mMonitor.txtWindow.setText("OK");
+                                    mMonitor.txtWindow.setBackground(Color.green);
+                                }
                             }
-                            else{
-                                mMonitor.txtWindow.setText("OK");
-                                mMonitor.txtWindow.setBackground(Color.green);
-                            }
+                            
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading window sensor: " + e);
+                            //messageWin.writeMessage("Error reading window sensor: " + e);
                         } // catch // catch
                     } // if
                     
                     if (em.returnid() == 7) { // movement reading
                         try {
                             //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
-                            if (em.returnMessage().equalsIgnoreCase("1.0")){
-                                mMonitor.txtMovement.setText("DETECTED");
-                                mMonitor.txtMovement.setBackground(Color.red);
+                            if (mMonitor.btnADMovement.getText().equalsIgnoreCase("Deactivate")){
+                                if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                    mMonitor.txtMovement.setText("DETECTED");
+                                    mMonitor.txtMovement.setBackground(Color.red);
                                 
+                                }
+                                else{
+                                    mMonitor.txtMovement.setText("NONE");
+                                    mMonitor.txtMovement.setBackground(Color.green);
+                                }
                             }
-                            else{
-                                mMonitor.txtMovement.setText("NONE");
-                                mMonitor.txtMovement.setBackground(Color.green);
-                                
-                            }
+                            
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading movement sensor: " + e);
+                            //messageWin.writeMessage("Error reading movement sensor: " + e);
                         } // catch // catch
                     } // if
                     if (em.returnid() == 10) { // fire reading
                         try {
-                            if (em.returnMessage().equalsIgnoreCase("1.0")){
-                                mMonitor.txtFire.setText("DETECTED");
-                                mMonitor.txtFire.setBackground(Color.red);
-                                mMonitor.txtSprinkler.setText("ON");
-                                mMonitor.txtSprinkler.setBackground(Color.green);
-                                
+                            if (mMonitor.btnADFire.getText().equalsIgnoreCase("Deactivate")){
+                                if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                    mMonitor.txtFire.setText("DETECTED");
+                                    mMonitor.txtFire.setBackground(Color.red);
+                                    if (mMonitor.btnADSprinkler.getText().equalsIgnoreCase("Deactivate")){
+                                        mMonitor.txtSprinkler.setText("ON");
+                                        mMonitor.txtSprinkler.setBackground(Color.green);
+                                    }
+                                }
+                                else{
+                                    mMonitor.txtFire.setText("OK");
+                                    mMonitor.txtFire.setBackground(Color.green);
+                                    if (mMonitor.btnADSprinkler.getText().equalsIgnoreCase("Deactivate")){
+                                        mMonitor.txtSprinkler.setText("OFF");
+                                        mMonitor.txtSprinkler.setBackground(Color.black);
+                                    }
+                                }
                             }
-                            else{
-                                mMonitor.txtFire.setText("NONE");
-                                mMonitor.txtFire.setBackground(Color.green);
-                                mMonitor.txtSprinkler.setText("OFF");
-                                mMonitor.txtSprinkler.setBackground(Color.black);
-                                
-                            }
+                            
                         } // try
                         catch (Exception e) {
-                            messageWin.writeMessage("Error reading humidity: " + e);
+                            //messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
 

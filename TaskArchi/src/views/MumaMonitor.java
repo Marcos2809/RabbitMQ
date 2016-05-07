@@ -11,6 +11,7 @@ package views;
 import common.Component;
 import instrumentation.*;
 import event.*;
+import java.awt.Color;
 
 
 /**
@@ -88,13 +89,6 @@ public class MumaMonitor extends javax.swing.JFrame {
         txtSprinkler = new javax.swing.JTextField();
         btnADFire = new javax.swing.JButton();
         btnADSprinkler = new javax.swing.JButton();
-        MnuBar = new javax.swing.JMenuBar();
-        MnuSystem = new javax.swing.JMenu();
-        MnuExit = new javax.swing.JMenuItem();
-        MnuShow = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MUMA Monitor");
@@ -256,6 +250,11 @@ public class MumaMonitor extends javax.swing.JFrame {
         txtMovement.setText("NONE");
 
         btnADMovement.setText("Deactivate");
+        btnADMovement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnADMovementActionPerformed(evt);
+            }
+        });
 
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("Fire");
@@ -273,30 +272,18 @@ public class MumaMonitor extends javax.swing.JFrame {
         txtSprinkler.setText("OFF");
 
         btnADFire.setText("Deactivate");
+        btnADFire.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnADFireActionPerformed(evt);
+            }
+        });
 
         btnADSprinkler.setText("Deactivate");
-
-        MnuSystem.setText("System");
-
-        MnuExit.setText("Exit");
-        MnuSystem.add(MnuExit);
-
-        MnuBar.add(MnuSystem);
-
-        MnuShow.setText("Show");
-
-        jMenuItem1.setText("Sensors");
-        MnuShow.add(jMenuItem1);
-
-        jMenuItem2.setText("Alarms");
-        MnuShow.add(jMenuItem2);
-
-        jMenuItem3.setText("All");
-        MnuShow.add(jMenuItem3);
-
-        MnuBar.add(MnuShow);
-
-        setJMenuBar(MnuBar);
+        btnADSprinkler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnADSprinklerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -512,19 +499,87 @@ public class MumaMonitor extends javax.swing.JFrame {
 
     private void btnADWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADWindowActionPerformed
         // TODO add your handling code here:
-        if (btnADWindow.getText().equals("Deactivate"))
+        if (btnADWindow.getText().equals("Deactivate")){
             btnADWindow.setText("Activate");
-        else
+            txtWindow.setForeground(Color.white);
+            txtWindow.setBackground(Color.black);
+            txtWindow.setText("OFF");
+        }
+        else{
             btnADWindow.setText("Deactivate");
+            txtWindow.setForeground(Color.black);
+            txtWindow.setBackground(Color.green);
+            txtWindow.setText("OK");
+        }
     }//GEN-LAST:event_btnADWindowActionPerformed
 
     private void btnADDoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADDoorActionPerformed
         // TODO add your handling code here:
-        if (btnADDoor.getText().equals("Deactivate"))
+        if (btnADDoor.getText().equals("Deactivate")){
             btnADDoor.setText("Activate");
-        else
+            txtDoor.setForeground(Color.white);
+            txtDoor.setBackground(Color.black);
+            txtDoor.setText("OFF");
+        }            
+        else{
             btnADDoor.setText("Deactivate");
+            txtDoor.setForeground(Color.black);
+            txtDoor.setBackground(Color.green);
+            txtDoor.setText("OK");
+        }
     }//GEN-LAST:event_btnADDoorActionPerformed
+
+    private void btnADMovementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADMovementActionPerformed
+        // TODO add your handling code here:
+        if (btnADMovement.getText().equals("Deactivate")){
+            btnADMovement.setText("Activate");
+            txtMovement.setForeground(Color.white);
+            txtMovement.setBackground(Color.black);
+            txtMovement.setText("OFF");
+        }            
+        else{
+            btnADMovement.setText("Deactivate");
+            txtMovement.setForeground(Color.black);
+            txtMovement.setBackground(Color.green);
+            txtMovement.setText("NONE");
+        }
+    }//GEN-LAST:event_btnADMovementActionPerformed
+
+    private void btnADFireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADFireActionPerformed
+        // TODO add your handling code here:
+        if (btnADFire.getText().equals("Deactivate")){
+            btnADFire.setText("Activate");
+            txtFire.setForeground(Color.white);
+            txtFire.setBackground(Color.black);
+            txtFire.setText("OFF");
+            txtSprinkler.setForeground(Color.white);
+            txtSprinkler.setBackground(Color.black);
+            txtSprinkler.setText("OFF");
+            btnADSprinkler.setText("Activate");
+            btnADSprinkler.setEnabled(false);
+        }            
+        else{
+            btnADFire.setText("Deactivate");
+            txtFire.setForeground(Color.black);
+            txtFire.setBackground(Color.green);
+            txtFire.setText("OK");
+            btnADSprinkler.setEnabled(true);
+        }
+    }//GEN-LAST:event_btnADFireActionPerformed
+
+    private void btnADSprinklerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADSprinklerActionPerformed
+        // TODO add your handling code here:
+        if (btnADSprinkler.getText().equals("Deactivate")){
+            btnADSprinkler.setText("Activate");
+            txtSprinkler.setForeground(Color.white);
+            txtSprinkler.setBackground(Color.black);
+            txtSprinkler.setText("DEACTIVATED");
+        }            
+        else{
+            btnADSprinkler.setText("Deactivate");
+            txtSprinkler.setText("OFF");
+        }
+    }//GEN-LAST:event_btnADSprinklerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -562,10 +617,6 @@ public class MumaMonitor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuBar MnuBar;
-    private javax.swing.JMenuItem MnuExit;
-    private javax.swing.JMenu MnuShow;
-    private javax.swing.JMenu MnuSystem;
     public javax.swing.JButton btnADDoor;
     public javax.swing.JButton btnADFire;
     public javax.swing.JButton btnADMovement;
@@ -586,9 +637,6 @@ public class MumaMonitor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     public javax.swing.JLabel lblChiller;
     public javax.swing.JLabel lblDehumidifier;
     public javax.swing.JLabel lblHeater;
