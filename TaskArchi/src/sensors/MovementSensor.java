@@ -25,6 +25,10 @@ import instrumentation.MessageWindow;
 public class MovementSensor extends Sensor implements Runnable {
      private float CurrentState;
      boolean MovementState = false;
+<<<<<<< HEAD
+=======
+     //boolean Done = false;
+>>>>>>> 55274911ce51d42e54caddc6a8545934489c0b92
 
     private static MovementSensor INSTANCE = new MovementSensor();
     
@@ -82,10 +86,12 @@ public class MovementSensor extends Sensor implements Runnable {
                       if (evtMgrI.returnMessage().equalsIgnoreCase(MOVEMENT_ON)) // chiller on
                             {
                                     MovementState = true;
+                                    CurrentState = 1;
                           } // if
                             if (evtMgrI.returnMessage().equalsIgnoreCase(MOVEMENT_OFF)) // chiller off
                             {
-                                    MovementState = false;  
+                                    MovementState = false;
+                                    CurrentState=0;
                             } // if
 
 

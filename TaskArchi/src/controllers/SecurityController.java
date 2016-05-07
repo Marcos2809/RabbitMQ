@@ -22,7 +22,11 @@ public class SecurityController  extends Controller implements Runnable {
     boolean DoorState = false;	// Chiller state: false == off, true == on
     boolean MovementState = false;
     int Delay = 1000;
+<<<<<<< HEAD
     boolean isDone = false;
+=======
+    //boolean Done = false;
+>>>>>>> 55274911ce51d42e54caddc6a8545934489c0b92
     
     private static SecurityController INSTANCE = new SecurityController();
     
