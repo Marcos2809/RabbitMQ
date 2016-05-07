@@ -346,8 +346,7 @@ public class ECSMonitor extends Thread {
            // RabbitMQInterface em = new RabbitMQInterface();
           if (ON) {
             //em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
-            System.out.println("Aca tambien le entra el pelñon");
-             em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
+            em.sendEvent(Component.HUMIDIFIER_ON+"&"+Component.HUMIDITY_CONTROLLER, "logs");
         }
         else {
            // em.sendEvent(Component.HUMIDIFIER_OFF+"&"+Component.HUMIDITY_CONTROLLER, "logs");

@@ -1,5 +1,5 @@
 /**
- * File:DoorSensor.java 
+ * File:FireSensor.java 
  * Course: Software Architecture 
  * Project: Event Architectures
  * Institution: CIMAT
@@ -20,13 +20,13 @@ import instrumentation.MessageWindow;
  *
  * @author YMGM,MGL,JMMM
  */
-public class Fire extends Sensor implements Runnable {
+public class FireSensor extends Sensor implements Runnable {
     private int CurrentState;
     private boolean FireState = false;
 
-    private static Fire INSTANCE = new Fire();
+    private static FireSensor INSTANCE = new FireSensor();
 
-    private Fire(){
+    private FireSensor(){
         super();
     }
     @Override
@@ -117,9 +117,9 @@ public class Fire extends Sensor implements Runnable {
     
     private static void createInstance() {
         if (INSTANCE == null) {
-            synchronized (DoorSensor.class) {
+            synchronized (FireSensor.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new Fire();
+                    INSTANCE = new FireSensor();
                 }
             }
         }
@@ -131,7 +131,7 @@ public class Fire extends Sensor implements Runnable {
      * 
      * @return The instance of this class.
      */
-    public static Fire getInstance() {
+    public static FireSensor getInstance() {
         if (INSTANCE == null) {
             createInstance();
         }
@@ -146,8 +146,8 @@ public class Fire extends Sensor implements Runnable {
      */
     public static void main(String args[]) {
         //if(args[0] != null) Component.SERVER_IP = args[0];
-        Component.SERVER_IP = "127.0.0.1";
-        DoorSensor sensor = DoorSensor.getInstance();
+        //Component.SERVER_IP = "127.0.0.1";
+        FireSensor sensor = FireSensor.getInstance();
         sensor.run();
     }
 

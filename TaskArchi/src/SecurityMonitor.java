@@ -124,6 +124,7 @@ public class SecurityMonitor extends Thread {
                 String DoorStatus="OK";
                 String WinStatus="OK";
                 String MovStatus="None";
+                String FivStatus="None";
                 
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = 1 or 2. Event IDs of 1 are temperature
@@ -170,7 +171,18 @@ public class SecurityMonitor extends Thread {
                         catch (Exception e) {
                             messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
-                    } // if
+                    }
+                    if (em.returnid() == 10) { // movement reading
+                        try {
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            if (em.returnMessage()=="1.0"){
+                                FivStatus="Detected";
+                            }
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading humidity: " + e);
+                        } // catch // catch
+                    }// if
                     /*if (em.returnid() == 10) { // fire reading
                         try {
                             messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
@@ -188,7 +200,7 @@ public class SecurityMonitor extends Thread {
                         } // catch // catch
                     } // if
                     */
-                    messageWin.writeMessage("Door Status: " + DoorStatus + " :: Window Status: "+ WinStatus + " :: Movement Status: " + MovStatus);
+                    messageWin.writeMessage("Door Status: " + DoorStatus + " :: Window Status: "+ WinStatus + " :: Movement Status: " + MovStatus+ " :: Fire Status: " + FivStatus);
                     
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
