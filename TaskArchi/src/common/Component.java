@@ -17,10 +17,10 @@
  */
 package common;
 
-import event.Event;
+//import event.Event;
 import event.RabbitMQInterface;
 //import event.EventManagerInterface;
-import event.EventQueue;
+//import event.EventQueue;
 
 public class Component {
 

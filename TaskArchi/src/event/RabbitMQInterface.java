@@ -177,15 +177,15 @@ public class RabbitMQInterface {
         Calendar TimeStamp = Calendar.getInstance();
         SimpleDateFormat TimeStampFormat = new SimpleDateFormat("yyyy MM dd::hh:mm:ss:SSS");
 
-        if (participantId != -1) {
+   //     if (participantId != -1) {
             TimeStamp.setTimeInMillis(participantId);
-            return (TimeStampFormat.format(TimeStamp.getTime()));
+          return (TimeStampFormat.format(TimeStamp.getTime()));
 
-        } else {
+       // } else {
 
-            throw new ParticipantNotRegisteredException("Participant not registered");
+       //     throw new ParticipantNotRegisteredException("Participant not registered");
 
-        } // if
+       // } // if
 
     } // getRegistrationTime
 

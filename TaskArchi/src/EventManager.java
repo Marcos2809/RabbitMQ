@@ -36,8 +36,8 @@ public class EventManager extends UnicastRemoteObject implements RMIEventManager
 
     public EventManager() throws RemoteException {
         super();					// Required by RMI
-        requestLogger = new RequestLogger();		// Screen logging object
-        eventQueueList = new Vector<>(15, 1);           // Queue for storing events
+        //requestLogger = new RequestLogger();		// Screen logging object
+        //eventQueueList = new Vector<>(15, 1);           // Queue for storing events
     } // Constructor
 
     public static void main(String args[]) {

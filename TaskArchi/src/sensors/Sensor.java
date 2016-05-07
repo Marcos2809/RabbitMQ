@@ -29,7 +29,7 @@ public class Sensor extends Component {
     protected float driftValue;				// The amount of temperature gained or lost
 
     
-    protected Sensor() {}
+    protected Sensor() {super();}
 
     /**
      * This method provides the simulation with random floating point 

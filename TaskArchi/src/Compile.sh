@@ -1,13 +1,9 @@
-#!/bin/bash
-echo Compiling files...
-javac common/*.java
-javac controllers/*.java
-javac event/*.java
-javac instrumentation/*.java
-javac sensors/*.java
-javac *.java
+echo "Compile Controllers"
+javac -cp .rabbitmq-client.jar controllers/*.java
 
-rmic EventManager
+echo "Compile Sensors"
+javac -cp .rabbitmq-client.jar sensors/*.java
+
 
 echo Done. 
 echo Press enter to continue...

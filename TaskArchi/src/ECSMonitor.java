@@ -44,6 +44,7 @@ public class ECSMonitor extends Thread {
             // Here we create an event manager interface object. This assumes
             // that the event manager is on the local machine
             //em = new RabbitMQInterface();
+      
         }
         catch (Exception e) {
             System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
@@ -53,12 +54,12 @@ public class ECSMonitor extends Thread {
 
     public ECSMonitor(String evmIpAddress) {
         // event manager is not on the local system
-        evtMgrIP = evmIpAddress;
+      //  evtMgrIP = evmIpAddress;
         try {
             // Here we create an event manager interface object. This assumes
             // that the event manager is NOT on the local machine
           //  em = new RabbitMQInterface();
-            Component.SERVER_IP = evtMgrIP;
+          //  Component.SERVER_IP = evtMgrIP;
         }
         catch (Exception e) {
             System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);

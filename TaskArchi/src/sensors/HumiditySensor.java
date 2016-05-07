@@ -20,7 +20,7 @@
 package sensors;
 
 import common.Component;
-import event.EventManagerInterface;
+//import event.EventManagerInterface;
 import instrumentation.MessageWindow;
 
 public class HumiditySensor extends Sensor implements Runnable {

@@ -189,7 +189,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        Component.SERVER_IP = "127.0.0.1";
+        //Component.SERVER_IP = "127.0.0.1";
         TemperatureSensor sensor = TemperatureSensor.getInstance();
         sensor.run();
     }

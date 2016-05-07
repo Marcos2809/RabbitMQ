@@ -23,18 +23,19 @@
 import common.*;
 
 public class ECSConsole {
-
+    
     public static void main(String args[]) {
-        IOManager userInput = new IOManager();	// IOManager IO Object
+       IOManager userInput = new IOManager();	// IOManager IO Object
         boolean isDone = false;			// Main loop flag
         String option;                          // Menu choice from user
         boolean isError;                        // Error flag
         ECSMonitor monitor;                     // The environmental control system monitor
-        SecurityMonitor smonitor;               // Alarmas    
+        SecurityMonitor smonitor;              // Alarmas 
         float tempRangeHigh = (float) 100.0;	// These parameters signify the temperature and humidity ranges in terms
         float tempRangeLow = (float) 0.0;	// of high value and low values. The ECSmonitor will attempt to maintain
         float humiRangeHigh = (float) 100.0;	// this temperature and humidity. Temperatures are in degrees Fahrenheit
         float humiRangeLow = (float) 0.0;	// and humidity is in relative humidity percentage.
+        
 
         /////////////////////////////////////////////////////////////////////////////////
         // Get the IP address of the event manager
