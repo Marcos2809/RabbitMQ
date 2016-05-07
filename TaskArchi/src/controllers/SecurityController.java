@@ -38,20 +38,21 @@ public class SecurityController  extends Controller implements Runnable {
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
         if (evtMgrI != null) {
-            System.out.println("Registered with the event manager.");
+            //System.out.println("Registered with the event manager.");
 
             /* Now we create the temperature control status and message panel
              ** We put this panel about 1/3 the way down the terminal, aligned to the left
              ** of the terminal. The status indicators are placed directly under this panel
              */
-            float winPosX = 0.0f; 	//This is the X position of the message window in terms 
+            //float winPosX = 0.0f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
+            //float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
 
-            MessageWindow messageWin = new MessageWindow("Security Controller Status Console", winPosX, winPosY);
+            //MessageWindow messageWin = new MessageWindow("Security Controller Status Console", winPosX, winPosY);
 
             // Put the status indicators under the panel...
+            /*
             Indicator wi = new Indicator("WindowsState OFF", messageWin.getX(), messageWin.getY() + messageWin.height());
             Indicator di = new Indicator("DoorState OFF", messageWin.getX() + (wi.width() * 3), messageWin.getY() + messageWin.height());
             Indicator mi= new Indicator ("MovementState OFF", messageWin.getX() + (di.width() * 6), messageWin.getY() + messageWin.height());
@@ -64,6 +65,7 @@ public class SecurityController  extends Controller implements Runnable {
             catch (Exception e) {
                 System.out.println("Error:: " + e);
             }
+            */
 
             /**
              * ******************************************************************
@@ -85,14 +87,14 @@ public class SecurityController  extends Controller implements Runnable {
                 // the assumption is that there should only be a message at most.
                 // If there are more, it is the last message that will effect the
                 // output of the temperature as it would in reality.
-                System.out.println(evtMgrI.returnid());
+                
                    if (evtMgrI.returnid() == SECURITY_CONTROLLER) {
                         if (evtMgrI.returnMessage().equalsIgnoreCase(WINDOW_ON)) { // heater on
                             WindowState = true;
                             //messageWin.writeMessage("Received heater on event");
                             // Confirm that the message was recieved and acted on
                             //confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_ON);
-                            messageWin.writeMessage("Received security event");
+                            //messageWin.writeMessage("Received security event");
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,WINDOW_SENSOR,WINDOW_ON);
                         }
@@ -102,7 +104,7 @@ public class SecurityController  extends Controller implements Runnable {
                             //messageWin.writeMessage("Received heater off event");
                             // Confirm that the message was recieved and acted on
                             //confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_OFF);
-                            messageWin.writeMessage("Received security off event");
+                            //messageWin.writeMessage("Received security off event");
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,WINDOW_SENSOR,WINDOW_OFF);
                         }
@@ -112,7 +114,7 @@ public class SecurityController  extends Controller implements Runnable {
                             //messageWin.writeMessage("Received chiller on event");
                             // Confirm that the message was recieved and acted on
                             //confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_ON);
-                            messageWin.writeMessage("Received security event");
+                            //messageWin.writeMessage("Received security event");
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,DOOR_SENSOR,DOOR_ON);
                         }
@@ -122,7 +124,7 @@ public class SecurityController  extends Controller implements Runnable {
                             //messageWin.writeMessage("Received chiller off event");
                             // Confirm that the message was recieved and acted on
                             //confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_OFF);
-                            messageWin.writeMessage("Received security off event");
+                            //messageWin.writeMessage("Received security off event");
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,DOOR_SENSOR,DOOR_OFF);
                         }
@@ -131,7 +133,7 @@ public class SecurityController  extends Controller implements Runnable {
                             //messageWin.writeMessage("Received chiller on event");
                             // Confirm that the message was recieved and acted on
                             //confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_ON);
-                            messageWin.writeMessage("Received security event");
+                            //messageWin.writeMessage("Received security event");
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,MOVEMENT_SENSOR,MOVEMENT_ON);
                         }
@@ -141,7 +143,7 @@ public class SecurityController  extends Controller implements Runnable {
                             //messageWin.writeMessage("Received chiller off event");
                             // Confirm that the message was recieved and acted on
                             //confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_OFF);
-                            messageWin.writeMessage("Received security off event");
+                            //messageWin.writeMessage("Received security off event");
                         //Confirmar que el mensaje fue reicibo y actuado 
                         confirmMessage(evtMgrI,MOVEMENT_SENSOR,MOVEMENT_OFF);
                         }
@@ -153,16 +155,17 @@ public class SecurityController  extends Controller implements Runnable {
                     // true and this process unregisters from the event manager.
                     if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
-                        wi.dispose();
-                        di.dispose();
-                        mi.dispose();
+                        //wi.dispose();
+                        //di.dispose();
+                        //mi.dispose();
                     }
                 }
 
                 // Update the lamp status
+                /*
                 if (WindowState) {
                     // Set to green, heater is on
                     wi.setLampColorAndMessage("WINDOW BROKEN", 1);
@@ -187,7 +190,7 @@ public class SecurityController  extends Controller implements Runnable {
                     // Set to black, chiller is off
                     mi.setLampColorAndMessage("NOT MOVEMENT", 0);
                 }
-                
+                */
                 try {
                     Thread.sleep(Delay);
                 }

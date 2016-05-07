@@ -30,7 +30,7 @@ import views.MumaMonitor;
 public class ECSMonitor extends Thread {
 
     private RabbitMQInterface em = null;                // Interface object to the event manager
-    private MumaMonitor mMonitor = null;
+    public MumaMonitor mMonitor = null;
     private String evtMgrIP = null;			// Event Manager IP address
     private float tempRangeHigh = 100;                  // These parameters signify the temperature and humidity ranges in terms
     private float tempRangeLow = 0;			// of high value and low values. The ECSmonitor will attempt to maintain
@@ -158,6 +158,81 @@ public class ECSMonitor extends Thread {
                         } // try
                         catch (Exception e) {
                             //messageWin.writeMessage("Error reading humidity: " + e);
+                        } // catch // catch
+                    } // if
+                    
+                    if (em.returnid() == 3) { // Door reading
+                        try {
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage() + " ID MEssage"+ em.returnid());
+                            if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                mMonitor.txtDoor.setText("BROKEN");
+                                mMonitor.txtDoor.setBackground(Color.red);
+                            }
+                            else{
+                                mMonitor.txtDoor.setText("OK");
+                                mMonitor.txtDoor.setBackground(Color.green);
+                            }
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading door sensor: " + e);
+                        } // catch // catch
+                    } // if
+
+                    if (em.returnid() == 6) { // Window reading
+                        try {
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                mMonitor.txtWindow.setText("BROKEN");
+                                mMonitor.txtWindow.setBackground(Color.red);
+                                
+                            }
+                            else{
+                                mMonitor.txtWindow.setText("OK");
+                                mMonitor.txtWindow.setBackground(Color.green);
+                            }
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading window sensor: " + e);
+                        } // catch // catch
+                    } // if
+                    
+                    if (em.returnid() == 7) { // movement reading
+                        try {
+                            //messageWin.writeMessage("Seguridad: " + em.returnMessage()+ " ID MEssage"+ em.returnid());
+                            if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                mMonitor.txtMovement.setText("DETECTED");
+                                mMonitor.txtMovement.setBackground(Color.red);
+                                
+                            }
+                            else{
+                                mMonitor.txtMovement.setText("NONE");
+                                mMonitor.txtMovement.setBackground(Color.green);
+                                
+                            }
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading movement sensor: " + e);
+                        } // catch // catch
+                    } // if
+                    if (em.returnid() == 10) { // fire reading
+                        try {
+                            if (em.returnMessage().equalsIgnoreCase("1.0")){
+                                mMonitor.txtFire.setText("DETECTED");
+                                mMonitor.txtFire.setBackground(Color.red);
+                                mMonitor.txtSprinkler.setText("ON");
+                                mMonitor.txtSprinkler.setBackground(Color.green);
+                                
+                            }
+                            else{
+                                mMonitor.txtFire.setText("NONE");
+                                mMonitor.txtFire.setBackground(Color.green);
+                                mMonitor.txtSprinkler.setText("OFF");
+                                mMonitor.txtSprinkler.setBackground(Color.black);
+                                
+                            }
+                        } // try
+                        catch (Exception e) {
+                            messageWin.writeMessage("Error reading humidity: " + e);
                         } // catch // catch
                     } // if
 

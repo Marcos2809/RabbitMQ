@@ -33,6 +33,7 @@ public class MovementSensor extends Sensor implements Runnable {
         }
             public void run(){
              if (evtMgrI != null){
+                  /*
                   float winPosX= 0.5f;
                   float winPosY= 0.3f;
                   MessageWindow messageWin = new MessageWindow("MovementSensor", winPosX,winPosY);
@@ -49,19 +50,20 @@ public class MovementSensor extends Sensor implements Runnable {
 
 
              messageWin.writeMessage("\n Initializating simulation ... ");
+             */
 
              while (!isDone)
              {
                  //post de current state
                CurrentState = getRandomNumberent();
                postEvent(evtMgrI,MOVEMENT,CurrentState);
-               messageWin.writeMessage("Current State:: " + CurrentState); //post de current state
+               //messageWin.writeMessage("Current State:: " + CurrentState); //post de current state
                        // Get the message queue
                 try {
                 evtMgrI.getEvent();
                 } // try
                 catch (Exception e) {
-                    messageWin.writeMessage("Error getting event queue::" + e);
+                    //messageWin.writeMessage("Error getting event queue::" + e);
                 } //
                  //Get the message queue
                   // Get the message queue
@@ -94,7 +96,7 @@ public class MovementSensor extends Sensor implements Runnable {
                 }
                 if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                     }
                 try
                 {
@@ -102,7 +104,7 @@ public class MovementSensor extends Sensor implements Runnable {
                 } // try
                 catch( Exception e )
                 {
-                        messageWin.writeMessage("Sleep error:: " + e );
+                        //messageWin.writeMessage("Sleep error:: " + e );
                 } // catch
 
                                 } // while

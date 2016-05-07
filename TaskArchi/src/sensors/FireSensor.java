@@ -20,20 +20,20 @@ import instrumentation.MessageWindow;
  *
  * @author YMGM,MGL,JMMM
  */
-public class Fire extends Sensor implements Runnable {
+public class FireSensor extends Sensor implements Runnable {
     private int CurrentState;
     private boolean FireState = false;
 
-    private static Fire INSTANCE = new Fire();
+    private static FireSensor INSTANCE = new FireSensor();
 
-    private Fire(){
+    private FireSensor(){
         super();
     }
     @Override
      public void run(){
         if (evtMgrI != null){
             
-             float winPosX= 0.5f;
+             /*float winPosX= 0.5f;
              float winPosY= 0.3f;
             
              MessageWindow messageWin = new MessageWindow("FireSensor", winPosX,winPosY);
@@ -49,7 +49,7 @@ public class Fire extends Sensor implements Runnable {
 
 
         messageWin.writeMessage("\n Initializating simulation ... ");
-       
+        */
         
      
      while (!isDone)
@@ -57,7 +57,7 @@ public class Fire extends Sensor implements Runnable {
          //post de current state
           CurrentState = getRandomNumberent();
          postEvent(evtMgrI,FIRE,CurrentState);
-         messageWin.writeMessage("Current State:: " + CurrentState);
+         //messageWin.writeMessage("Current State:: " + CurrentState);
          
           //Get the message queue
           // Get the message queue
@@ -65,7 +65,7 @@ public class Fire extends Sensor implements Runnable {
                 evtMgrI.getEvent();
             } // try
             catch (Exception e) {
-                messageWin.writeMessage("Error getting event queue::" + e);
+                //messageWin.writeMessage("Error getting event queue::" + e);
             } // catch
         // If there are messages in the queue, we read through them.
         // We are looking for EventIDs = -5, this means the the heater
@@ -99,13 +99,13 @@ public class Fire extends Sensor implements Runnable {
                 }
                 if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                 }
                  try {
                     Thread.sleep(delay);
                 }
                 catch (Exception e) {
-                  messageWin.writeMessage("Sleep error:: " + e);
+                  //messageWin.writeMessage("Sleep error:: " + e);
                 } 
             } 
         //}
@@ -117,9 +117,9 @@ public class Fire extends Sensor implements Runnable {
     
     private static void createInstance() {
         if (INSTANCE == null) {
-            synchronized (DoorSensor.class) {
+            synchronized (FireSensor.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new Fire();
+                    INSTANCE = new FireSensor();
                 }
             }
         }
@@ -131,7 +131,7 @@ public class Fire extends Sensor implements Runnable {
      * 
      * @return The instance of this class.
      */
-    public static Fire getInstance() {
+    public static FireSensor getInstance() {
         if (INSTANCE == null) {
             createInstance();
         }
@@ -147,7 +147,7 @@ public class Fire extends Sensor implements Runnable {
     public static void main(String args[]) {
         //if(args[0] != null) Component.SERVER_IP = args[0];
         Component.SERVER_IP = "127.0.0.1";
-        DoorSensor sensor = DoorSensor.getInstance();
+        FireSensor sensor = FireSensor.getInstance();
         sensor.run();
     }
 

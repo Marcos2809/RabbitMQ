@@ -32,7 +32,7 @@ public class DoorSensor extends Sensor implements Runnable {
     @Override
      public void run(){
         if (evtMgrI != null){
-            
+            /*
              float winPosX= 0.5f;
              float winPosY= 0.3f;
             
@@ -49,7 +49,7 @@ public class DoorSensor extends Sensor implements Runnable {
 
 
         messageWin.writeMessage("\n Initializating simulation ... ");
-       
+        */
         
      
      while (!isDone)
@@ -57,7 +57,7 @@ public class DoorSensor extends Sensor implements Runnable {
          //post de current state
           CurrentState = getRandomNumberent();
          postEvent(evtMgrI,DOOR,CurrentState);
-         messageWin.writeMessage("Current State:: " + CurrentState);
+         //messageWin.writeMessage("Current State:: " + CurrentState);
          
           //Get the message queue
           // Get the message queue
@@ -65,7 +65,7 @@ public class DoorSensor extends Sensor implements Runnable {
                 evtMgrI.getEvent();
             } // try
             catch (Exception e) {
-                messageWin.writeMessage("Error getting event queue::" + e);
+                //messageWin.writeMessage("Error getting event queue::" + e);
             } // catch
         // If there are messages in the queue, we read through them.
         // We are looking for EventIDs = -5, this means the the heater
@@ -99,13 +99,13 @@ public class DoorSensor extends Sensor implements Runnable {
                 }
                 if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                 }
                  try {
                     Thread.sleep(delay);
                 }
                 catch (Exception e) {
-                  messageWin.writeMessage("Sleep error:: " + e);
+                  //messageWin.writeMessage("Sleep error:: " + e);
                 } 
             } 
         //}

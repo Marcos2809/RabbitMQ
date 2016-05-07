@@ -32,6 +32,7 @@ private static WindowSensor INSTANCE = new WindowSensor();
     }
      public void run(){
      if (evtMgrI != null){
+          /*
           float winPosX= 0.5f;
           float winPosY= 0.3f;
           MessageWindow messageWin = new MessageWindow("WindowSensor", winPosX,winPosY);
@@ -48,13 +49,14 @@ private static WindowSensor INSTANCE = new WindowSensor();
 
 
      messageWin.writeMessage("\n Initializating simulation ... ");
+     */
      
      while (!isDone)
      {
          //post de current state
           CurrentState = getRandomNumberent();
-         postEvent(evtMgrI,DOOR,CurrentState);
-         messageWin.writeMessage("Current State:: " + CurrentState);
+         postEvent(evtMgrI,WINDOW,CurrentState);
+         //messageWin.writeMessage("Current State:: " + CurrentState);
          
           //Get the message queue
           // Get the message queue 
@@ -62,7 +64,7 @@ private static WindowSensor INSTANCE = new WindowSensor();
                 evtMgrI.getEvent();
             } // try
             catch (Exception e) {
-                messageWin.writeMessage("Error getting event queue::" + e);
+                //messageWin.writeMessage("Error getting event queue::" + e);
             } // catch
 				// If there are messages in the queue, we read through them.
 				// We are looking for EventIDs = -5, this means the the heater
@@ -93,13 +95,13 @@ private static WindowSensor INSTANCE = new WindowSensor();
                 }
             if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
                 }
                  try {
                     Thread.sleep(delay);
                 }
                 catch (Exception e) {
-                  messageWin.writeMessage("Sleep error:: " + e);
+                  //messageWin.writeMessage("Sleep error:: " + e);
                 } 
             } 
      }
