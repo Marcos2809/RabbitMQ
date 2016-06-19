@@ -48,7 +48,7 @@ public class MovementSensor extends Sensor implements Runnable {
              float winPosX= 0.5f;
              float winPosY= 0.3f;
             
-             MessageWindow messageWin = new MessageWindow("WindowSensor", winPosX,winPosY);
+             MessageWindow messageWin = new MessageWindow("MovementSensor", winPosX,winPosY);
              messageWin.writeMessage ("Registered with the event manager.");
 
              messageWin.writeMessage("\n Initializating simulation ... ");
