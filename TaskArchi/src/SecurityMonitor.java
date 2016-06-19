@@ -81,6 +81,11 @@ public class SecurityMonitor extends Thread {
         messageWin = new MessageWindow("Security Monitoring Console", 0, 0);
         di= new Indicator("DOOR OK", messageWin.getX() + messageWin.width(), 1);
         di.setLampColorAndMessage("DOOR OK", 1);
+        wi= new Indicator("WINDOW OK", messageWin.getX() + messageWin.width(), 1);
+        wi.setLampColorAndMessage("WINDOW OK", 1);
+        mi= new Indicator("MOVEMENT DETECTION", messageWin.getX() + messageWin.width(), di.height()*2);
+        mi.setLampColorAndMessage("NOT MOVEMENT DETECTION", 1);
+            
 
         messageWin.writeMessage("Registered with the event manager.");
 
@@ -101,6 +106,42 @@ public class SecurityMonitor extends Thread {
                     String message = new String(body, "UTF-8");
                    // setdoor(Float.valueOf(message));
                     if (alarmsStatus){
+                        if(message.equalsIgnoreCase("5")){
+                            try {
+                                Activatemov(on);
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            messageWin.writeMessage("Security:: ALERT! Movement detection");
+                            mi.setLampColorAndMessage("Movement Detected", 3); // Door is broken
+                        } 
+                        if(message.equalsIgnoreCase("4")){
+                            try {
+                                Activatemov(off);
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            messageWin.writeMessage("Security:: Movement detection: False");
+                            mi.setLampColorAndMessage("NOT Movement Detected", 1); // Door is broken
+                        } 
+                        if(message.equalsIgnoreCase("3")){
+                            try {
+                                Activatewindow(on);
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            messageWin.writeMessage("Security:: ALERT! WINDOWS broken");
+                            wi.setLampColorAndMessage("WINDOW BROKEN", 3); // Door is broken
+                        } 
+                        if(message.equalsIgnoreCase("2")){
+                            try {
+                                Activatewindow(off);
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            messageWin.writeMessage("Security:: ALERT! WINDOWS OK");
+                            wi.setLampColorAndMessage("WINDOW OK", 1); // Door is broken
+                        } 
                         if(message.equalsIgnoreCase("1")){
                             try {
                                 Activatedoor(on);
@@ -122,6 +163,8 @@ public class SecurityMonitor extends Thread {
                     } else {
                         messageWin.writeMessage("Security:: ALERT! Alarms deactivate");
                         di.setLampColorAndMessage("DOOR OFF", 0); // Alarms deactivate                
+                        wi.setLampColorAndMessage("WINDOW OFF", 0); // Alarms deactivate                
+                        mi.setLampColorAndMessage("MOVEMENT DETECTION OFF", 0); // Alarms deactivate  
                     }
                 }
             };
@@ -166,6 +209,40 @@ public class SecurityMonitor extends Thread {
             }
             else {
                 message = Component.DOOR_OFF;
+           } // if
+            try {
+            canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
+            } // heater
+            catch (Exception e) {
+             }
+        }
+    }
+    private void Activatewindow(boolean ON)throws Exception {
+        // Here we create the event.
+        String message;
+        if (alarmsStatus){
+            if (ON) {
+                message = Component.WINDOW_ON;
+            }
+            else {
+                message = Component.WINDOW_OFF;
+           } // if
+            try {
+            canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
+            } // heater
+            catch (Exception e) {
+             }
+        }
+    }
+     private void Activatemov(boolean ON)throws Exception {
+        // Here we create the event.
+        String message;
+        if (alarmsStatus){
+            if (ON) {
+                message = Component.MOVEMENT_ON;
+            }
+            else {
+                message = Component.MOVEMENT_OFF;
            } // if
             try {
             canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());

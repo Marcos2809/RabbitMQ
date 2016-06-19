@@ -25,15 +25,17 @@ public class SecurityController  extends Controller implements Runnable {
     boolean WindowState = false;	// Heater state: false == off, true == on
     boolean DoorState = false;	// Chiller state: false == off, true == on
     boolean MovementState = false;
-    int Delay = 1000;
+    int Delay = 500;
     boolean isDone = false;
-    private String channelController, channelContReturn;
+    private String channelController, channelContReturn, channelContReturn2;
     private Channel channel;
     
     //private static SecurityController INSTANCE = new SecurityController();
     private SecurityController(String channelController){
         this.channelController = channelController;
         channelContReturn = "DR";
+        // WINDOWS 
+        
     }
     
     @Override
@@ -61,9 +63,9 @@ public class SecurityController  extends Controller implements Runnable {
             MessageWindow messageWin = new MessageWindow("Security Controller Status Console", winPosX, winPosY);
 
             // Put the status indicators under the panel...
-         //   Indicator wi = new Indicator("WindowsState OFF", messageWin.getX(), messageWin.getY() + messageWin.height());
-            Indicator di = new Indicator("DoorState OFF", messageWin.getX() /*+ (di.width() * 3)*/, messageWin.getY() + messageWin.height());
-           // Indicator mi= new Indicator ("MovementState OFF", messageWin.getX() + (di.width() * 6), messageWin.getY() + messageWin.height());
+            Indicator wi = new Indicator("WindowsState OFF", messageWin.getX(), messageWin.getY() + messageWin.height());
+            Indicator di = new Indicator("DoorState OFF", messageWin.getX() + (wi.width() * 3), messageWin.getY() + messageWin.height());
+            Indicator mi= new Indicator ("MovementState OFF", messageWin.getX() + (di.width() * 6), messageWin.getY() + messageWin.height());
             messageWin.writeMessage("Registered with the event manager.");
 
            
@@ -85,27 +87,8 @@ public class SecurityController  extends Controller implements Runnable {
                     public void handleDelivery(String consumerTag, Envelope envelope, 
                         AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
                         String message = new String(body, "UTF-8");
-                      /*  if (message.equalsIgnoreCase(WINDOW_ON)) { // heater on
-                           WindowState = true;
-                            messageWin.writeMessage("Received security event");
-                             try {
-                                confirmMessage(channelContReturn, String.valueOf(WINDOW_ON));
-                            } catch (Exception ex) {
-                                Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-
-                        if (message.equalsIgnoreCase(WINDOW_OFF)) { // heater off
-                            WindowState = false;
-                            messageWin.writeMessage("Received security off event");
-                        //Confirmar que el mensaje fue reicibo y actuado 
-                         try {
-                                confirmMessage(channelContReturn, String.valueOf(WINDOW_OFF));
-                            } catch (Exception ex) {
-                                Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
-                            } 
-                        }
-*/
+                        System.out.println("COLA EN RABBIT::"+ message);
+                      
                       //System.out.println("MENSJA DEL A COAL:::"+message);
                       if (message.equalsIgnoreCase(DOOR_ON)) { // chiller on
                             DoorState = true;
@@ -126,24 +109,45 @@ public class SecurityController  extends Controller implements Runnable {
                                 Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
                             }                       
                         }
-                  /*  if (message.equalsIgnoreCase(MOVEMENT_ON)) { // chiller on
+                          if (message.equalsIgnoreCase(WINDOW_ON)) { // chiller on
+                            WindowState = true;
+                            messageWin.writeMessage("Received security event");
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(WINDOW_ON));
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                        if (message.equalsIgnoreCase(WINDOW_OFF)) { // chiller off
+                            WindowState = false;
+                            messageWin.writeMessage("Received security off event");
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(WINDOW_OFF));
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
+                            }                       
+                        }
+                         if (message.equalsIgnoreCase(MOVEMENT_ON)) { // chiller on
                             MovementState = true;
-                             messageWin.writeMessage("Received security event");
-                         try {
+                            messageWin.writeMessage("Received security event");
+                            try {
                                 confirmMessage(channelContReturn, String.valueOf(MOVEMENT_ON));
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
-                            } 
+                            }
                         }
 
                         if (message.equalsIgnoreCase(MOVEMENT_OFF)) { // chiller off
                             MovementState = false;
-                             messageWin.writeMessage("Received security off event");
-                        try {
+                            messageWin.writeMessage("Received security off event");
+                            try {
                                 confirmMessage(channelContReturn, String.valueOf(MOVEMENT_OFF));
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
-                            }}*/
+                            }                       
+                        }
+                  
                     
                         
                     }
@@ -154,35 +158,30 @@ public class SecurityController  extends Controller implements Runnable {
                     Logger.getLogger(SecurityController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                // Update the lamp status
-             /*   if (WindowState) {
-                    // Set to green, heater is on
-                    wi.setLampColorAndMessage("WINDOW BROKEN", 1);
-                }
-                else {
-                    // Set to black, heater is off
-                    wi.setLampColorAndMessage("WINDOW FINE", 0);
-                }*/
-                if (DoorState) {
+               if (DoorState) {
                     // Set to green, door is on
                     di.setLampColorAndMessage("CHECK DOOR", 3);
                 }
-                else if (DoorState){
-                    // Set to black, door is off
-                    di.setLampColorAndMessage("DOOR OFF", 0);
+                 else {            
+                    // Set to black, chiller is off
+                    di.setLampColorAndMessage("DOOR FINE", 1);
+                }
+                 if (WindowState) {
+                    // Set to green, door is on
+                    wi.setLampColorAndMessage("CHECK WINDOWS", 3);
                 }
                 else{            
                     // Set to black, chiller is off
-                    di.setLampColorAndMessage("DOOR FINE", 1);
-                }/*
+                    wi.setLampColorAndMessage("WINDOW FINE", 1);
+                }
                 if (MovementState) {
                     // Set to green, chiller is on
-                    mi.setLampColorAndMessage("EXISTS MOVEMENT ", 1);
+                    mi.setLampColorAndMessage("EXISTS MOVEMENT ", 3);
                 }
                 else {
                     // Set to black, chiller is off
-                    mi.setLampColorAndMessage("NOT MOVEMENT", 0);
-                }*/
+                    mi.setLampColorAndMessage("NOT MOVEMENT", 1);
+                }
                 
                 try {
                     Thread.sleep(Delay);

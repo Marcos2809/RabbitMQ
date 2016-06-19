@@ -27,13 +27,13 @@ import controllers.TemperatureController;
  *
  * @author YMGM,MGL,JMMM
  */
-public class DoorSensor extends Sensor implements Runnable {
+public class MovementSensor extends Sensor implements Runnable {
     private int CurrentState;
-    private boolean DoorState = false;
+        boolean MovementState = false;
         private String channelSensor,channelContReturn;
     private Channel channel,channel2;
  
-     private DoorSensor(String channelSensor){
+     private MovementSensor(String channelSensor){
         this.channelSensor = channelSensor;
         channelContReturn = "DR";
     }
@@ -48,7 +48,7 @@ public class DoorSensor extends Sensor implements Runnable {
              float winPosX= 0.5f;
              float winPosY= 0.3f;
             
-             MessageWindow messageWin = new MessageWindow("DoorSensor", winPosX,winPosY);
+             MessageWindow messageWin = new MessageWindow("WindowSensor", winPosX,winPosY);
              messageWin.writeMessage ("Registered with the event manager.");
 
              messageWin.writeMessage("\n Initializating simulation ... ");
@@ -58,7 +58,7 @@ public class DoorSensor extends Sensor implements Runnable {
      while (!isDone)
      {
          
-         CurrentState = getRandomNumberent();
+         CurrentState = getRandomNumberent3();
          
        messageWin.writeMessage("Current State:: " + CurrentState);
        final Consumer consumer = new DefaultConsumer(channel2) {
@@ -76,15 +76,15 @@ public class DoorSensor extends Sensor implements Runnable {
         // If there are more, it is the last message that will effect the
         // output of the temperature as it would in reality.
 
-                 if (message.equalsIgnoreCase(DOOR_ON)) // 
+                 if (message.equalsIgnoreCase(MOVEMENT_ON)) // 
                         {
-                                DoorState = true;
+                                MovementState = true;
 
                          } // if
 
-                        if (message.equalsIgnoreCase(DOOR_OFF)) // 
+                        if (message.equalsIgnoreCase(MOVEMENT_OFF)) // 
                         {
-                                DoorState = false;
+                                MovementState = false;
                          } // if
                         //CurrentState = evtMgrI.getEvent()
                      }
@@ -102,7 +102,7 @@ public class DoorSensor extends Sensor implements Runnable {
             }// Now we trend the relative humidity according to the status of the
                 // humidifier/dehumidifier controller.
                // Here we wait for a 2.5 seconds before we start the next sample
-                
+               
                  try {
                     Thread.sleep(delay);
                 }
@@ -124,7 +124,7 @@ public class DoorSensor extends Sensor implements Runnable {
         //if(args[0] != null) Component.SERVER_IP = args[0];
         //Component.SERVER_IP = "127.0.0.1";
         //DoorSensor sensor = DoorSensor.getInstance();
-        DoorSensor sensor = new DoorSensor("DoorSensor");
+        MovementSensor sensor = new MovementSensor("DoorSensor");
         sensor.run();
     }
 

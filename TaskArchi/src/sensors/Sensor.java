@@ -98,6 +98,34 @@ public class Sensor extends Component {
             
         return res;
     }
+    protected int getRandomNumberent2() {
+        Random r = new Random();
+        int val=0;
+        int res=0;
+        val = (int)(Math.random()*100 + 1);
+        if (val % 3==0){
+            res =3;
+                } else
+        {
+            res=2;
+        }
+            
+        return res;
+    }
+      protected int getRandomNumberent3() {
+        Random r = new Random();
+        int val=0;
+        int res=0;
+        val = (int)(Math.random()*100 + 1);
+        if (val % 3==0){
+            res =5;
+                } else
+        {
+            res=4;
+        }
+            
+        return res;
+    }
 
     /**
      * This method provides a random true or

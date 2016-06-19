@@ -35,7 +35,7 @@ public class WindowSensor extends Sensor implements Runnable {
  
      private WindowSensor(String channelSensor){
         this.channelSensor = channelSensor;
-        channelContReturn = "WR";
+        channelContReturn = "DR";
     }
     @Override
      public void run(){
@@ -58,7 +58,7 @@ public class WindowSensor extends Sensor implements Runnable {
      while (!isDone)
      {
          
-         CurrentState = getRandomNumberent();
+         CurrentState = getRandomNumberent2();
          
        messageWin.writeMessage("Current State:: " + CurrentState);
        final Consumer consumer = new DefaultConsumer(channel2) {
@@ -102,10 +102,7 @@ public class WindowSensor extends Sensor implements Runnable {
             }// Now we trend the relative humidity according to the status of the
                 // humidifier/dehumidifier controller.
                // Here we wait for a 2.5 seconds before we start the next sample
-                if (WindowState) {
-                    CurrentState += getRandomNumber();
-                }
-                
+               
                  try {
                     Thread.sleep(delay);
                 }
@@ -127,7 +124,7 @@ public class WindowSensor extends Sensor implements Runnable {
         //if(args[0] != null) Component.SERVER_IP = args[0];
         //Component.SERVER_IP = "127.0.0.1";
         //DoorSensor sensor = DoorSensor.getInstance();
-        WindowSensor sensor = new WindowSensor("WindowSensor");
+        WindowSensor sensor = new WindowSensor("DoorSensor");
         sensor.run();
     }
 
