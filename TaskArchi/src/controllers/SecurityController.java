@@ -34,7 +34,7 @@ public class SecurityController  extends Controller implements Runnable {
     private SecurityController(String channelController){
         this.channelController = channelController;
         channelContReturn = "DR";
-        // WINDOWS 
+ 
         
     }
     

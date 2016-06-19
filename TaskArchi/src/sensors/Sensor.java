@@ -46,30 +46,7 @@ public class Sensor extends Component {
              channel.queueDeclare(conector, false, false, false, null);
          return channel; 
 
- }/*
-    protected Channel crearCanal(String endpointName) throws IOException, TimeoutException{
-        this.endpointName = endpointName;
-        
-         //Create a connection factory
-         ConnectionFactory factory = new ConnectionFactory();
-	    
-         //hostname of your rabbitmq server
-         factory.setHost("localhost");
-		
-         //getting a connection
-         connection = factory.newConnection();
-	    
-         //creating a channel
-         Channel channel = connection.createChannel();
-	    
-         //declaring a queue for this channel. If queue does not exist,
-         //it will be created on the server.
-         channel.queueDeclare(this.endpointName, false, false, false, null);
-         return channel;
-    }
-    protected Sensor() {}
-*/
-    /**
+ }  /**
      * This method provides the simulation with random floating point 
      * temperature values between 0.1 and 0.9.
      * 
