@@ -339,7 +339,7 @@ public class SecurityMonitor extends Thread {
     private void Activatesprinkler(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-        if (alarmsStatus){
+        if (sprinklerStatus){
             if (ON) {
                 message = Component.SPRINKLER_ON;
             }
