@@ -7,15 +7,13 @@
  * */
 
 import common.*;
-import java.util.Timer;
-import sensors.*;
 
 public class ECSSecurityConsole {
     
     //private DoorSensor mDoorSensor = null;
 
 
-    @SuppressWarnings("SleepWhileInLoop")
+    //@SuppressWarnings("SleepWhileInLoop")
     public static void main(String args[]) throws Exception {
         IOManager userInput = new IOManager();	// IOManager IO Object
         boolean isDone = false;			// Main loop flag
@@ -25,12 +23,15 @@ public class ECSSecurityConsole {
         boolean sprinkleractive = false;
         SecMonitor = new SecurityMonitor();
         int Delay =15000;
+        //TTimer timernew;
+        //timernew = new TTimer();
         
         
         
         if (SecMonitor.isRegistered()){
             SecMonitor.start(); // Here we start the monitoring and control thread
-                    
+          //  timernew = new TTimer();
+            
             while (!isDone) {
                 
 
@@ -75,32 +76,12 @@ public class ECSSecurityConsole {
                 //////////// option 2 ////////////
                 if (option.equals("3")) {
                     
-                System.out.print( "\nEnter 1/0 to activate or deactivate sprinklers, it will activate in 15 sec. if theres no input >>> " );
-                option = userInput.keyboardReadString();
-                //TimerTask task = new TimerTask(){
-               // Timer timer = new Timer();
-                //timer.schedule( task, 15*1000 );
-                //timer.schedule(null, 15 * 1000);
-               try{
-                Thread.sleep(Delay);
-               }
-               catch (Exception e) {
-                   System.out.println("Sleep error:: " + e);
-               }
-               // timer.schedule(null, 15*1000);
-                if (option.equals("1")) {
-                    // Here we deactivate alarms
+                     // Here we deactivate alarms
                     sprinkleractive = true;
+                    //System.out.println("ACTIVATE MESSAGE RECEIVED");
+                    SecMonitor.setSprinklerStatus(sprinkleractive);
                     System.out.println("ACTIVATE MESSAGE RECEIVED");
-                    SecMonitor.setAlarmsStatus(sprinkleractive);
                     
-                    }
-                if (option.equals("0")){
-                sprinkleractive = false;
-                System.out.println("DEACTIVATE MESSAGE RECEIVED");
-                SecMonitor.setAlarmsStatus(sprinkleractive);
-           } // if
-                
                 } // if
 
                 //////////// option X ////////////

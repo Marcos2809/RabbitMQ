@@ -45,13 +45,16 @@ public class SecurityMonitor extends Thread {
     MessageWindow messageWin = null;   
     boolean alarmsStatus= true;  
     boolean sprinklerStatus=false;
-        
+    ConfirmSprinkler timernew;
+    
+            
     
     public SecurityMonitor() {
         // event manager is on the local system
         try{
             canalDoor = conectorrabbit("DoorSensor");
             canalDoorControlador = conectorrabbit("DoorControlador");
+            timernew = new ConfirmSprinkler();
                       
         }catch(Exception e){
               System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
@@ -122,13 +125,31 @@ public class SecurityMonitor extends Thread {
                         if(message.equalsIgnoreCase("7")){
                             try {
                                 Activatefire(on);
-                                Activatesprinkler(on);
+                                //Activatesprinkler(on);
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             messageWin.writeMessage("Security:: ALERT! Fire detection");
                             fi.setLampColorAndMessage("Fire Detected", 3); // Fire Detected
+                            //timernew.show();
+                            //timernew.setVisible(true);
+                            timernew.setVisible(true);
+                            if (timernew.sprinkleractive){
+                            try{
+                                Activatesprinkler(on);
+                            } catch (Exception ex) {
+                                Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             si.setLampColorAndMessage("Sprinkler ON", 1); // Sprinkler ON
+                            }
+                            else{
+                                try {
+                                    Activatesprinkler(off);
+                                } catch (Exception ex) {
+                                    Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            si.setLampColorAndMessage("Sprinkler OFF", 0); // Sprinkler OFF                            
+                            }
                         } 
                         if(message.equalsIgnoreCase("6")){
                             try {
