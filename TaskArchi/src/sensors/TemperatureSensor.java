@@ -20,36 +20,50 @@
 package sensors;
 
 import common.Component;
+import com.rabbitmq.client.*;
 import instrumentation.MessageWindow;
+import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import controllers.TemperatureController;
 
 public class TemperatureSensor extends Sensor implements Runnable {
 
     private boolean heaterState = false;	// Heater state: false == off, true == on
     private boolean chillerState = false;	// Chiller state: false == off, true == on
     private float currentTemperature;		// Current simulated ambient room temperature
+    private String channelSensor,channelContReturn;
+    private Channel channel,channel2;
 
-    private static TemperatureSensor INSTANCE = new TemperatureSensor();
 
-    private TemperatureSensor() {
-        super();
+    private TemperatureSensor(String channelSensor) {
+        this.channelSensor = channelSensor;
+        channelContReturn = "contReturn";
     }
 
     public void run() {
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
-     //   if (evtMgrI != null) {
+        //   if (evtMgrI != null) {
+        
+        try{
+            channel = super.conectorrabbit(channelSensor);
+            channel2 = super.conectorrabbit(channelContReturn);
+        }catch(Exception e){
 
+        }
             // We create a message window. Note that we place this panel about 1/2 across 
             // and 1/3 down the screen			
-            //float winPosX = 0.5f; 	//This is the X position of the message window in terms 
+            float winPosX = 0.5f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            //float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
+            float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
-            /*
+
             MessageWindow messageWin = new MessageWindow("Temperature Sensor", winPosX, winPosY);
             messageWin.writeMessage("Registered with the event manager.");
-
+/*
             try {
                 messageWin.writeMessage("   Participant id: " + evtMgrI.getMyId());
                 messageWin.writeMessage("   Registration Time: " + evtMgrI.getRegistrationTime());
@@ -57,40 +71,39 @@ public class TemperatureSensor extends Sensor implements Runnable {
             catch (Exception e) {
                 messageWin.writeMessage("Error:: " + e);
             } // catch
-
+*/
             messageWin.writeMessage("\nInitializing Temperature Simulation::");
-            */
             currentTemperature = (float) 50.00;
             if (coinToss()) {
-                driftValue = getRandomNumber() * (float) -0.5;
+                driftValue = getRandomNumber() * (float) -1.0;
             }
             else {
                 driftValue = getRandomNumber();
             } // if
 
-            //messageWin.writeMessage("   Initial Temperature Set:: " + currentTemperature);
-            //messageWin.writeMessage("   Drift Value Set:: " + driftValue);
+            messageWin.writeMessage("   Initial Temperature Set:: " + currentTemperature);
+            messageWin.writeMessage("   Drift Value Set:: " + driftValue);
 
             /**
              * ******************************************************************
              ** Here we start the main simulation loop
              * *******************************************************************
              */
-            //messageWin.writeMessage("Beginning Simulation... ");
+            messageWin.writeMessage("Beginning Simulation... ");
 
             while (!isDone) {
                 // Post the current temperature
-                postEvent(evtMgrI, TEMPERATURE, currentTemperature);
-                //messageWin.writeMessage("Current Temperature::  " + currentTemperature + " F");
-
+                /*postEvent(evtMgrI, TEMPERATURE, currentTemperature);
+                messageWin.writeMessage("Current Temperature::  " + currentTemperature + " F");
+                */
                 // Get the message queue
-                try {
+                /*try {
                     evtMgrI.getEvent();
                 } // try
                 catch (Exception e) {
-                    //messageWin.writeMessage("Error getting event queue::" + e);
+                    messageWin.writeMessage("Error getting event queue::" + e);
                 } // catch
-
+                */
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = -5, this means the the heater
                 // or chiller has been turned on/off. Note that we get all the messages
@@ -102,25 +115,27 @@ public class TemperatureSensor extends Sensor implements Runnable {
                // System.out.println(evtMgrI.returnMessage());
                // System.out.println(TEMPERATURE_SENSOR+"Valor del Sensor" );
 //                System.out.println(evtMgrI.returnMessage()+"Valor del mensade del sensor" );
-
-                    if (evtMgrI.returnid() == TEMPERATURE_SENSOR) {
-                       // System.out.println("Probando Sensor: "+evtMgrI.returnid());
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_ON)) // heater on
+                
+                final Consumer consumer = new DefaultConsumer(channel2) {
+                    public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
+			String message = new String(body, "UTF-8");
+                        
+                        if (message.equalsIgnoreCase(HEATER_ON)) // heater on
                         {
                             heaterState = true;
                         } // if
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_OFF)) // heater off
+                        if (message.equalsIgnoreCase(HEATER_OFF)) // heater off
                         {
                             heaterState = false;
                         } // if
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_ON)) // chiller on
+                        if (message.equalsIgnoreCase(CHILLER_ON)) // chiller on
                         {
                             chillerState = true;
                         } // if
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_OFF)) // chiller off
+                        if (message.equalsIgnoreCase(CHILLER_OFF)) // chiller off
                         {
                             chillerState = false;
                       } // if
@@ -128,12 +143,29 @@ public class TemperatureSensor extends Sensor implements Runnable {
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
-                     if (evtMgrI.returnid() == END) {
+                     /*if (evtMgrI.returnid() == END) {
                         isDone = true;
-                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                        messageWin.writeMessage("\n\nSimulation Stopped. \n");
                     } 
+                    */
+                    }
+                };
                 
-                } // for
+                try {
+                    channel2.basicConsume(channelContReturn, true, consumer);
+                } catch (IOException ex) {
+              ///     Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                try {
+                    // Post the current temperature
+                    postEvent(channelSensor, String.valueOf(currentTemperature));
+                } catch (IOException ex) {
+               //     Logger.getLogger(TemperatureSensor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (TimeoutException ex) {
+                 //   Logger.getLogger(TemperatureSensor.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                messageWin.writeMessage("Current Temperature::  " + currentTemperature + " F");
 
                 // Now we trend the temperature according to the status of the
                 // heater/chiller controller.
@@ -151,7 +183,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
                     Thread.sleep(delay);
                 } // try
                 catch (Exception e) {
-                    //messageWin.writeMessage("Sleep error:: " + e);
+                    messageWin.writeMessage("Sleep error:: " + e);
                 } // catch
             } // while
        // }
@@ -160,28 +192,6 @@ public class TemperatureSensor extends Sensor implements Runnable {
      //   } // if
     }
 
-    private static void createInstance() {
-        if (INSTANCE == null) {
-            synchronized (TemperatureSensor.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TemperatureSensor();
-                }
-            }
-        }
-    }
-    
-    /**
-     * This method calls createInstance method to creates and ensure that 
-     * only one instance of this class is created. Singleton design pattern.
-     * 
-     * @return The instance of this class.
-     */
-    public static TemperatureSensor getInstance() {
-        if (INSTANCE == null) {
-            createInstance();
-        }
-        return INSTANCE;
-    }
 
     /**
      * Start this sensor
@@ -190,8 +200,8 @@ public class TemperatureSensor extends Sensor implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        Component.SERVER_IP = "127.0.0.1";
-        TemperatureSensor sensor = TemperatureSensor.getInstance();
+        //Component.SERVER_IP = "127.0.0.1";
+        TemperatureSensor sensor = new TemperatureSensor("TempSensor");
         sensor.run();
     }
 

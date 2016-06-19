@@ -27,15 +27,22 @@ package controllers;
 import common.Component;
 import instrumentation.Indicator;
 import instrumentation.MessageWindow;
+import com.rabbitmq.client.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TemperatureController extends Controller implements Runnable {
 
     private boolean heaterState = false;	// Heater state: false == off, true == on
     private boolean chillerState = false;	// Chiller state: false == off, true == on
+    private String channelController, channelContReturn;
+    private Channel channel;
     
-    private static TemperatureController INSTANCE = new TemperatureController();
     
-    private TemperatureController(){
+    private TemperatureController(String channelController){
+        this.channelController = channelController;
+        channelContReturn = "contReturn";
     }
 
     @Override
@@ -43,18 +50,23 @@ public class TemperatureController extends Controller implements Runnable {
 
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
-      //  if (evtMgrI != null) {
-            //System.out.println("Registered with the event manager.");
+        //  if (evtMgrI != null) {
+        try{
+            channel = super.conectorrabbit(channelController);
+        }catch(Exception e){
+           
+        }
+            System.out.println("Registered with the event manager.");
 
             /* Now we create the temperature control status and message panel
              ** We put this panel about 1/3 the way down the terminal, aligned to the left
              ** of the terminal. The status indicators are placed directly under this panel
              */
-            //float winPosX = 0.0f; 	//This is the X position of the message window in terms 
+            float winPosX = 0.0f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            //float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
+            float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
-            /*
+
             MessageWindow messageWin = new MessageWindow("Temperature Controller Status Console", winPosX, winPosY);
 
             // Put the status indicators under the panel...
@@ -63,26 +75,26 @@ public class TemperatureController extends Controller implements Runnable {
 
             messageWin.writeMessage("Registered with the event manager.");
 
-            try {
+            /*try {
                 messageWin.writeMessage("   Participant id: " + evtMgrI.getMyId());
                 messageWin.writeMessage("   Registration Time: " + evtMgrI.getRegistrationTime());
             }
             catch (Exception e) {
                 System.out.println("Error:: " + e);
-            }
-            */
+            }*/
+
             /**
              * ******************************************************************
              ** Here we start the main simulation loop
              * *******************************************************************
              */
             while (!isDone) {
-              try {
+              /*try {
                   evtMgrI.getEvent();
               }
               catch (Exception e){
                   
-              }
+              }*/
 
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = 5, this is a request to turn the
@@ -96,48 +108,70 @@ public class TemperatureController extends Controller implements Runnable {
 
  //mod               for (int i = 0; i < qlen; i++) {
 //mod                    evt = queue.getEvent();
-                        if (evtMgrI.returnid() == TEMPERATURE_CONTROLLER) {
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_ON)) { // heater on
+                   final Consumer consumer = new DefaultConsumer(channel) {
+                    public void handleDelivery(String consumerTag, Envelope envelope, 
+                        AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
+			String message = new String(body, "UTF-8");
+                        if (message.equalsIgnoreCase(HEATER_ON)) { // heater on
                             heaterState = true;
-                            //messageWin.writeMessage("Received heater on event");
-                            // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_ON);
+                            messageWin.writeMessage("Received heater on event");
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(HEATER_ON));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(HEATER_OFF)) { // heater off
+                        
+                        if (message.equalsIgnoreCase(HEATER_OFF)) { // heater off
                             heaterState = false;
-                            //messageWin.writeMessage("Received heater off event");
-                            // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, TEMPERATURE_SENSOR, HEATER_OFF);
+                            messageWin.writeMessage("Received heater off event");
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(HEATER_OFF));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_ON)) { // chiller on
+                        if (message.equalsIgnoreCase(CHILLER_ON)) { // chiller on
                             chillerState = true;
-                            //messageWin.writeMessage("Received chiller on event");
-                            // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_ON);
+                            messageWin.writeMessage("Received chiller on event");
+                            try {
+                               confirmMessage(channelContReturn, String.valueOf(CHILLER_ON));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
 
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(CHILLER_OFF)) { // chiller off
+                        if (message.equalsIgnoreCase(CHILLER_OFF)) { // chiller off
                             chillerState = false;
-                            //messageWin.writeMessage("Received chiller off event");
-                            // Confirm that the message was recieved and acted on
-                            confirmMessage(evtMgrI, TEMPERATURE_SENSOR, CHILLER_OFF);
+                            messageWin.writeMessage("Received chiller off event");
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(CHILLER_OFF));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
+                        
                     }
+                };
+                try {
+                    channel.basicConsume(channelController, true, consumer);
+                } catch (IOException ex) {
+                    Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                     // If the event ID == 99 then this is a signal that the simulation
                     // is to end. At this point, the loop termination flag is set to
                     // true and this process unregisters from the event manager.
-                    if (evtMgrI.returnid() == END) {
+                    /*if (evtMgrI.returnid() == END) {
                         isDone = true;
-                       //messageWin.writeMessage("\n\nSimulation Stopped. \n");
+                       messageWin.writeMessage("\n\nSimulation Stopped. \n");
                         // Get rid of the indicators. The message panel is left for the
                         // user to exit so they can see the last message posted.
-                        //heatIndicator.dispose();
-                        //chillIndicator.dispose();
-                    }
+                        heatIndicator.dispose();
+                        chillIndicator.dispose();*/
+                
 
-                /*
+
                 // Update the lamp status
                 if (heaterState) {
                     // Set to green, heater is on
@@ -145,7 +179,7 @@ public class TemperatureController extends Controller implements Runnable {
                 }
                 else {
                     // Set to black, heater is off
-                    heatIndicator.setLampColorAndMessage("HEATER OFF", 0);
+                    heatIndicator.setLampColorAndMessage("HEATER ON", 0);
                 }
                 if (chillerState) {
                     // Set to green, chiller is on
@@ -161,7 +195,6 @@ public class TemperatureController extends Controller implements Runnable {
                 catch (Exception e) {
                     System.out.println("Sleep error:: " + e);
                 }
-                */
             }
         //}
 //        else {
@@ -169,28 +202,7 @@ public class TemperatureController extends Controller implements Runnable {
      //   }
     }
 
-    private static void createInstance() {
-        if (INSTANCE == null) {
-            synchronized (TemperatureController.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TemperatureController();
-                }
-            }
-        }
-    }
-
-    /**
-     * This method calls createInstance method to creates and ensure that 
-     * only one instance of this class is created. Singleton design pattern.
-     * 
-     * @return The instance of this class.
-     */
-    public static TemperatureController getInstance() {
-        if (INSTANCE == null) {
-            createInstance();
-        }
-        return INSTANCE;
-    }
+   
     
     /**
      * Start this controller
@@ -200,8 +212,8 @@ public class TemperatureController extends Controller implements Runnable {
      */
     public static void main(String args[]) {
       //  if(args[0] != null) Component.SERVER_IP = args[0];
-        Component.SERVER_IP = "127.0.0.1";
-        TemperatureController sensor = TemperatureController.getInstance();
+       // Component.SERVER_IP = "127.0.0.1";
+        TemperatureController sensor = new TemperatureController("TempControlador");
         sensor.run();
     }
 

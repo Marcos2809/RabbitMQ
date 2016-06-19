@@ -9,7 +9,7 @@
  * Reviewer: Perla Velasco Elizondo
  * Update: Equipo MEETMECORP
  * Institution: CIMAT
- * Date: 29/04/2016
+ * Date: 29/04/2016 
  * **************************************************************************************
  * This class contains the necessary to build a controller, in order to every 
  * controller extends from this.
@@ -18,34 +18,39 @@
 package controllers;
 
 import common.Component;
-import event.Event;
-import event.RabbitMQInterface;
+import com.rabbitmq.client.*;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 
 public class Controller extends Component {
     protected int delay = 2500;				// The loop delay (2.5 seconds)
     protected boolean isDone = false;			// Loop termination flag
+    protected String conector;
+    protected Connection connection;
+    private Channel channel;
     
     protected Controller() {
         super();
     }
     
-    /**
-     * This method posts the specified message to the specified event manager
-     * 
-     * @param ei This is the eventmanger interface where the event will be posted.
-     * @param evtId This is the ID to identify the type of event
-     * @param m This is the received command.
-     */
-    protected void confirmMessage(RabbitMQInterface ei, int evtId, String m) {
-        // Here we create the event.
-        Event evt = new Event(evtId, m);
-        // Here we send the event to the event manager.
-        try {
-             //ei.sendEvent(m, "");
-              ei.sendEvent(m+"&"+evtId, "logs");
-        } // try
-        catch (Exception e) {
-            System.out.println("Error Confirming Message:: " + e);
-        } // catch
-    } // PostMessage
+    protected Channel conectorrabbit(String connector) throws IOException, TimeoutException{
+                ConnectionFactory factory = new ConnectionFactory();
+                factory.setHost("localhost");
+                // Declaration Publish 
+                connection = factory.newConnection();
+                channel = connection.createChannel();
+                channel.queueDeclare(connector, false, false, false, null);
+                return channel; 
+    }
+      protected void confirmMessage(String conector, String message) throws Exception {
+        // Create the event.
+        Channel channel = conectorrabbit(conector);
+        channel.basicPublish("", conector, null, message.getBytes());
+        channel.close();
+	connection.close();
+    } // PostMessage*/   
 }

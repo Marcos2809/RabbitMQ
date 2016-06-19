@@ -18,19 +18,57 @@
 package sensors;
 
 import common.Component;
-import event.Event;
-import event.RabbitMQInterface;
+//import event.RabbitMQInterface;
 import java.util.Random;
+import com.rabbitmq.client.*;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class Sensor extends Component {
 
     protected int delay = 2500;				// The loop delay (2.5 seconds)
     protected boolean isDone = false;			// Loop termination flag
     protected float driftValue;				// The amount of temperature gained or lost
-
+   protected String endpointName;
     
-    protected Sensor() {}
+    protected Connection connection;
+   // Channel channel;
 
+    protected Channel conectorrabbit(String conector)throws IOException, TimeoutException{
+             ConnectionFactory factory = new ConnectionFactory();
+             factory.setHost("localhost");
+             // Declaration Publish 
+             connection = factory.newConnection();
+             Channel channel = connection.createChannel();
+             channel.queueDeclare(conector, false, false, false, null);
+         return channel; 
+
+ }/*
+    protected Channel crearCanal(String endpointName) throws IOException, TimeoutException{
+        this.endpointName = endpointName;
+        
+         //Create a connection factory
+         ConnectionFactory factory = new ConnectionFactory();
+	    
+         //hostname of your rabbitmq server
+         factory.setHost("localhost");
+		
+         //getting a connection
+         connection = factory.newConnection();
+	    
+         //creating a channel
+         Channel channel = connection.createChannel();
+	    
+         //declaring a queue for this channel. If queue does not exist,
+         //it will be created on the server.
+         channel.queueDeclare(this.endpointName, false, false, false, null);
+         return channel;
+    }
+    protected Sensor() {}
+*/
     /**
      * This method provides the simulation with random floating point 
      * temperature values between 0.1 and 0.9.
@@ -82,19 +120,12 @@ public class Sensor extends Component {
      * @param eventId This is the ID to identify the type of event
      * @param value Is the value to publish in the event queue
      */
-    protected void postEvent(RabbitMQInterface ei, int eventId, float value) {
+    
+    protected void postEvent(String connect, String mensaje) throws TimeoutException, IOException  {
         // Create the event.
-        Event evt = new Event(eventId, String.valueOf(value));
-        String event_id =""+eventId;
-        String mensaje = String.valueOf(value) +"&"+event_id;
-        
-        // Send the event to the event manager.
-        try {
-          
-            ei.sendEvent(mensaje, "logs");
-        }
-        catch (Exception e) {
-            System.out.println("Error Posting Temperature:: " + e);
-        }
+            Channel channel = conectorrabbit(connect);
+            channel.basicPublish("", connect, null, mensaje.getBytes());
+            channel.close();
+            connection.close();
     }
 }

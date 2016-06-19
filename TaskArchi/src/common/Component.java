@@ -1,4 +1,4 @@
-/**
+    /**
  * **************************************************************************************
  * File:Component.java 
  * Course: Software Architecture 
@@ -17,14 +17,14 @@
  */
 package common;
 
-import event.Event;
-import event.RabbitMQInterface;
+//import event.Event;
+//import event.RabbitMQInterface;
 //import event.EventManagerInterface;
-import event.EventQueue;
+//import event.EventQueue;
 
 public class Component {
 
-    public static String SERVER_IP = "127.0.0.1";
+   // public static String SERVER_IP = "127.0.0.1";
 
     public final static int TEMPERATURE = 1;
     public final static int HUMIDITY = 2;
@@ -66,9 +66,11 @@ public class Component {
     public final static String SPRINKLE_ON = "SP1";
     public final static String SPRINKLE_OFF = "SP0";
 
-    protected RabbitMQInterface evtMgrI = null;         // Interface object to the RabbitMQ Interface
+   // protected RabbitMQInterface evtMgrI = null;         // Interface object to the RabbitMQ Interface
+   // protected EventQueue queue = null;                              // Message Queue
+   // protected int evtId = 0;	
 
-    protected Component() {
+ /*   protected Component() {
             System.out.println("\n\nAttempting to register on the local machine...");
             try {
                 // Here we create an event manager interface object. This assumes
@@ -78,7 +80,7 @@ public class Component {
             catch (Exception e) {
                 System.out.println("Error instantiating event manager interface: " + e);
             } // catch
-    }
+    }*/
     // This is to accomplish with singleton pattern
     @Override
     public Object clone() throws CloneNotSupportedException {

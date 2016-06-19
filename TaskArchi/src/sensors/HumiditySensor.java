@@ -20,36 +20,52 @@
 package sensors;
 
 import common.Component;
-import event.EventManagerInterface;
+import com.rabbitmq.client.*;
 import instrumentation.MessageWindow;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import controllers.TemperatureController;
 
 public class HumiditySensor extends Sensor implements Runnable {
 
     private boolean humidifierState = false;	// Humidifier state: false == off, true == on
     private boolean dehumidifierState = false;	// Dehumidifier state: false == off, true == on
     private float relativeHumidity;		// Current simulated ambient room humidity
+    private String channelSensor,channelContReturn;
+    private Channel channel,channel2;
     
-    private static HumiditySensor INSTANCE = new HumiditySensor();
+    //private static HumiditySensor INSTANCE = new HumiditySensor();
     
-    private HumiditySensor(){
+    private HumiditySensor(String channelSensor){
+        this.channelSensor = channelSensor;
+        channelContReturn = "hr";
     }
 
     @Override
     public void run() {
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
+        try {
+              channel = super.conectorrabbit(channelSensor);
+              channel2 = super.conectorrabbit(channelContReturn);
+            }catch (Exception e) {
+            System.out.println("Error al establecer la conexión:: " + e);
+        } // catch
       // if (evtMgrI != null) {
 
             // We create a message window. Note that we place this panel about 1/2 across 
             // and 2/3s down the screen
-            //float winPosX = 0.5f; 	//This is the X position of the message window in terms 
+            float winPosX = 0.5f; 	//This is the X position of the message window in terms 
             //of a percentage of the screen height
-            //float winPosY = 0.60f;	//This is the Y position of the message window in terms 
+            float winPosY = 0.60f;	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
-            /*
-            MessageWindow messageWin = new MessageWindow("Humidity Sensor", winPosX, winPosY);
-            messageWin.writeMessage("Registered with the event manager.");
 
+            MessageWindow messageWin = new MessageWindow("Humidity Sensor", winPosX, winPosY);
+            messageWin.writeMessage("Registered with RABBIT.");
+/*
             try {
                 messageWin.writeMessage("   Participant id: " + evtMgrI.getMyId());
                 messageWin.writeMessage("   Registration Time: " + evtMgrI.getRegistrationTime());
@@ -57,37 +73,27 @@ public class HumiditySensor extends Sensor implements Runnable {
             catch (Exception e) {
                 messageWin.writeMessage("Error:: " + e);
             } 
-
+*/
             messageWin.writeMessage("\nInitializing Humidity Simulation::");
-            */
-            relativeHumidity = getRandomNumber() * (float) 50.00;
+            relativeHumidity = getRandomNumber() * (float) 100.00;
             if (coinToss()) {
-                driftValue = getRandomNumber() * (float) 0.5;
+                driftValue = getRandomNumber() * (float) 0.0;
             }
             else {
                 driftValue = getRandomNumber();
             } 
-            //messageWin.writeMessage("   Initial Humidity Set:: " + relativeHumidity);
-            //messageWin.writeMessage("   Drift Value Set:: " + driftValue);
+            messageWin.writeMessage("   Initial Humidity Set:: " + relativeHumidity);
+            messageWin.writeMessage("   Drift Value Set:: " + driftValue);
             
             /**
              * ******************************************************************
              ** Here we start the main simulation loop
              * *******************************************************************
              */
-            //messageWin.writeMessage("Beginning Simulation... ");
+            messageWin.writeMessage("Beginning Simulation... ");
             while (!isDone) {
                 // Post the current relative humidity
-                postEvent(evtMgrI, HUMIDITY, relativeHumidity);
-                //messageWin.writeMessage("Current Relative Humidity:: " + relativeHumidity + "%");
-                // Get the message queue
-                // Get the message queue
-                try {
-                    evtMgrI.getEvent();
-                } // try
-                catch (Exception e) {
-                    //messageWin.writeMessage("Error getting event queue::" + e);
-                }
+                //postEvent(evtMgrI, HUMIDITY, relativeHumidity);
                 // If there are messages in the queue, we read through them.
                 // We are looking for EventIDs = -4, this means the the humidify or
                 // dehumidifier has been turned on/off. Note that we get all the messages
@@ -96,36 +102,52 @@ public class HumiditySensor extends Sensor implements Runnable {
                 // If there are more, it is the last message that will effect the
                 // output of the humidity as it would in reality.
       
-                    if (evtMgrI.returnid() == HUMIDITY_SENSOR) {
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_ON)) // humidifier on
+                 final Consumer consumer = new DefaultConsumer(channel2) {
+                     public void handleDelivery(String consumerTag, Envelope envelope, 
+                             AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
+                         String message = new String(body, "UTF-8");
+                         if (message.equalsIgnoreCase(HUMIDIFIER_ON)) // humidifier on
                         {
+                         
                             humidifierState = true;
-                        } 
-
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(HUMIDIFIER_OFF)) // humidifier off
+                        }
+                        if (message.equalsIgnoreCase(HUMIDIFIER_OFF)) // humidifier off
                         {
+                
                             humidifierState = false;
-                        } 
-
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_ON)) // dehumidifier on
+                        }
+                        if (message.equalsIgnoreCase(DEHUMIDIFIER_ON)) // dehumidifier on
                         {
                             dehumidifierState = true;
+                            
                         }
-
-                        if (evtMgrI.returnMessage().equalsIgnoreCase(DEHUMIDIFIER_OFF)) // dehumidifier off
+                        if (message.equalsIgnoreCase(DEHUMIDIFIER_OFF)) // dehumidifier off
                         {
+                          
                             dehumidifierState = false;
-                        } 
-                    }
-
-                    // If the event ID == 99 then this is a signal that the simulation
-                    // is to end. At this point, the loop termination flag is set to
-                    // true and this process unregisters from the event manager.
-                    if (evtMgrI.returnid() == END) {
-                        isDone = true;
-                        //messageWin.writeMessage("\n\nSimulation Stopped. \n");
-                    }
-                // Now we trend the relative humidity according to the status of the
+                        }
+                     }
+                 };
+                try {
+                    channel2.basicConsume(channelContReturn, true, consumer);
+                } catch (IOException e) { 
+             }
+                
+            try {
+                // Post the current temperature
+                postEvent(channelSensor, String.valueOf(relativeHumidity));
+            } catch (IOException e) {
+            } catch (TimeoutException e) {
+            }
+                //} catch (IOException ex) {
+                  //  Logger.getLogger(HumiditySensor.class.getName()).log(Level.SEVERE, null, ex);
+                //} 
+                messageWin.writeMessage("Current Relative Humidity:: " + relativeHumidity + "%");
+                // Get the message queue
+                // Get the message queue
+                
+                
+                    // Now we trend the relative humidity according to the status of the
                 // humidifier/dehumidifier controller.
                 if (humidifierState) {
                     relativeHumidity += getRandomNumber();
@@ -144,38 +166,14 @@ public class HumiditySensor extends Sensor implements Runnable {
                     Thread.sleep(delay);
                 }
                 catch (Exception e) {
-                  //messageWin.writeMessage("Sleep error:: " + e);
+                  messageWin.writeMessage("Sleep error:: " + e);
                 } 
-            } 
+            }
         //}
         //else {
             //System.out.println("Unable to register with the event manager.\n\n");
        // } 
     }
-    
-    private static void createInstance() {
-        if (INSTANCE == null) {
-            synchronized (HumiditySensor.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new HumiditySensor();
-                }
-            }
-        }
-    }
-
-    /**
-     * This method calls createInstance method to creates and ensure that 
-     * only one instance of this class is created. Singleton design pattern.
-     * 
-     * @return The instance of this class.
-     */
-    public static HumiditySensor getInstance() {
-        if (INSTANCE == null) {
-            createInstance();
-        }
-        return INSTANCE;
-    }
-
     /**
      * Start this sensor
      * 
@@ -183,9 +181,7 @@ public class HumiditySensor extends Sensor implements Runnable {
      * If blank, it is assumed that the event manager is on the local machine.
      */
     public static void main(String args[]) {
-        //if(args[0] != null) Component.SERVER_IP = args[0];
-        Component.SERVER_IP = "127.0.0.1";
-        HumiditySensor sensor = HumiditySensor.getInstance();
+        HumiditySensor sensor = new HumiditySensor("HumiditySensor");
         sensor.run();
     }
 
