@@ -179,7 +179,7 @@ public class TemperatureController extends Controller implements Runnable {
                 }
                 else {
                     // Set to black, heater is off
-                    heatIndicator.setLampColorAndMessage("HEATER ON", 0);
+                    heatIndicator.setLampColorAndMessage("HEATER OFF", 0);
                 }
                 if (chillerState) {
                     // Set to green, chiller is on
