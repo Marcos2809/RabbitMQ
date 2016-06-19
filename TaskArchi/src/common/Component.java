@@ -63,8 +63,8 @@ public class Component {
     public final static String MOVEMENT_OFF = "M0";
     public final static String FIRE_ON = "FD1";
     public final static String FIRE_OFF = "FD0";
-    public final static String SPRINKLE_ON = "SP1";
-    public final static String SPRINKLE_OFF = "SP0";
+    public final static String SPRINKLER_ON = "SP1";
+    public final static String SPRINKLER_OFF = "SP0";
 
    // protected RabbitMQInterface evtMgrI = null;         // Interface object to the RabbitMQ Interface
    // protected EventQueue queue = null;                              // Message Queue

@@ -11,15 +11,6 @@
  * Institution: CIMAT
  * Date: 29/04/2016
  * **************************************************************************************
- * This class simulates a device that controls a heater and chiller. 
- * It polls the event manager for event ids = 5 and reacts to them by turning 
- * on or off the heater or chiller. The following command are valid strings for 
- * controlling the heater and chiller.
- * H1 = heater on 
- * H0 = heater off 
- * C1 = chiller on 
- * C0 = chiller off
- * **************************************************************************************
  */
 
 package controllers;
@@ -32,17 +23,17 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TemperatureController extends Controller implements Runnable {
+public class FireController extends Controller implements Runnable {
 
-    private boolean heaterState = false;	// Heater state: false == off, true == on
-    private boolean chillerState = false;	// Chiller state: false == off, true == on
+    private boolean FireState = false;	
+    private boolean SprinklerState = false;	
     private String channelController, channelContReturn;
     private Channel channel;
     
     
-    private TemperatureController(String channelController){
+    private FireController(String channelController){
         this.channelController = channelController;
-        channelContReturn = "contReturn";
+        channelContReturn = "DR";
     }
 
     @Override
@@ -67,11 +58,11 @@ public class TemperatureController extends Controller implements Runnable {
             float winPosY = 0.3f; 	//This is the Y position of the message window in terms 
             //of a percentage of the screen height 
 
-            MessageWindow messageWin = new MessageWindow("Temperature Controller Status Console", winPosX, winPosY);
+            MessageWindow messageWin = new MessageWindow("Fire Controller Status Console", winPosX, winPosY);
 
             // Put the status indicators under the panel...
-            Indicator chillIndicator = new Indicator("Chiller OFF", messageWin.getX(), messageWin.getY() + messageWin.height());
-            Indicator heatIndicator = new Indicator("Heater OFF", messageWin.getX() + (chillIndicator.width() * 2), messageWin.getY() + messageWin.height());
+            Indicator FireIndicator = new Indicator("Fire OFF", messageWin.getX(), messageWin.getY() + messageWin.height());
+            Indicator SprinklerIndicator = new Indicator("Sprinkler OFF", messageWin.getX() + (FireIndicator.width() * 2), messageWin.getY() + messageWin.height());
 
             messageWin.writeMessage("Registered with the event manager.");
 
@@ -112,43 +103,43 @@ public class TemperatureController extends Controller implements Runnable {
                     public void handleDelivery(String consumerTag, Envelope envelope, 
                         AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
 			String message = new String(body, "UTF-8");
-                        if (message.equalsIgnoreCase(HEATER_ON)) { // heater on
-                            heaterState = true;
-                            messageWin.writeMessage("Received heater on event");
+                        if (message.equalsIgnoreCase(FIRE_ON)) { // fire on
+                            FireState = true;
+                            messageWin.writeMessage("Received fire on event");
                             try {
-                                confirmMessage(channelContReturn, String.valueOf(HEATER_ON));
+                                confirmMessage(channelContReturn, String.valueOf(FIRE_ON));
                             } catch (Exception ex) {
-                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(FireController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         
-                        if (message.equalsIgnoreCase(HEATER_OFF)) { // heater off
-                            heaterState = false;
-                            messageWin.writeMessage("Received heater off event");
+                        if (message.equalsIgnoreCase(FIRE_OFF)) { // fire off
+                            FireState = false;
+                            messageWin.writeMessage("Received fire off event");
                             try {
-                                confirmMessage(channelContReturn, String.valueOf(HEATER_OFF));
+                                confirmMessage(channelContReturn, String.valueOf(FIRE_OFF));
                             } catch (Exception ex) {
-                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(FireController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
 
-                        if (message.equalsIgnoreCase(CHILLER_ON)) { // chiller on
-                            chillerState = true;
-                            messageWin.writeMessage("Received chiller on event");
+                        if (message.equalsIgnoreCase(SPRINKLER_ON)) { // sprinkler on
+                            SprinklerState = true;
+                            messageWin.writeMessage("Received sprinkler on event");
                             try {
-                               confirmMessage(channelContReturn, String.valueOf(CHILLER_ON));
+                               confirmMessage(channelContReturn, String.valueOf(SPRINKLER_ON));
                             } catch (Exception ex) {
-                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(FireController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
 
-                        if (message.equalsIgnoreCase(CHILLER_OFF)) { // chiller off
-                            chillerState = false;
-                            messageWin.writeMessage("Received chiller off event");
+                        if (message.equalsIgnoreCase(SPRINKLER_OFF)) { // sprinkler off
+                            SprinklerState = false;
+                            messageWin.writeMessage("Received sprinkler off event");
                             try {
-                                confirmMessage(channelContReturn, String.valueOf(CHILLER_OFF));
+                                confirmMessage(channelContReturn, String.valueOf(SPRINKLER_OFF));
                             } catch (Exception ex) {
-                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(FireController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
                         
@@ -157,37 +148,26 @@ public class TemperatureController extends Controller implements Runnable {
                 try {
                     channel.basicConsume(channelController, true, consumer);
                 } catch (IOException ex) {
-                    Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FireController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                    // If the event ID == 99 then this is a signal that the simulation
-                    // is to end. At this point, the loop termination flag is set to
-                    // true and this process unregisters from the event manager.
-                    /*if (evtMgrI.returnid() == END) {
-                        isDone = true;
-                       messageWin.writeMessage("\n\nSimulation Stopped. \n");
-                        // Get rid of the indicators. The message panel is left for the
-                        // user to exit so they can see the last message posted.
-                        heatIndicator.dispose();
-                        chillIndicator.dispose();*/
-                
-
+                    
 
                 // Update the lamp status
-                if (heaterState) {
+                if (FireState) {
                     // Set to green, heater is on
-                    heatIndicator.setLampColorAndMessage("HEATER ON", 1);
+                    FireIndicator.setLampColorAndMessage("FIRE DETECTED", 3);
                 }
                 else {
                     // Set to black, heater is off
-                    heatIndicator.setLampColorAndMessage("HEATER OFF", 0);
+                    FireIndicator.setLampColorAndMessage("NOT FIRE DETECTED", 1);
                 }
-                if (chillerState) {
+                if (SprinklerState) {
                     // Set to green, chiller is on
-                    chillIndicator.setLampColorAndMessage("CHILLER ON", 1);
+                    SprinklerIndicator.setLampColorAndMessage("SPRINKLER ON", 1);
                 }
                 else {
                     // Set to black, chiller is off
-                    chillIndicator.setLampColorAndMessage("CHILLER OFF", 0);
+                    SprinklerIndicator.setLampColorAndMessage("SPRINKLER OFF", 0);
                 }
                 try {
                     Thread.sleep(delay);
@@ -213,7 +193,7 @@ public class TemperatureController extends Controller implements Runnable {
     public static void main(String args[]) {
       //  if(args[0] != null) Component.SERVER_IP = args[0];
        // Component.SERVER_IP = "127.0.0.1";
-        TemperatureController sensor = new TemperatureController("TempControlador");
+        FireController sensor = new FireController("DoorControlador");
         sensor.run();
     }
 

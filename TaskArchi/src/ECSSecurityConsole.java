@@ -42,6 +42,7 @@ public class ECSSecurityConsole {
 
                 System.out.println("1: Activate alarms");                
                 System.out.println("2: Deactivate alarms");
+                //System.out.println("3: Deactivate sprinkler");
                 System.out.println("X: Stop Security Console\n");
                 System.out.print("Choose an option:\n>>>> ");
                 option = userInput.keyboardReadString();
