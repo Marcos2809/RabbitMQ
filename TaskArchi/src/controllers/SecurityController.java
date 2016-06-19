@@ -25,7 +25,7 @@ public class SecurityController  extends Controller implements Runnable {
     boolean WindowState = false;	// Heater state: false == off, true == on
     boolean DoorState = false;	// Chiller state: false == off, true == on
     boolean MovementState = false;
-    int Delay = 2500;
+    int Delay = 1000;
     boolean isDone = false;
     private String channelController, channelContReturn;
     private Channel channel;
@@ -165,7 +165,7 @@ public class SecurityController  extends Controller implements Runnable {
                 }*/
                 if (DoorState) {
                     // Set to green, door is on
-                    di.setLampColorAndMessage("DOOR BROKEN", 3);
+                    di.setLampColorAndMessage("CHECK DOOR", 3);
                 }
                 else if (DoorState){
                     // Set to black, door is off
