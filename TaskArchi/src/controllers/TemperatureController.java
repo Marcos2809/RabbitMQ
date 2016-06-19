@@ -196,20 +196,12 @@ public class TemperatureController extends Controller implements Runnable {
                     System.out.println("Sleep error:: " + e);
                 }
             }
-        //}
-//        else {
-       //     System.out.println("Unable to register with the event manager.\n\n");
-     //   }
+    
     }
 
    
     
-    /**
-     * Start this controller
-     * 
-     * @param args IP address of the event manager (on command line). 
-     * If blank, it is assumed that the event manager is on the local machine.
-     */
+   
     public static void main(String args[]) {
       //  if(args[0] != null) Component.SERVER_IP = args[0];
        // Component.SERVER_IP = "127.0.0.1";

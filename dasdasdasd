@@ -1,0 +1,13 @@
+[1mdiff --git a/TaskArchi/src/controllers/SecurityController.java b/TaskArchi/src/controllers/SecurityController.java[m
+[1mindex 9abc3f9..91fe006 100644[m
+[1m--- a/TaskArchi/src/controllers/SecurityController.java[m
+[1m+++ b/TaskArchi/src/controllers/SecurityController.java[m
+[36m@@ -25,7 +25,7 @@[m [mpublic class SecurityController  extends Controller implements Runnable {[m
+     boolean WindowState = false;	// Heater state: false == off, true == on[m
+     boolean DoorState = false;	// Chiller state: false == off, true == on[m
+     boolean MovementState = false;[m
+[31m-    int Delay = 2500;[m
+[32m+[m[32m    int Delay = 1000;[m[41m[m
+     boolean isDone = false;[m
+     private String channelController, channelContReturn;[m
+     private Channel channel;[m
