@@ -24,8 +24,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.Logger;
 import com.rabbitmq.client.*;
+import common.IOManager;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+
 
 public class SecurityMonitor extends Thread {
 
@@ -35,22 +38,28 @@ public class SecurityMonitor extends Thread {
      private Indicator fi;               
      private Indicator si;
      String DoorStatus="OK";
-    boolean registered = true;				// Signifies that this class is registered with an event manager.     
+     IOManager userInput = new IOManager();	// IOManager IO Object
+     boolean registered = true;				// Signifies that this class is registered with an event manager.     
     private Connection connection;
     private Channel channel, canalDoor, canalWindow, canalMotionSensor, canalDoorControlador;
     MessageWindow messageWin = null;   
-    boolean alarmsStatus= true;     
+    boolean alarmsStatus= true;  
+    boolean sprinklerStatus=false;
+        
     
     public SecurityMonitor() {
         // event manager is on the local system
         try{
             canalDoor = conectorrabbit("DoorSensor");
             canalDoorControlador = conectorrabbit("DoorControlador");
-          
+                      
         }catch(Exception e){
               System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
         }
     } //Constructor
+   
+    
+    
     
   protected Channel conectorrabbit(String connector) throws IOException, TimeoutException{
                 ConnectionFactory factory = new ConnectionFactory();
@@ -229,6 +238,13 @@ public class SecurityMonitor extends Thread {
         alarmsStatus = status;
     } 
 
+    public void setSprinklerStatus(boolean status) {
+        sprinklerStatus = status;
+    }
+    
+    
+    
+    
   private void Activatedoor(boolean ON)throws Exception {
         // Here we create the event.
         String message;
@@ -316,5 +332,8 @@ public class SecurityMonitor extends Thread {
              }
         }
     }
+                    
+    
+        
           // } // Dehumidifier
 } // ECSMonitor
