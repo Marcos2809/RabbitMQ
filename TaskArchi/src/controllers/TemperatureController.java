@@ -40,7 +40,7 @@ public class TemperatureController extends Controller implements Runnable {
     private Channel channel;
     
     
-    private TemperatureController(String channelController){
+    public TemperatureController(String channelController){
         this.channelController = channelController;
         channelContReturn = "contReturn";
     }
@@ -199,7 +199,11 @@ public class TemperatureController extends Controller implements Runnable {
     
     }
 
-   
+      public static void stop() {
+      //  if(args[0] != null) Component.SERVER_IP = args[0];
+       // Component.SERVER_IP = "127.0.0.1";
+        System.exit(0);
+    }
     
    
     public static void main(String args[]) {

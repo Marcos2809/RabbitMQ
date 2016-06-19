@@ -21,6 +21,9 @@
  */
 
 import common.*;
+import controllers.*;
+import java.io.IOException;
+import sensors.*;
 
 public class ECSConsole {
 
@@ -30,11 +33,12 @@ public class ECSConsole {
         String option;                          // Menu choice from user
         boolean isError;                        // Error flag
         ECSMonitor monitor;                     // The environmental control system monitor
-        //SecurityMonitor smonitor;               // Alarmas    
+        SecurityMonitor smonitor;               // Alarmas    
         float tempRangeHigh = (float) 100.0;	// These parameters signify the temperature and humidity ranges in terms
         float tempRangeLow = (float) 0.0;	// of high value and low values. The ECSmonitor will attempt to maintain
         float humiRangeHigh = (float) 100.0;	// this temperature and humidity. Temperatures are in degrees Fahrenheit
         float humiRangeLow = (float) 0.0;	// and humidity is in relative humidity percentage.
+        TemperatureSensor temp = new TemperatureSensor("");
 
         /////////////////////////////////////////////////////////////////////////////////
         // Get the IP address of the event manager
@@ -46,14 +50,14 @@ public class ECSConsole {
         //}
         //else {
             monitor = new ECSMonitor();
-            //smonitor = new SecurityMonitor();
+            smonitor = new SecurityMonitor();
        // } // if
 
         // Here we check to see if registration worked. If ef is null then the
         // event manager interface was not properly created.
         if (monitor.isRegistered()){// && smonitor.isRegistered()) {
             monitor.start(); // Here we start the monitoring and control thread
-            //smonitor.start();
+            smonitor.start();
           
             while (!isDone) {
                 // Here, the main thread continues and provides the main menu
@@ -174,8 +178,16 @@ public class ECSConsole {
                     // cause problems for the event manager.
 
                     //monitor.halt();
+                    
                     isDone = true;
                     System.out.println("\nConsole Stopped... Exit monitor mindow to return to command prompt.");
+                 try {
+                        String cmd = "killall java"; //Comando de apagado en linux
+                        Runtime.getRuntime().exec(cmd); 
+                } catch (IOException ioe) {
+                        System.out.println (ioe);
+                }
+                    
                    // smonitor.halt();
                 } // if
             } // while

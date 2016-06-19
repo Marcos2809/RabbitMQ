@@ -38,7 +38,7 @@ public class TemperatureSensor extends Sensor implements Runnable {
     private Channel channel,channel2;
 
 
-    private TemperatureSensor(String channelSensor) {
+    public TemperatureSensor(String channelSensor) {
         this.channelSensor = channelSensor;
         channelContReturn = "contReturn";
     }
@@ -199,6 +199,12 @@ public class TemperatureSensor extends Sensor implements Runnable {
      * @param args IP address of the event manager (on command line). 
      * If blank, it is assumed that the event manager is on the local machine.
      */
+      public static void stop() {
+      //  if(args[0] != null) Component.SERVER_IP = args[0];
+       // Component.SERVER_IP = "127.0.0.1";
+        System.exit(0);
+    }
+    
     public static void main(String args[]) {
         //Component.SERVER_IP = "127.0.0.1";
         TemperatureSensor sensor = new TemperatureSensor("TempSensor");
