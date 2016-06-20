@@ -19,3 +19,11 @@ de los archivos
 
 
 Repetir estos pasos para cada uno de los Releses disponibles en la Rama Master de este proyecto.
+
+El codigo del proyecto esta estructurado en versiones de cada RELEASE como se menciona a continuación:
+
+La Rama Release1.4 Contiene el codigo de la ultima versión del Release 1 Completo
+La Rama Release2.1 Contiene el codigo de la ultima versión del Release 2 Completo
+La Rama Release3.1 Contiene el codigo de la ultima versión del Release 3 Completo
+
+NOTA: Si se desea bajar el código de una rama en especial es necesario descargar todo el proyecto una vez descargado localmente realizar el cambio de la rama master que posiciona por default GIT a la rama que se desea probar. 
