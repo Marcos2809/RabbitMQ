@@ -17,12 +17,13 @@ public class ECSSecurityConsole {
     public static void main(String args[]) throws Exception {
         IOManager userInput = new IOManager();	// IOManager IO Object
         boolean isDone = false;			// Main loop flag
-        String option;                          // Menu choice from user
+        String option = null;                          // Menu choice from user
         SecurityMonitor SecMonitor;               // Alarmas    
         boolean active = true;                       //este par�metro es una bandera para saber el estado del sistema
         boolean sprinkleractive = false;
         SecMonitor = new SecurityMonitor();
-        int Delay =15000;
+        int delay =1000;
+        int cont = 15;
         //TTimer timernew;
         //timernew = new TTimer();
         
@@ -47,10 +48,31 @@ public class ECSSecurityConsole {
 
                 System.out.println("1: Activate alarms");                
                 System.out.println("2: Deactivate alarms");
-                System.out.println("3: Deactivate sprinkler");
+                System.out.println("Presione '3' para activar rociador o '4' para cancelar el roseador, \n si no presiona nada automáticamente en 15 segundos se activará el roseador");
                 System.out.println("X: Stop Security Console\n");
                 System.out.print("Choose an option:\n>>>> ");
+              //  do{
                 option = userInput.keyboardReadString();
+              /*  System.out.println(cont);
+                cont--;
+                try {
+                    Thread.sleep(delay);
+                }
+                catch (Exception e) {
+                 // messageWin.writeMessage("Sleep error:: " + e);
+                }
+                }while (cont ==0 || option != null);
+                if (option.equals(null)){
+                    sprinkleractive = true;
+                    SecMonitor.setSprinklerStatus(sprinkleractive);
+                
+                } else if (option.equals("3")){
+                    sprinkleractive = true;
+                    SecMonitor.setSprinklerStatus(sprinkleractive);
+                }else {
+                    sprinkleractive = false;
+                    SecMonitor.setSprinklerStatus(sprinkleractive);
+                }*/
 
                 //////////// option 1 ////////////
                 if (option.equals("1")) {
@@ -73,16 +95,24 @@ public class ECSSecurityConsole {
             
                 } // if
                 
-                //////////// option 2 ////////////
+                //////////// option 3 ////////////
                 if (option.equals("3")) {
                     
-                     // Here we deactivate alarms
+                     // Here we activate alarms
                     sprinkleractive = true;
                     //System.out.println("ACTIVATE MESSAGE RECEIVED");
                     SecMonitor.setSprinklerStatus(sprinkleractive);
                     System.out.println("ACTIVATE MESSAGE RECEIVED");
                     
-                } // if
+                } 
+                if (option.equals("4")) {
+                    
+                     // Here we deactivate alarms
+                    sprinkleractive = false;
+                    SecMonitor.setSprinklerStatus(sprinkleractive);
+                    System.out.println("DESACTIVATE MESSAGE RECEIVED");
+                    
+                }// if
 
                 //////////// option X ////////////
                 if (option.equalsIgnoreCase("X")) {

@@ -43,6 +43,7 @@ public class SecurityMonitor extends Thread {
     private Connection connection;
     private Channel channel, canalDoor, canalWindow, canalMotionSensor, canalDoorControlador;
     MessageWindow messageWin = null;   
+    MessageWindow messageWin2 = null;   
     boolean alarmsStatus= true;  
     boolean sprinklerStatus=false;
     ConfirmSprinkler timernew;
@@ -90,6 +91,14 @@ public class SecurityMonitor extends Thread {
         // because we do not know if the temperature/humidity is high/low.
         // This panel is placed in the upper left hand corner and the status 
         // indicators are placed directly to the right, one on top of the other
+         /*  System.out.println("1: Activate alarms");                
+           System.out.println("2: Deactivate alarms");
+           System.out.println("Presione '3' para activar rociador o '4' para cancelar el roseador, \n si no presiona nada automáticamente en 15 segundos se activará el roseador");
+           System.out.println("X: Stop Security Console\n");
+           System.out.print("Choose an option:\n>>>> ");
+         
+           */    
+        
         messageWin = new MessageWindow("Security Monitoring Console", 0, 0);
         di= new Indicator("DOOR OK", messageWin.getX() + messageWin.width(), 1);
         di.setLampColorAndMessage("DOOR OK", 1);
@@ -113,7 +122,7 @@ public class SecurityMonitor extends Thread {
          */
         while (!isDone) {
         //String DoorStatus="OK";
-
+         
             // Here we get the messages from rabbit
             final Consumer consumer = new DefaultConsumer(canalDoor) {
                 public void handleDelivery(String consumerTag, Envelope envelope, 
@@ -124,33 +133,26 @@ public class SecurityMonitor extends Thread {
                         
                         if(message.equalsIgnoreCase("7")){
                             try {
+                                messageWin.writeMessage("Security:: ALERT! Fire detection");
+                                fi.setLampColorAndMessage("Fire Detected", 3); // Fire Detected
                                 Activatefire(on);
-                                //Activatesprinkler(on);
-                            } catch (Exception ex) {
-                                Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            messageWin.writeMessage("Security:: ALERT! Fire detection");
-                            fi.setLampColorAndMessage("Fire Detected", 3); // Fire Detected
-                            //timernew.show();
-                            //timernew.setVisible(true);
-                            timernew.setVisible(true);
-                            if (timernew.sprinkleractive){
-                            try{
+                                if(!sprinklerStatus){
+                                   // System.out.println("AQui en tro con falso");
+                                    si.setLampColorAndMessage("Sensor Sprinkler OFF", 0); // Sprinkler OFF                            
+                                Activatesprinkler(off);
+                                }else{
+                                    //System.out.println("AQui en tro con verdadero");
                                 Activatesprinkler(on);
+                                si.setLampColorAndMessage("Sensor Sprinkler ON", 1); // Sprinkler OFF                            
+                                }
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            si.setLampColorAndMessage("Sprinkler ON", 1); // Sprinkler ON
+                            
+                            
+                            
                             }
-                            else{
-                                try {
-                                    Activatesprinkler(off);
-                                } catch (Exception ex) {
-                                    Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            si.setLampColorAndMessage("Sprinkler OFF", 0); // Sprinkler OFF                            
-                            }
-                        } 
+                         
                         if(message.equalsIgnoreCase("6")){
                             try {
                                 Activatefire(off);
@@ -160,7 +162,7 @@ public class SecurityMonitor extends Thread {
                             }
                             messageWin.writeMessage("Security:: Fire detection: False");
                             fi.setLampColorAndMessage("Not Fire Detected", 1); // Not Fire Detected
-                            si.setLampColorAndMessage("Sprinkler OFF", 0); // Sprinkler OFF                            
+                            si.setLampColorAndMessage("Sensor Sprinkler OFF", 0); // Sprinkler OFF                            
                         }
                         if(message.equalsIgnoreCase("5")){
                             try {
@@ -261,6 +263,7 @@ public class SecurityMonitor extends Thread {
 
     public void setSprinklerStatus(boolean status) {
         sprinklerStatus = status;
+        //System.out.println("DATO DE CONSOLA::" + sprinklerStatus);
     }
     
     
@@ -339,7 +342,7 @@ public class SecurityMonitor extends Thread {
     private void Activatesprinkler(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-        if (sprinklerStatus){
+       // if (sprinklerStatus){
             if (ON) {
                 message = Component.SPRINKLER_ON;
             }
@@ -351,7 +354,7 @@ public class SecurityMonitor extends Thread {
             } // heater
             catch (Exception e) {
              }
-        }
+       // }
     }
                     
     
