@@ -100,7 +100,7 @@ public class ECSSecurityConsole {
                     
                      // Here we activate alarms
                     sprinkleractive = true;
-                    //System.out.println("ACTIVATE MESSAGE RECEIVED");
+                    //System.out.println("ACTIVATE MESSAGE RECEIVED  ");
                     SecMonitor.setSprinklerStatus(sprinkleractive);
                     System.out.println("ACTIVATE MESSAGE RECEIVED");
                     
