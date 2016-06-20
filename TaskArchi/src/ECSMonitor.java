@@ -21,7 +21,7 @@
 import common.Component;
 import instrumentation.*;
 import controllers.TemperatureController;
-//import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Channel;
 //import event.RabbitMQInterface;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +60,7 @@ public class ECSMonitor extends Thread {
             canalsecControlador = conectorrabbit("SecControlador");
 
         }catch(Exception e){
-              System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
+            //  System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
         }
     } //Constructor
     

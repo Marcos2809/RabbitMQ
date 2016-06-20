@@ -87,7 +87,6 @@ public class SecurityController  extends Controller implements Runnable {
                     public void handleDelivery(String consumerTag, Envelope envelope, 
                         AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
                         String message = new String(body, "UTF-8");
-                        System.out.println("COLA EN RABBIT::"+ message);
                       
                       //System.out.println("MENSJA DEL A COAL:::"+message);
                       if (message.equalsIgnoreCase(DOOR_ON)) { // chiller on

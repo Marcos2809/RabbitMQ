@@ -32,6 +32,7 @@ public class FireSensor extends Sensor implements Runnable {
     private boolean FireState = false;
         private String channelSensor,channelContReturn;
     private Channel channel,channel2;
+    protected int delay = 2500;
  
      private FireSensor(String channelSensor){
         this.channelSensor = channelSensor;

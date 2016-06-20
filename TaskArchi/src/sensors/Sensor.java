@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 public class Sensor extends Component {
 
-    protected int delay = 2500;				// The loop delay (2.5 seconds)
+    int delay = 2500;				// The loop delay (2.5 seconds)
     protected boolean isDone = false;			// Loop termination flag
     protected float driftValue;				// The amount of temperature gained or lost
    protected String endpointName;
@@ -110,11 +110,10 @@ public class Sensor extends Component {
         int res=0;
         val = (int)(Math.random()*100 + 1);
         if (val % 3==0){
-            //res =7;
             res =7;
-                } else
+              } else
         {
-            res=7;
+            res=6;
         }
             
         return res;

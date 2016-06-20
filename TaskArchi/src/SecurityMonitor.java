@@ -46,7 +46,6 @@ public class SecurityMonitor extends Thread {
     MessageWindow messageWin2 = null;   
     boolean alarmsStatus= true;  
     boolean sprinklerStatus=false;
-    ConfirmSprinkler timernew;
     
             
     
@@ -55,10 +54,9 @@ public class SecurityMonitor extends Thread {
         try{
             canalDoor = conectorrabbit("DoorSensor");
             canalDoorControlador = conectorrabbit("DoorControlador");
-            timernew = new ConfirmSprinkler();
                       
         }catch(Exception e){
-              System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
+              //System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
         }
     } //Constructor
    
@@ -263,8 +261,7 @@ public class SecurityMonitor extends Thread {
 
     public void setSprinklerStatus(boolean status) {
         sprinklerStatus = status;
-        //System.out.println("DATO DE CONSOLA::" + sprinklerStatus);
-    }
+     }
     
     
     
