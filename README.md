@@ -4,7 +4,7 @@ Archivo de ejecución de Release 1, 2 y 3
 
 # Instalación
 
-1.- Descomprimir los archivos Release [1,2 ó 3]
+1.- Descomprimir los archivos Release [1, 2 ó 3]
 
 
 2.- Una vez que se descomprimio la carpeta abrir la terminar y posicionarla sobre la carpeta actual para la ejecución
@@ -14,7 +14,7 @@ de los archivos
     ../Documentos/Release1
     
     
-3.- Ejecutar el comando EMStart.sh con permisos de administrador de lo contrario no se podra ejecutar el sistema.
+3.- Ejecutar el comando EMStart.sh y EMStart2.sh en terminales separadas (para administrar el menu de cada Consola de Monitoreo) con permisos de administrador de lo contrario no se podra ejecutar el sistema.
 
 
 
