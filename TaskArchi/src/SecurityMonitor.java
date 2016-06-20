@@ -1,3 +1,7 @@
+
+
+
+
 /**
  * **************************************************************************************
  * File:ECSMonitor.java 
@@ -20,10 +24,12 @@
  */
 import common.Component;
 import instrumentation.*;
+import views.MumaMonitor2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.Logger;
 import com.rabbitmq.client.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
@@ -39,7 +45,9 @@ public class SecurityMonitor extends Thread {
     private Connection connection;
     private Channel channel, canalDoor, canalWindow, canalMotionSensor, canalDoorControlador;
     MessageWindow messageWin = null;   
-    boolean alarmsStatus= true;     
+    boolean alarmsStatus= true;
+    MumaMonitor2 mMonitor = MumaMonitor2.getINSTANCE();
+
     
     public SecurityMonitor() {
         // event manager is on the local system
@@ -91,7 +99,8 @@ public class SecurityMonitor extends Thread {
         si.setLampColorAndMessage("SPRINKLER OFF", 0);
 
         messageWin.writeMessage("Registered with the event manager.");
-
+        
+        mMonitor.setVisible(true);
 
 
         /**
@@ -140,6 +149,7 @@ public class SecurityMonitor extends Thread {
                             }
                             messageWin.writeMessage("Security:: ALERT! Movement detection");
                             mi.setLampColorAndMessage("Movement Detected", 3); // Door is broken
+                            
                         } 
                         if(message.equalsIgnoreCase("4")){
                             try {
@@ -176,6 +186,8 @@ public class SecurityMonitor extends Thread {
                             }
                             messageWin.writeMessage("Security:: ALERT! Door broken");
                             di.setLampColorAndMessage("DOOR BROKEN", 3); // Door is broken
+                            mMonitor.txtDoor.setText("DOOR BROKEN");
+                            mMonitor.txtDoor.setBackground(Color.red);
                         } 
                         if(message.equalsIgnoreCase("0")) {
                             try {

@@ -1,3 +1,7 @@
+
+
+
+
 /**
  * **************************************************************************************
  * File:ECSMonitor.java 
@@ -20,7 +24,7 @@
  */
 import common.Component;
 import instrumentation.*;
-import controllers.TemperatureController;
+import views.MumaMonitor1;
 //import com.rabbitmq.client.Channel;
 //import event.RabbitMQInterface;
 import java.util.logging.Level;
@@ -48,6 +52,8 @@ public class ECSMonitor extends Thread {
     private Channel channel, canalTempSensor, canalTempControlador, canalHumSensor, canalHumControlador,  canalsecSensor, canalsecControlador;
     float currentTemperature = 0;           // Current temperature as reported by the temperature sensor
     float currentHumidity = 0;
+    MumaMonitor1 mMonitor = MumaMonitor1.getINSTANCE();
+    
     
     public ECSMonitor() {
         // event manager is on the local system
@@ -87,13 +93,13 @@ public class ECSMonitor extends Thread {
             // because we do not know if the temperature/humidity is high/low.
             // This panel is placed in the upper left hand corner and the status 
             // indicators are placed directly to the right, one on top of the other
-
+            
             messageWin = new MessageWindow("ECS Monitoring Console", 0, 0);
             tempIndicator = new Indicator("TEMP UNK", messageWin.getX() + messageWin.width(), 0);
             humIndicator = new Indicator("HUMI UNK", messageWin.getX() + messageWin.width(), (int) (messageWin.height() / 2), 2);
 
             messageWin.writeMessage("Registered with the event manager.");
-
+            mMonitor.setVisible(true);
             
 
             /**
@@ -161,8 +167,10 @@ public class ECSMonitor extends Thread {
                         tempIndicator.dispose();
                     } // if*/
                 
-
+                
                 messageWin.writeMessage("Temperature:: " + currentTemperature + "F  Humidity:: " + currentHumidity);
+                mMonitor.txtTemperature.setText(String.valueOf(currentTemperature) + " F");
+                mMonitor.txtHumidity.setText(String.valueOf(currentHumidity) + " %");                
                 // Check temperature and effect control as necessary
                 if (currentTemperature < tempRangeLow) { // temperature is below threshhold
                     tempIndicator.setLampColorAndMessage("TEMP LOW", 3);

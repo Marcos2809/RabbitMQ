@@ -23,8 +23,21 @@ public class MumaMonitor extends javax.swing.JFrame {
     /**
      * Creates new form MumaMonitor
      */
-    public MumaMonitor() {
+    
+
+    private MumaMonitor() {
         initComponents();
+    }
+    
+    private static MumaMonitor INSTANCE;
+
+    public static MumaMonitor getINSTANCE() 
+    {
+        if (INSTANCE == null){
+            INSTANCE = new MumaMonitor();
+        }
+        
+        return INSTANCE;
     }
 
     /**
@@ -580,6 +593,7 @@ public class MumaMonitor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnADSprinklerActionPerformed
 
+    
     /**
      * @param args the command line arguments
      */
@@ -611,6 +625,7 @@ public class MumaMonitor extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MumaMonitor().setVisible(true);
+                
             }
         });
     }
