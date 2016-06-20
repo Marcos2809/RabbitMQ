@@ -80,6 +80,7 @@ public class ECSMonitor extends Thread {
 
         
         mMonitor.setVisible(true);
+        mMonitor.setLocation(200, 80);
 
 
         /**

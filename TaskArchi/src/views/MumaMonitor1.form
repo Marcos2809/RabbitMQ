@@ -464,7 +464,7 @@
           <Font name="Ubuntu" size="18" style="3"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="SENSORS"/>
+        <Property name="text" type="java.lang.String" value="ENVIRONMENTAL CONTROL"/>
       </Properties>
     </Component>
   </SubComponents>

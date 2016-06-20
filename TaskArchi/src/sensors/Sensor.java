@@ -109,12 +109,11 @@ public class Sensor extends Component {
         int val=0;
         int res=0;
         val = (int)(Math.random()*100 + 1);
-        if (val % 3==0){
-            //res =7;
+        if (val % 7==0){
             res =7;
                 } else
         {
-            res=7;
+            res=6;
         }
             
         return res;

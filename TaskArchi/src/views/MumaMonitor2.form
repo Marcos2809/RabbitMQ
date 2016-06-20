@@ -169,7 +169,7 @@
           <Font name="Ubuntu" size="18" style="3"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="ALARMS"/>
+        <Property name="text" type="java.lang.String" value="SECURITY ALARMS"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel12">

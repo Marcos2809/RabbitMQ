@@ -208,7 +208,7 @@ public class MumaMonitor1 extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Ubuntu", 3, 18)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("SENSORS");
+        jLabel10.setText("ENVIRONMENTAL CONTROL");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

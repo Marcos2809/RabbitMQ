@@ -83,6 +83,8 @@ public class SecurityMonitor extends Thread {
         boolean off = false;			// Used to turn off heaters, chillers, humidifiers, and dehumidifiers
 
         mMonitor.setVisible(true);
+        mMonitor.setLocation(680, 80);
+        
 
         /**
          * ******************************************************************
