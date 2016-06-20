@@ -38,7 +38,7 @@ public class TemperatureController extends Controller implements Runnable {
     private Channel channel;
     
     
-    private TemperatureController(String channelController){
+    public TemperatureController(String channelController){
         this.channelController = channelController;
         channelContReturn = "contReturn";
     }
@@ -56,71 +56,86 @@ public class TemperatureController extends Controller implements Runnable {
         }
             
 
-        /**
-         * ******************************************************************
-         ** Here we start the main simulation loop
-         * *******************************************************************
-         */
-        while (!isDone) {
-          
-            final Consumer consumer = new DefaultConsumer(channel) {
-                public void handleDelivery(String consumerTag, Envelope envelope, 
-                    AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
-                    String message = new String(body, "UTF-8");
-                    if (message.equalsIgnoreCase(HEATER_ON)) { // heater on
-                        heaterState = true;
-                        try {
-                            confirmMessage(channelContReturn, String.valueOf(HEATER_ON));
-                        } catch (Exception ex) {
-                            Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+            /**
+             * ******************************************************************
+             ** Here we start the main simulation loop
+             * *******************************************************************
+             */
+            while (!isDone) {
 
-                    if (message.equalsIgnoreCase(HEATER_OFF)) { // heater off
-                        heaterState = false;
-                        try {
-                            confirmMessage(channelContReturn, String.valueOf(HEATER_OFF));
-                        } catch (Exception ex) {
-                            Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                // If there are messages in the queue, we read through them.
+                // We are looking for EventIDs = 5, this is a request to turn the
+                // heater or chiller on. Note that we get all the messages
+                // at once... there is a 2.5 second delay between samples,.. so
+                // the assumption is that there should only be a message at most.
+                // If there are more, it is the last message that will effect the
+                // output of the temperature as it would in reality.
 
-                    if (message.equalsIgnoreCase(CHILLER_ON)) { // chiller on
-                        chillerState = true;
-                        try {
-                           confirmMessage(channelContReturn, String.valueOf(CHILLER_ON));
-                        } catch (Exception ex) {
-                            Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                final Consumer consumer = new DefaultConsumer(channel) {
+                    public void handleDelivery(String consumerTag, Envelope envelope, 
+                        AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
+			String message = new String(body, "UTF-8");
+                        if (message.equalsIgnoreCase(HEATER_ON)) { // heater on
+                            heaterState = true;
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(HEATER_ON));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-
-                    if (message.equalsIgnoreCase(CHILLER_OFF)) { // chiller off
-                        chillerState = false;
-                        try {
-                            confirmMessage(channelContReturn, String.valueOf(CHILLER_OFF));
-                        } catch (Exception ex) {
-                            Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                        
+                        if (message.equalsIgnoreCase(HEATER_OFF)) { // heater off
+                            heaterState = false;
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(HEATER_OFF));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
 
+                        if (message.equalsIgnoreCase(CHILLER_ON)) { // chiller on
+                            chillerState = true;
+                            try {
+                               confirmMessage(channelContReturn, String.valueOf(CHILLER_ON));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                        if (message.equalsIgnoreCase(CHILLER_OFF)) { // chiller off
+                            chillerState = false;
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(CHILLER_OFF));
+                            } catch (Exception ex) {
+                                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
+                    }
+                };
+                try {
+                    channel.basicConsume(channelController, true, consumer);
+                } catch (IOException ex) {
+                    Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            };
-            try {
-                channel.basicConsume(channelController, true, consumer);
-            } catch (IOException ex) {
-                Logger.getLogger(TemperatureController.class.getName()).log(Level.SEVERE, null, ex);
+                
+                try {
+                    Thread.sleep(delay);
+                }
+                catch (Exception e) {
+                    System.out.println("Sleep error:: " + e);
+                }
             }
-        }
+    
     }
 
-   
+      public static void stop() {
+      //  if(args[0] != null) Component.SERVER_IP = args[0];
+       // Component.SERVER_IP = "127.0.0.1";
+        System.exit(0);
+    }
     
-    /**
-     * Start this controller
-     * 
-     * @param args IP address of the event manager (on command line). 
-     * If blank, it is assumed that the event manager is on the local machine.
-     */
+   
     public static void main(String args[]) {
       //  if(args[0] != null) Component.SERVER_IP = args[0];
        // Component.SERVER_IP = "127.0.0.1";

@@ -34,9 +34,10 @@ public class HumidityController extends Controller implements Runnable {
 
     private boolean humidifierState = false;	// Heater state: false == off, true == on
     private boolean dehumidifierState = false;	// Dehumidifier state: false == off, true == on
-    private String channelController, channelContReturn;
+   private String channelController, channelContReturn;
     private Channel channel;
     
+//    private static HumidityController INSTANCE = new HumidityController();
 
     private HumidityController(String canalcontroller){
         this.channelController = canalcontroller;
@@ -56,97 +57,76 @@ public class HumidityController extends Controller implements Runnable {
 
             
 
-        /**
-         * ******************************************************************
-         ** Here we start the main simulation loop gls
-         * *******************************************************************
-         */
-        while (!isDone) {
-
-            // If there are messages in the queue, we read through them.
-            // We are looking for EventIDs = 4, this is a request to turn the
-            // humidifier or dehumidifier on/off. Note that we get all the messages
-            // at once... there is a 2.5 second delay between samples,.. so
-            // the assumption is that there should only be a message at most.
-            // If there are more, it is the last message that will effect the
-            // output of the humidity as it would in reality.
-             final Consumer consumer = new DefaultConsumer(channel) {
-                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
-                    String message = new String(body, "UTF-8");
-
-                if (message.equalsIgnoreCase(HUMIDIFIER_ON)) { // heater on
-                        humidifierState = true;
-                        try {
-                            confirmMessage(channelContReturn, String.valueOf(HUMIDIFIER_ON));
-                        } catch (Exception ex) {
-                           Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+            /**
+             * ******************************************************************
+             ** Here we start the main simulation loop gls
+             * *******************************************************************
+             */
+            while (!isDone) {
+                
+                // If there are messages in the queue, we read through them.
+                // We are looking for EventIDs = 4, this is a request to turn the
+                // humidifier or dehumidifier on/off. Note that we get all the messages
+                // at once... there is a 2.5 second delay between samples,.. so
+                // the assumption is that there should only be a message at most.
+                // If there are more, it is the last message that will effect the
+                // output of the humidity as it would in reality.
+                 final Consumer consumer = new DefaultConsumer(channel) {
+                    public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws java.io.IOException {
+			String message = new String(body, "UTF-8");
+               
+                    if (message.equalsIgnoreCase(HUMIDIFIER_ON)) { // heater on
+                            humidifierState = true;
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(HUMIDIFIER_ON));
+                            } catch (Exception ex) {
+                               Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-
-                    if (message.equalsIgnoreCase(HUMIDIFIER_OFF)) { // heater off
-                       humidifierState = false;
-                        try {
-                            confirmMessage(channelContReturn, String.valueOf(HUMIDIFIER_OFF));
-                        } catch (Exception ex) {
-                            Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                        
+                        if (message.equalsIgnoreCase(HUMIDIFIER_OFF)) { // heater off
+                           humidifierState = false;
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(HUMIDIFIER_OFF));
+                            } catch (Exception ex) {
+                                Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
 
-                    if (message.equalsIgnoreCase(DEHUMIDIFIER_ON)) { // chiller on
-                        dehumidifierState = true;
-                       try {
-                            confirmMessage(channelContReturn, String.valueOf(DEHUMIDIFIER_ON));
-                        } catch (Exception ex) {
-                            Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                        if (message.equalsIgnoreCase(DEHUMIDIFIER_ON)) { // chiller on
+                            dehumidifierState = true;
+                           try {
+                                confirmMessage(channelContReturn, String.valueOf(DEHUMIDIFIER_ON));
+                            } catch (Exception ex) {
+                                Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
 
-                    if (message.equalsIgnoreCase(DEHUMIDIFIER_OFF)) { // chiller off
-                        dehumidifierState = false;
-                        try {
-                            confirmMessage(channelContReturn, String.valueOf(DEHUMIDIFIER_OFF));
-                        } catch (Exception ex) {
-                           Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
-                           }
+                        if (message.equalsIgnoreCase(DEHUMIDIFIER_OFF)) { // chiller off
+                            dehumidifierState = false;
+                            try {
+                                confirmMessage(channelContReturn, String.valueOf(DEHUMIDIFIER_OFF));
+                            } catch (Exception ex) {
+                               Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                               }
+                        }
+			
                     }
-
+                };
+                 try {
+                        channel.basicConsume(channelController, true, consumer);
+                    } catch (IOException ex) {
+                        Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+               
+                try {
+                    Thread.sleep(delay);
+                    //Thread.yield();
                 }
-            };
-             try {
-                    channel.basicConsume(channelController, true, consumer);
-                } catch (IOException ex) {
-                    Logger.getLogger(HumidityController.class.getName()).log(Level.SEVERE, null, ex);
+                catch (Exception e) {
+                    System.out.println("Sleep error:: " + e);
                 }
-           // messageWin.writeMessage("\n\nSimulation Stopped. \n");
-
-                    // Get rid of the indicators. The message panel is left for the
-                    // user to exit so they can see the last message posted.
-          //          humIndicator.dispose();
-               //     dehumIndicator.dispose();
-
-            // Update the lamp status
-            if (humidifierState) {
-                // Set to green, humidifier is on
             }
-            else {
-                // Set to black, humidifier is off
-            }
-
-            if (dehumidifierState) {
-                // Set to green, dehumidifier is on
-            }
-            else {
-                // Set to black, dehumidifier is off
-            }
-            try {
-                Thread.sleep(delay);
-                //Thread.yield();
-            }
-            catch (Exception e) {
-                System.out.println("Sleep error:: " + e);
-            }
-        }
-      
     }
     
     /**
