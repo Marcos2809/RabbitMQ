@@ -40,9 +40,7 @@ public class ECSMonitor extends Thread {
     private float humiRangeHigh = 100;                  // this temperature and humidity. Temperatures are in degrees Fahrenheit
     private float humiRangeLow = 0;			// and humidity is in relative humidity percentage.
     boolean registered = true;				// Signifies that this class is registered with an event manager.
-    MumaMonitor1 mMonitor = MumaMonitor1.getINSTANCE();			
-    Indicator tempIndicator;				// Temperature indicator
-    Indicator humIndicator;				// Humidity indicator
+    MumaMonitor1 mMonitor = MumaMonitor1.getINSTANCE();
     private Connection connection;
     private Channel channel, canalTempSensor, canalTempControlador, canalHumSensor, canalHumControlador,  canalsecSensor, canalsecControlador;
     float currentTemperature = 0;           // Current temperature as reported by the temperature sensor
@@ -63,14 +61,14 @@ public class ECSMonitor extends Thread {
         }
     } //Constructor
     
-  protected Channel conectorrabbit(String connector) throws IOException, TimeoutException{
-                ConnectionFactory factory = new ConnectionFactory();
-                factory.setHost("localhost");
-                // Declaration Publish 
-                connection = factory.newConnection();
-                channel = connection.createChannel();
-                channel.queueDeclare(connector, false, false, false, null);
-                return channel; 
+    protected Channel conectorrabbit(String connector) throws IOException, TimeoutException{
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        // Declaration Publish 
+        connection = factory.newConnection();
+        channel = connection.createChannel();
+        channel.queueDeclare(connector, false, false, false, null);
+        return channel; 
     }
    
     @Override

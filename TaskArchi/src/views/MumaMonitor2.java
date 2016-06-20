@@ -65,6 +65,7 @@ public class MumaMonitor2 extends javax.swing.JFrame {
         txtSprinkler = new javax.swing.JTextField();
         btnADFire = new javax.swing.JButton();
         btnADSprinkler = new javax.swing.JButton();
+        btnADAll = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MUMA Monitor");
@@ -144,51 +145,64 @@ public class MumaMonitor2 extends javax.swing.JFrame {
             }
         });
 
+        btnADAll.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        btnADAll.setText("Deactivate All Alarms");
+        btnADAll.setName("btnADAll"); // NOI18N
+        btnADAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnADAllActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtDoor)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtWindow, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(28, 28, 28)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtMovement)
-                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(115, 115, 115)
-                                .addComponent(btnADFire)
-                                .addGap(162, 162, 162)
-                                .addComponent(btnADSprinkler)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtFire)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(69, 69, 69)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtSprinkler, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(94, 94, 94)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(btnADDoor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnADWindow)
-                        .addGap(114, 114, 114)
-                        .addComponent(btnADMovement)
-                        .addGap(52, 52, 52)))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtDoor)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(31, 31, 31)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtWindow, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(28, 28, 28)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtMovement)
+                                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(115, 115, 115)
+                                        .addComponent(btnADFire)
+                                        .addGap(162, 162, 162)
+                                        .addComponent(btnADSprinkler)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(txtFire)
+                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(69, 69, 69)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtSprinkler, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(94, 94, 94)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(45, 45, 45)
+                                .addComponent(btnADDoor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnADWindow)
+                                .addGap(114, 114, 114)
+                                .addComponent(btnADMovement)
+                                .addGap(52, 52, 52))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(195, 195, 195)
+                        .addComponent(btnADAll, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -223,7 +237,9 @@ public class MumaMonitor2 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnADSprinkler)
                     .addComponent(btnADFire))
-                .addContainerGap(230, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addComponent(btnADAll, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         pack();
@@ -286,7 +302,7 @@ public class MumaMonitor2 extends javax.swing.JFrame {
             txtFire.setText("OFF");
             txtSprinkler.setForeground(Color.white);
             txtSprinkler.setBackground(Color.black);
-            txtSprinkler.setText("OFF");
+            txtSprinkler.setText("DEACTIVATED");
             btnADSprinkler.setText("Activate");
             btnADSprinkler.setEnabled(false);
         }            
@@ -309,9 +325,72 @@ public class MumaMonitor2 extends javax.swing.JFrame {
         }            
         else{
             btnADSprinkler.setText("Deactivate");
+            txtSprinkler.setForeground(Color.white);
+            txtSprinkler.setBackground(Color.black);
             txtSprinkler.setText("OFF");
         }
     }//GEN-LAST:event_btnADSprinklerActionPerformed
+
+    private void btnADAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADAllActionPerformed
+        // TODO add your handling code here:
+        if (btnADAll.getText().equals("Deactivate All Alarms")){
+            btnADAll.setText("Activate All Alarms");
+            txtDoor.setForeground(Color.white);
+            txtDoor.setBackground(Color.black);
+            txtDoor.setText("OFF");
+            btnADDoor.setText("Activate");
+            btnADDoor.setEnabled(false);
+            txtWindow.setForeground(Color.white);
+            txtWindow.setBackground(Color.black);
+            txtWindow.setText("OFF");
+            btnADWindow.setText("Activate");
+            btnADWindow.setEnabled(false);
+            txtMovement.setForeground(Color.white);
+            txtMovement.setBackground(Color.black);
+            txtMovement.setText("OFF");
+            btnADMovement.setText("Activate");
+            btnADMovement.setEnabled(false);
+            txtFire.setForeground(Color.white);
+            txtFire.setBackground(Color.black);
+            txtFire.setText("OFF");
+            btnADFire.setText("Activate");
+            btnADFire.setEnabled(false);
+            txtSprinkler.setForeground(Color.white);
+            txtSprinkler.setBackground(Color.black);
+            txtSprinkler.setText("DEACTIVATED");
+            btnADSprinkler.setText("Activate");
+            btnADSprinkler.setEnabled(false);
+            
+        }            
+        else{
+            btnADAll.setText("Deactivate All Alarms");
+            txtDoor.setForeground(Color.black);
+            txtDoor.setBackground(Color.green);
+            txtDoor.setText("OK");
+            btnADDoor.setText("Deactivate");
+            btnADDoor.setEnabled(true);
+            txtWindow.setForeground(Color.black);
+            txtWindow.setBackground(Color.green);
+            txtWindow.setText("OK");
+            btnADWindow.setText("Deactivate");
+            btnADWindow.setEnabled(true);
+            txtMovement.setForeground(Color.black);
+            txtMovement.setBackground(Color.green);
+            txtMovement.setText("NONE");
+            btnADMovement.setText("Deactivate");
+            btnADMovement.setEnabled(true);
+            txtFire.setForeground(Color.black);
+            txtFire.setBackground(Color.green);
+            txtFire.setText("OK");
+            btnADFire.setText("Deactivate");
+            btnADFire.setEnabled(true);
+            txtSprinkler.setForeground(Color.white);
+            txtSprinkler.setBackground(Color.black);
+            txtSprinkler.setText("OFF");
+            btnADSprinkler.setText("Deactivate");
+            btnADSprinkler.setEnabled(true);
+        }
+    }//GEN-LAST:event_btnADAllActionPerformed
 
     
     /**
@@ -352,6 +431,7 @@ public class MumaMonitor2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnADAll;
     public javax.swing.JButton btnADDoor;
     public javax.swing.JButton btnADFire;
     public javax.swing.JButton btnADMovement;

@@ -19,12 +19,13 @@
  * **************************************************************************************
  */
 import common.Component;
-import instrumentation.*;
+import views.MumaMonitor2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.Logger;
 import com.rabbitmq.client.*;
 import common.IOManager;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
@@ -32,20 +33,17 @@ import java.util.concurrent.TimeoutException;
 
 public class SecurityMonitor extends Thread {
 
-     private Indicator wi;               
-     private Indicator di;               
-     private Indicator mi;               
-     private Indicator fi;               
-     private Indicator si;
-     String DoorStatus="OK";
-     IOManager userInput = new IOManager();	// IOManager IO Object
-     boolean registered = true;				// Signifies that this class is registered with an event manager.     
+     
+    String DoorStatus="OK";
+    IOManager userInput = new IOManager();	// IOManager IO Object
+    boolean registered = true;				// Signifies that this class is registered with an event manager.
+    MumaMonitor2 mMonitor = MumaMonitor2.getINSTANCE();
     private Connection connection;
     private Channel channel, canalDoor, canalWindow, canalMotionSensor, canalDoorControlador;
-    MessageWindow messageWin = null;   
-    MessageWindow messageWin2 = null;   
+       
     boolean alarmsStatus= true;  
     boolean sprinklerStatus=false;
+    boolean doorActive = false, windowActive = false, movActive = false, fireActive = false, sprinklerActive = false;
     ConfirmSprinkler timernew;
     
             
@@ -58,22 +56,22 @@ public class SecurityMonitor extends Thread {
             timernew = new ConfirmSprinkler();
                       
         }catch(Exception e){
-              System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
+            System.out.println("ECSMonitor::Error instantiating event manager interface: " + e);
         }
     } //Constructor
    
     
     
     
-  protected Channel conectorrabbit(String connector) throws IOException, TimeoutException{
-                ConnectionFactory factory = new ConnectionFactory();
-                factory.setHost("localhost");
-                // Declaration Publish 
-                connection = factory.newConnection();
-                channel = connection.createChannel();
-                channel.queueDeclare(connector, false, false, false, null);
-                
-                return channel; 
+    protected Channel conectorrabbit(String connector) throws IOException, TimeoutException{
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        // Declaration Publish 
+        connection = factory.newConnection();
+        channel = connection.createChannel();
+        channel.queueDeclare(connector, false, false, false, null);
+
+        return channel; 
                 
     }
    
@@ -84,42 +82,14 @@ public class SecurityMonitor extends Thread {
         boolean on = true;			// Used to turn on heaters, chillers, humidifiers, and dehumidifiers
         boolean off = false;			// Used to turn off heaters, chillers, humidifiers, and dehumidifiers
 
-      
-        
-        // Now we create the ECS status and message panel
-        // Note that we set up two indicators that are initially yellow. This is
-        // because we do not know if the temperature/humidity is high/low.
-        // This panel is placed in the upper left hand corner and the status 
-        // indicators are placed directly to the right, one on top of the other
-         /*  System.out.println("1: Activate alarms");                
-           System.out.println("2: Deactivate alarms");
-           System.out.println("Presione '3' para activar rociador o '4' para cancelar el roseador, \n si no presiona nada automáticamente en 15 segundos se activará el roseador");
-           System.out.println("X: Stop Security Console\n");
-           System.out.print("Choose an option:\n>>>> ");
-         
-           */    
-        
-        messageWin = new MessageWindow("Security Monitoring Console", 0, 0);
-        di= new Indicator("DOOR OK", messageWin.getX() + messageWin.width(), 1);
-        di.setLampColorAndMessage("DOOR OK", 1);
-        wi= new Indicator("WINDOW OK", messageWin.getX() + messageWin.width(), 1);
-        wi.setLampColorAndMessage("WINDOW OK", 1);
-        mi= new Indicator("MOVEMENT DETECTION", messageWin.getX() + messageWin.width(), di.height()*2);
-        mi.setLampColorAndMessage("NOT MOVEMENT DETECTION", 1);
-        fi= new Indicator("FIRE DETECTION", messageWin.getX() + messageWin.width(), mi.height()*2);
-        fi.setLampColorAndMessage("NOT FIRE DETECTED", 1);
-        si= new Indicator("SPRINKLER ACTIVATION", messageWin.getX() + messageWin.width(), fi.height()*2);
-        si.setLampColorAndMessage("SPRINKLER OFF", 0);
-
-        messageWin.writeMessage("Registered with the event manager.");
-
-
+        mMonitor.setVisible(true);
 
         /**
          * ******************************************************************
          ** Here we start the main simulation loop
          * *******************************************************************
          */
+        
         while (!isDone) {
         //String DoorStatus="OK";
          
@@ -133,18 +103,9 @@ public class SecurityMonitor extends Thread {
                         
                         if(message.equalsIgnoreCase("7")){
                             try {
-                                messageWin.writeMessage("Security:: ALERT! Fire detection");
-                                fi.setLampColorAndMessage("Fire Detected", 3); // Fire Detected
+                                
                                 Activatefire(on);
-                                if(!sprinklerStatus){
-                                   // System.out.println("AQui en tro con falso");
-                                    si.setLampColorAndMessage("Sensor Sprinkler OFF", 0); // Sprinkler OFF                            
-                                Activatesprinkler(off);
-                                }else{
-                                    //System.out.println("AQui en tro con verdadero");
                                 Activatesprinkler(on);
-                                si.setLampColorAndMessage("Sensor Sprinkler ON", 1); // Sprinkler OFF                            
-                                }
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -159,10 +120,7 @@ public class SecurityMonitor extends Thread {
                                 Activatesprinkler(off);
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            messageWin.writeMessage("Security:: Fire detection: False");
-                            fi.setLampColorAndMessage("Not Fire Detected", 1); // Not Fire Detected
-                            si.setLampColorAndMessage("Sensor Sprinkler OFF", 0); // Sprinkler OFF                            
+                            }                           
                         }
                         if(message.equalsIgnoreCase("5")){
                             try {
@@ -170,8 +128,6 @@ public class SecurityMonitor extends Thread {
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            messageWin.writeMessage("Security:: ALERT! Movement detection");
-                            mi.setLampColorAndMessage("Movement Detected", 3); // Door is broken
                         } 
                         if(message.equalsIgnoreCase("4")){
                             try {
@@ -179,8 +135,6 @@ public class SecurityMonitor extends Thread {
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            messageWin.writeMessage("Security:: Movement detection: False");
-                            mi.setLampColorAndMessage("NOT Movement Detected", 1); // Door is broken
                         } 
                         if(message.equalsIgnoreCase("3")){
                             try {
@@ -188,8 +142,6 @@ public class SecurityMonitor extends Thread {
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            messageWin.writeMessage("Security:: ALERT! WINDOWS broken");
-                            wi.setLampColorAndMessage("WINDOW BROKEN", 3); // Door is broken
                         } 
                         if(message.equalsIgnoreCase("2")){
                             try {
@@ -197,8 +149,6 @@ public class SecurityMonitor extends Thread {
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            messageWin.writeMessage("Security:: ALERT! WINDOWS OK");
-                            wi.setLampColorAndMessage("WINDOW OK", 1); // Door is broken
                         } 
                         if(message.equalsIgnoreCase("1")){
                             try {
@@ -206,8 +156,6 @@ public class SecurityMonitor extends Thread {
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            messageWin.writeMessage("Security:: ALERT! Door broken");
-                            di.setLampColorAndMessage("DOOR BROKEN", 3); // Door is broken
                         } 
                         if(message.equalsIgnoreCase("0")) {
                             try {
@@ -215,18 +163,8 @@ public class SecurityMonitor extends Thread {
                             } catch (Exception ex) {
                                 Logger.getLogger(SecurityMonitor.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            messageWin.writeMessage("DOOR OK");
-                            di.setLampColorAndMessage("DOOR OK", 1); // Door is ok
                         }
-                    } else {
-                        messageWin.writeMessage("Security:: ALERT! Alarms deactivate");
-                        di.setLampColorAndMessage("DOOR OFF", 0); // Alarms deactivate                
-                        wi.setLampColorAndMessage("WINDOW OFF", 0); // Alarms deactivate                
-                        mi.setLampColorAndMessage("MOVEMENT DETECTION OFF", 0); // Alarms deactivate
-                        fi.setLampColorAndMessage("FIRE DETECTION OFF", 0); // Alarms deactivate  
-                        si.setLampColorAndMessage("SPRINKLER DEACTIVATED", 0); // Alarms deactivate  
-
-                    }
+                    } 
                 }
             };
 
@@ -243,6 +181,43 @@ public class SecurityMonitor extends Thread {
             catch (Exception e) {
                 System.out.println("Sleep error:: " + e);
             } // catch
+            
+            if(mMonitor.btnADAll.getText().equalsIgnoreCase("Deactivate All Alarms")){
+                alarmsStatus = true;
+            }else{
+                alarmsStatus = false;
+            }
+            
+            if(mMonitor.btnADDoor.getText().equalsIgnoreCase("Deactivate")){
+                doorActive = true;
+            }else{
+                doorActive = false;
+            }
+            
+            if(mMonitor.btnADWindow.getText().equalsIgnoreCase("Deactivate")){
+                windowActive = true;
+            }else{
+                windowActive = false;
+            }
+            
+            if(mMonitor.btnADMovement.getText().equalsIgnoreCase("Deactivate")){
+                movActive = true;
+            }else{
+                movActive = false;
+            }
+            
+            if(mMonitor.btnADFire.getText().equalsIgnoreCase("Deactivate")){
+                fireActive = true;
+            }else{
+                fireActive = false;
+            }
+            
+            if(mMonitor.btnADSprinkler.getText().equalsIgnoreCase("Deactivate")){
+                sprinklerActive = true;
+            }else{
+                sprinklerActive = false;
+            }
+            
         } // while
         
        
@@ -272,12 +247,18 @@ public class SecurityMonitor extends Thread {
   private void Activatedoor(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-        if (alarmsStatus){
+        if ((alarmsStatus) && (windowActive)){            
             if (ON) {
                 message = Component.DOOR_ON;
+                mMonitor.txtDoor.setText("OPEN");
+                mMonitor.txtDoor.setBackground(Color.red);
+                mMonitor.txtDoor.setForeground(Color.white);
             }
             else {
                 message = Component.DOOR_OFF;
+                mMonitor.txtDoor.setText("OK");
+                mMonitor.txtDoor.setBackground(Color.green);
+                mMonitor.txtDoor.setForeground(Color.black);
            } // if
             try {
             canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
@@ -289,12 +270,18 @@ public class SecurityMonitor extends Thread {
     private void Activatewindow(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-        if (alarmsStatus){
+        if ((alarmsStatus) && (windowActive)){            
             if (ON) {
                 message = Component.WINDOW_ON;
+                mMonitor.txtWindow.setText("BROKEN");
+                mMonitor.txtWindow.setBackground(Color.red);
+                mMonitor.txtWindow.setForeground(Color.white);
             }
             else {
                 message = Component.WINDOW_OFF;
+                mMonitor.txtWindow.setText("OK");
+                mMonitor.txtWindow.setBackground(Color.green);
+                mMonitor.txtWindow.setForeground(Color.black);
            } // if
             try {
             canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
@@ -306,12 +293,20 @@ public class SecurityMonitor extends Thread {
     private void Activatemov(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-        if (alarmsStatus){
+        if ((alarmsStatus) && (movActive)){            
             if (ON) {
                 message = Component.MOVEMENT_ON;
+                mMonitor.txtMovement.setText("DETECTED");
+                mMonitor.txtMovement.setBackground(Color.red);
+                mMonitor.txtMovement.setForeground(Color.white);
+                
             }
             else {
                 message = Component.MOVEMENT_OFF;
+                mMonitor.txtMovement.setText("NONE");
+                mMonitor.txtMovement.setBackground(Color.green);
+                mMonitor.txtMovement.setForeground(Color.black);
+                
            } // if
             try {
             canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
@@ -324,12 +319,19 @@ public class SecurityMonitor extends Thread {
     private void Activatefire(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-        if (alarmsStatus){
+        if ((alarmsStatus) && (fireActive)){            
+            
             if (ON) {
                 message = Component.FIRE_ON;
-            }
-            else {
+                mMonitor.txtFire.setText("DETECTED");
+                mMonitor.txtFire.setBackground(Color.red);
+                mMonitor.txtFire.setForeground(Color.white);
+                
+            } else{
                 message = Component.FIRE_OFF;
+                mMonitor.txtFire.setText("OK");
+                mMonitor.txtFire.setBackground(Color.green);
+                mMonitor.txtFire.setForeground(Color.black);
            } // if
             try {
             canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
@@ -342,19 +344,24 @@ public class SecurityMonitor extends Thread {
     private void Activatesprinkler(boolean ON)throws Exception {
         // Here we create the event.
         String message;
-       // if (sprinklerStatus){
+        if ((alarmsStatus) && (sprinklerActive)){            
             if (ON) {
                 message = Component.SPRINKLER_ON;
-            }
-            else {
+                mMonitor.txtSprinkler.setText("ON");
+                mMonitor.txtSprinkler.setBackground(Color.green);
+                mMonitor.txtSprinkler.setForeground(Color.black);
+            } else{
                 message = Component.SPRINKLER_OFF;
-           } // if
+                mMonitor.txtSprinkler.setText("OFF");
+                mMonitor.txtSprinkler.setBackground(Color.black);
+                mMonitor.txtSprinkler.setForeground(Color.white);
+            } // if
             try {
-            canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
+                canalDoor.basicPublish("", "DoorControlador" , null, message.getBytes());
             } // heater
-            catch (Exception e) {
-             }
-       // }
+                catch (Exception e) {
+            }
+        }
     }
                     
     
