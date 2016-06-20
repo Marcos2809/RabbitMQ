@@ -4,7 +4,7 @@ Archivo de ejecución de Release 1, 2 y 3
 
 # Instalación
 
-1.- Descomprimir los archivos Release [1,2 ó 3]
+1.- Descomprimir los archivos Release [1, 2 ó 3] Actualizado.zip
 
 
 2.- Una vez que se descomprimio la carpeta abrir la terminar y posicionarla sobre la carpeta actual para la ejecución
