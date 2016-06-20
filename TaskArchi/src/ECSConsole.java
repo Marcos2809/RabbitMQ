@@ -21,6 +21,7 @@
  */
 
 import common.*;
+import java.io.IOException;
 
 public class ECSConsole {
 
@@ -174,6 +175,12 @@ public class ECSConsole {
                     // cause problems for the event manager.
 
                     //monitor.halt();
+                    try {
+                        String cmd = "killall java"; //Comando de apagado en linux
+                        Runtime.getRuntime().exec(cmd); 
+                } catch (IOException ioe) {
+                        System.out.println (ioe);
+                }
                     isDone = true;
                     System.out.println("\nConsole Stopped... Exit monitor mindow to return to command prompt.");
                    // smonitor.halt();
